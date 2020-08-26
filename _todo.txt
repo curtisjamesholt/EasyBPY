@@ -1,19 +1,9 @@
 EasyBPY
 All of these functions should return references where possible.
 == Objects ==
-- create_object(name)       //string or obj ref
-- delete_object(name)       //string or obj ref 
-- duplicate_object(name)    //string or obj ref
-- instance_object(name)     //string or obj ref
-- get_object(name)          //string
-- bpy.data.objects[name]
+
 
 == Collections ==
-- create_collection(name)
-- delete_collection(name)
-- duplicate_collection(name)
-- get_object_from_collection(name, collection)
-- bpy.data.collections[collection].objects[object]
 
 == Materials ==
 - create_material(name)
