@@ -42,16 +42,42 @@ from mathutils import Vector
 def create_object(name, col):
     m = bpy.data.meshes.new(name)
     o = bpy.data.objects.new(name, m)
-    colref = bpy.data.collections[col]
-    colref.objects.link(o)
+    col_ref = None
+    # Assess col
+    if is_string(col):
+        if col in bpy.data.collections:
+            col_ref = bpy.data.collections[col]
+        else:
+            col_ref = create_collection(col)
+    else:
+        col_ref = col
+        pass
+    col_ref.objects.link(o)
     return o
 
 def copy_object(tocopy, col):
-    new_obj = tocopy.copy()
-    new_obj.data = tocopy.data.copy()
+    # Set up vars
+    new_obj = None
+    to_copy = None
+    col_ref = None
+    # Assess tocopy
+    if is_string(tocopy):
+        to_copy = get_object(tocopy)
+    else:
+        to_copy = tocopy
+    # Assess col
+    if is_string(col):
+        if collection_exists(col):
+            col_ref = get_collection(col)
+        else:
+            col_ref = create_collection(col)
+    else:
+        col_ref = col
+    # Perform action
+    new_obj = to_copy.copy()
+    new_obj.data = to_copy.data.copy()
     new_obj.animation_data_clear()
-    colref = bpy.data.collections[col]
-    colref.objects.link(o)
+    col_ref.objects.link(new_obj)
     return new_obj
 
 # Returns the active selected object
@@ -67,6 +93,9 @@ def select_all_objects():
 def deselect_all_objects():
     for ob in bpy.context.selected_objects:
         ob.select_set(False)
+
+def delete_selected_objects():
+    bpy.ops.object.delete()
 
 def delete_object(ref):
     pass
@@ -84,14 +113,19 @@ def instance_object(ref, newname):
     return bpy.data.new(name=newname, object_data=ref.data)
 
 def get_object(ref):
-    pass
+    #Expecting string
+    if ref in bpy.data.objects:
+        return bpy.data.objects[ref]
+    else:
+        return False
 
 def object_exists(ref):
     pass
 
 # Primitive Objects
 def create_cube():
-    pass
+    bpy.ops.mesh.primitive_cube_add()
+    return bpy.data.objects["Cube"]
 # etc...
 #endregion
 #region SHADING
@@ -123,11 +157,40 @@ def create_vertex_group(ref, group_name):
     return ref.vertex_groups[group_name]
 #endregion
 #region COLLECTIONS
-def create_collection(colname):
-    bpy.data.collections.new(colname)
-    return bpy.data.collections[colname]
+def create_collection(name):
+    if collection_exists(name) is False:
+        bpy.data.collections.new(name)
+        colref = bpy.data.collections[name]
+        bpy.context.scene.collection.children.link(colref)
+        return colref
+    else:
+        return False
 
-def delete_collection(colname):
+def collection_exists(name):
+    if name in bpy.data.collections:
+        return True
+    else:
+        return False
+
+def delete_collection(name, delete_objects = True):
+    # Make sure collection exists
+    if collection_exists(name):
+        col = get_collection(name)
+        # See if deleting the children
+        if delete_objects != None:
+            if delete_objects:
+                deselect_all_objects()
+                if len(col.objects) > 0:
+                    for co in col.objects:
+                        co.select_set(True)
+                    delete_selected_objects()
+        # Now remove collection
+        bpy.data.collections.remove(col)
+    else:
+        return False
+
+def delete_hierarchy(name):
+    
     pass
 
 def duplicate_collection(colname):
@@ -135,6 +198,12 @@ def duplicate_collection(colname):
 
 def get_object_from_collection(objname, collection):
     pass
+
+def get_collection(ref):
+    if ref in bpy.data.collections:
+        return bpy.data.collections[ref]
+    else:
+        return False
 
 def get_collections():
     return bpy.data.collections
@@ -161,7 +230,10 @@ def remove_material_from_object(objref, matname):
 #endregion
 #region NODES
 def set_material_use_nodes(matref, value):
-    (matref.use_nodes = True) if(value is True) else(matref.use_nodes = False)
+    if value is True:
+        matref.use_nodes = True
+    else:
+        matref.use_nodes = False
 
 def get_node_tree(matref):
     matref.use_nodes = True
@@ -215,6 +287,13 @@ def delete_text_object(textname):
     bpy.data.texts.remove(t)
 def get_lines_in_text_object(textname):
     return bpy.data.texts[textname].lines
+#endregion
+#region DATA CHECKS
+def is_string(ref):
+    if isinstance(ref, str):
+        return True
+    else:
+        return False
 #endregion
 #region DATA CONSTRUCTORS
 def make_vector(data):
