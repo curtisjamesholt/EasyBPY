@@ -4,24 +4,128 @@ All of these functions should return references where possible.
 === TEST LOGGING ===
 
 OBJECTS                             TESTED
-- create_object                     X (string and new col creation)
-- copy_object                       X (string and ref tested)
-- get_active_object
-- get_selected_object
-- select_all_objects
-- deselect_all_objects
+- create_object                     X
+- copy_object                       X
+- get_active_object                 X
+- active_object                     X
+- get_selected_object               X
+- selected_object                   X
+- get_selected_objects              X
+- select_object                     X
+- select_all_objects                X
+- deselect_object                   X
+- deselect_all_objects              X
 - delete_selected_objects           X
-- delete_object
-- delete_objects_in_list
-- duplicate_object
-- instance_object
-- get_object
-- object_exists
+- delete_object                     X
+- delete_objects                    X
+- duplicate_object                  X
+- instance_object                   X
+- get_object                        X
+- object_exists                     X
 
+PRIMITIVE OBJECTS
+- create_cube                       X
+- create_cylinder                   X
+- create_ico_sphere                 X
+- create_suzanne                    X
+- create_monkey                     X
+- create_cone                       X
+
+VISIBILITY
+- hide_in_viewport                  X
+- show_in_viewport                  X
+- hide_in_render                    X
+- show_in_render                    X
+- display_as_bounds                 X
+- display_as_textured               X
+- display_as_solid                  X
+- display_as_wire                   X
+
+TRANSFORMATIONS
+- location
+- rotation
+- scale
+
+3D CURSOR   
+- selection_to_cursor_without_offset
+- selection_to_cursor_with_offset   
+- cursor_to_world_origin            
+- cursor_to_selection
+- cursor_to_active
+- selection_to_grid
+- selection_to_active
+- cursor_to_grid
+- get_cursor_location
+- set_cursor_location
+
+SHADING
+- shade_object_smooth               X
+- shade_object_flat                 X
+
+MESHES
+- create_mesh                       X
+- get_vertices                      X (todo: type check)
+- get_edges                         X (todo: type check)
+- get_faces                         X (todo: type check)
+
+VERTEX GROUPS
+- create_vertex_group
+
+COLLECTIONS
 - create_collection                 X
-- collection_exists                 X
+- collection_exists                 
 - delete_collection                 X
+- delete_objects_in_colletion       X
 - delete_hierarchy
+- duplicate_collection
+- get_objects_from_collection
+- get_collection                    X
+- get_list_of_collections           X
+- link_object_to_collection         X
+- unlink_object_from_collection     
+- get_object_collection             X
+- collection_exists                 X
+
+MATERIALS
+- create_material
+- delete_material
+- add_material_to_object
+- remove_material_from_object
+
+NODES
+- set_material_use_nodes
+- get_node_tree
+- create_node
+- get_node_links
+- create_node_link
+
+TEXTURES
+- create_texture
+- delete_texture
+
+MODIFIERS
+- add_modifier
+- get_modifier
+- remove_modifier
+- add_subfurf_modifier
+- add_displace_modifier
+
+TEXT OBJECTS
+- create_text_object
+- delete_text_object
+- get_lines_in_text_object
+
+DATA CHECKS
+- is_string                         X
+
+DATA CONSTRUCTORS
+- make_vector                       X
+
+MISC
+- run_python_from_string            X
+- clear_unwanted_data               X
+- clear_unsaved_data                X
+
 
 === DOCUMENTATION LOGGING ===
 
@@ -31,12 +135,22 @@ create_object (name, col)
     - 'name' requires a string.
     - 'col' can be a string or a collection reference.
     - If col does not exist, it will be created.
+get_object (name)
+    Returns an object reference for the object with the name 'name'. If the object does not exist, then it will return False.
+object_exists (name)
+    Checks to see if an object exists with the namme 'name'. If it does, return True, if not then return False.
+instance_object (red, newname, col)
+    Creates an instance of an object 'ref' linking the data block to the newly created object. If 'newname' is provided, it will be given to the new object. If 'col' is provided, the new object will be linked to that collection.
 
 = COLLECTIONS = 
 create_collection (name)
     Creates a collection with name 'name' and links it to the active scene.
     - 'name' requires a string.
     - If the collection already exists, it will return False.
+get_collection (name)
+    Returns a reference to the collection of name 'name'. If the collection does not exist, it will return False.
+get_list_of_collections
+    This will return the full list of collectios in the blend file, as provided by bpy.data.collections.
 collection_exists (name)
     Checks to see if a collection exists.
     - 'name' requires a string.

@@ -38,7 +38,6 @@ import bpy
 from mathutils import Vector
 #endregion
 #region OBJECTS
-# Creates object - (string) name, (string) col
 def create_object(name, col):
     m = bpy.data.meshes.new(name)
     o = bpy.data.objects.new(name, m)
@@ -80,14 +79,49 @@ def copy_object(tocopy, col):
     col_ref.objects.link(new_obj)
     return new_obj
 
-# Returns the active selected object
 def get_active_object():
     return bpy.context.active_object
+
+def active_object():
+    return get_active_object()
+
+def get_selected_object():
+    return get_active_object()
+
+def selected_object():
+    return get_selected_object()
+
+def so():
+    return get_selected_object()
 
 def get_selected_objects():
     return bpy.context.selected_objects
 
+def select_object(ref):
+    # ref is string
+    if is_string(ref):
+        if object_exists(ref):
+            bpy.data.objects[ref].select_set(True)
+        else:
+            return False
+    # ref is object reference
+    else:
+        ref.select_set(True)
+
 def select_all_objects():
+    for co in bpy.context.scene.objects:
+        co.select_set(True)
+
+def deselect_object(ref):
+    # ref is string
+    if is_string(ref):
+        if object_exists(ref):
+            bpy.data.objects[ref].select_set(False)
+        else:
+            return False
+    # ref is object reference
+    else:
+        ref.select_set(False)
     pass
 
 def deselect_all_objects():
@@ -98,9 +132,17 @@ def delete_selected_objects():
     bpy.ops.object.delete()
 
 def delete_object(ref):
-    pass
+    deselect_all_objects()
+    # ref is string
+    if is_string(ref):
+        obj = get_object(ref)
+        obj.select_set(True)
+    # ref is object reference
+    else:
+        ref.select_set(True)
+    delete_selected_objects()
 
-def delete_objects_in_list(objlist):
+def delete_objects(objlist):
     deselect_all_objects()
     for ob in objlist:
         ob.select_set(True)
@@ -109,8 +151,16 @@ def delete_objects_in_list(objlist):
 def duplicate_object(tocopy,col):
     return copy_object(tocopy,col)
 
-def instance_object(ref, newname):
-    return bpy.data.new(name=newname, object_data=ref.data)
+def instance_object(ref, newname = None, col = None):
+    deselect_all_objects()
+    select_object(ref)
+    bpy.ops.object.duplicate_move_linked()
+    o = selected_object()
+    if newname != None:
+        o.name = newname
+    if col != None:
+        link_object_to_collection(o,col)
+    return o
 
 def get_object(ref):
     #Expecting string
@@ -120,18 +170,192 @@ def get_object(ref):
         return False
 
 def object_exists(ref):
-    pass
-
-# Primitive Objects
+    if is_string(ref):
+        if ref in bpy.data.objects:
+            return True
+        else:
+            return False
+    # redundant but for safety
+    else:
+        if ref.name in bpy.data.objects:
+            return True
+        else:
+            return False
+#endregion
+#region OBJECTS - PRIMITIVES
 def create_cube():
     bpy.ops.mesh.primitive_cube_add()
     return bpy.data.objects["Cube"]
-# etc...
+
+def create_cylinder():
+    bpy.ops.mesh.primitive_cylinder_add()
+    return bpy.data.objects["Cylinder"]
+
+def create_ico_sphere():
+    bpy.ops.mesh.primitive_ico_sphere_add()
+    return bpy.data.objects["Icosphere"]
+
+def create_suzanne():
+    bpy.ops.mesh.primitive_monkey_add()
+    return bpy.data.objects["Suzanne"]
+
+def create_monkey():
+    create_suzanne()
+
+def create_cone():
+    bpy.ops.mesh.primitive_cone_add()
+    return bpy.data.objects["Cone"]
+#endregion
+#region VISIBILITY
+def hide_in_viewport(ref):
+    # ref is string
+    if is_string(ref):
+        if object_exists(ref):
+            obj = get_object(ref)
+            obj.hide_viewport = True
+    # ref is an object reference
+    else:
+        if object_exists(ref):
+            ref.hide_viewport = True
+        else:
+            return False
+
+def show_in_viewport(ref):
+    # ref is string
+    if is_string(ref):
+        if object_exists(ref):
+            obj = get_object(ref)
+            obj.hide_viewport = False
+    # ref is an object reference
+    else:
+        if object_exists(ref):
+            ref.hide_viewport = False
+        else:
+            return False
+
+def hide_in_render(ref):
+    # ref is string
+    if is_string(ref):
+        if object_exists(ref):
+            obj = get_object(ref)
+            obj.hide_render = True
+    # ref is an object reference
+    else:
+        if object_exists(ref):
+            ref.hide_render = True
+        else:
+            return False
+
+def show_in_render(ref):
+    # ref is string
+    if is_string(ref):
+        if object_exists(ref):
+            obj = get_object(ref)
+            obj.hide_render = False
+    # ref is an object reference
+    else:
+        if object_exists(ref):
+            ref.hide_render = False
+        else:
+            return False
+
+def display_as_bounds(ref):
+    # ref is string
+    if is_string(ref):
+        if object_exists(ref):
+            obj = get_object(ref)
+            obj.display_type = 'BOUNDS'
+    # ref is an object reference
+    else:
+        if object_exists(ref):
+            ref.display_type = 'BOUNDS'
+        else:
+            return False
+
+def display_as_textured(ref):
+    # ref is string
+    if is_string(ref):
+        if object_exists(ref):
+            obj = get_object(ref)
+            obj.display_type = 'TEXTURED'
+    # ref is an object reference
+    else:
+        if object_exists(ref):
+            ref.display_type = 'TEXTURED'
+        else:
+            return False
+
+def display_as_solid(ref):
+    # ref is string
+    if is_string(ref):
+        if object_exists(ref):
+            obj = get_object(ref)
+            obj.display_type = 'SOLID'
+    # ref is an object reference
+    else:
+        if object_exists(ref):
+            ref.display_type = 'SOLID'
+        else:
+            return False
+
+def display_as_wire(ref):
+    # ref is string
+    if is_string(ref):
+        if object_exists(ref):
+            obj = get_object(ref)
+            obj.display_type = 'WIRE'
+    # ref is an object reference
+    else:
+        if object_exists(ref):
+            ref.display_type = 'WIRE'
+        else:
+            return False
+#endregion
+#region TRANSFORMATIONS
+def location(obj = None, newloc = None):
+    pass
+def rotation(obj = None, newrot = None):
+    pass
+def scale(obj = None, newscale = None):
+    pass
+#endregion
+#region 3D CURSOR
+def selection_to_cursor_without_offset():
+    bpy.ops.view3d.snap_selected_to_cursor(use_offset=False)
+
+def selection_to_cursor_with_offset():
+    bpy.ops.view3d.snap_selected_to_cursor(use_offset=True)
+
+def cursor_to_world_origin():
+    bpy.ops.view3d.snap_cursor_to_center()
+
+def cursor_to_selection():
+    bpy.ops.view3d.snap_cursor_to_selected()
+
+def cursor_to_active():
+    bpy.ops.view3d.snap_cursor_to_selected()
+
+def selection_to_grid():
+    bpy.ops.view3d.snap_selected_to_grid()
+
+def selection_to_active():
+    bpy.ops.view3d.snap_selected_to_active()
+
+def cursor_to_grid():
+    bpy.ops.view3d.snap_cursor_to_grid()
+    
+def get_cursor_location():
+    return bpy.contex.scene.cursor_location
+
+def set_cursor_location(newloc):
+    bpy.context.scene.cursor_location = newloc
 #endregion
 #region SHADING
 def shade_object_smooth(ref):
+    bpy.ops.object.shade_smooth()
     pass
 def shade_object_flat(ref):
+    bpy.ops.object.shade_flat()
     pass
 #endregion
 #region MESHES
@@ -149,9 +373,6 @@ def get_faces(ref):
     return ref.data.faces
 #endregion
 #region VERTEX GROUPS
-
-# Creates a vertex group for the given object
-# (object) ref, (string) group_name
 def create_vertex_group(ref, group_name):
     ref.vertex_groups.new(name=group_name)
     return ref.vertex_groups[group_name]
@@ -166,16 +387,14 @@ def create_collection(name):
     else:
         return False
 
-def collection_exists(name):
-    if name in bpy.data.collections:
-        return True
-    else:
-        return False
-
 def delete_collection(name, delete_objects = True):
     # Make sure collection exists
     if collection_exists(name):
-        col = get_collection(name)
+        # String or reference check
+        if is_string(name):
+            col = get_collection(name)
+        else:
+            col = name
         # See if deleting the children
         if delete_objects != None:
             if delete_objects:
@@ -189,14 +408,29 @@ def delete_collection(name, delete_objects = True):
     else:
         return False
 
+def delete_objects_in_collection(col):
+    # setting up colref
+    colref = None
+    # col is a string
+    if collection_exists(col):
+        if is_string(col):
+            colref = get_collection(col)
+        else:
+            colref = col
+    # delete all objects in colref
+    deselect_all_objects()
+    for co in colref.objects:
+        co.select_set(True)
+    delete_selected_objects()
+
 def delete_hierarchy(name):
-    
+
     pass
 
 def duplicate_collection(colname):
     pass
 
-def get_object_from_collection(objname, collection):
+def get_objects_from_collection(colname):
     pass
 
 def get_collection(ref):
@@ -205,22 +439,58 @@ def get_collection(ref):
     else:
         return False
 
-def get_collections():
+def get_list_of_collections():
     return bpy.data.collections
 
 def link_object_to_collection(ref, col):
-    bpy.data.collections[col].objects.link(ref)
+    if is_string(col):
+        if is_string(ref):
+            objref = get_object(ref)
+            bpy.data.collections[col].objects.link(objref)
+        else:
+            bpy.data.collections[col].objects.link(ref)
+    else:
+        if is_string(ref):
+            objref = get_object(ref)
+            col.objects.link(objref)
+        else:
+            col.objects.link(ref)
 
-def unlink_object_from_collection(ref):
-    ref.users_collection[0].unlink(ref)
+def unlink_object_from_collection(ref, col):
+    #ref.users_collection[0].unlink(ref)
+    if is_string(col):
+        if is_string(ref):
+            objref = get_object(ref)
+            bpy.data.collections[col].objects.unlink(objref)
+        else:
+            bpy.data.collections[col].objects.unlink(ref)
+    else:
+        if is_string(ref):
+            objref = get_object(ref)
+            col.objects.unlink(objref)
+        else:
+            col.objects.unlink(ref)
 
 def get_object_collection(ref):
     return ref.users_collection
+
+def collection_exists(col):
+    if is_string(col):
+        if col in bpy.data.collections:
+            return True
+        else:
+            return False
+    else:
+        if col.name in bpy.data.collections:
+            return True
+        else:
+            return False
 #endregion
 #region MATERIALS
 def create_material(name):
-    pass
+    return bpy.data.materials.new(name)
 def delete_material(name):
+    bpy.data.materials.remove(name)
     pass
 def add_material_to_object(objname, matname):
     pass
@@ -268,16 +538,9 @@ def add_subsurf_modifier(ref, modname, level):
     mod_subsurf.levels = level
     mod_subsurf.render = level
     return mod_subsurf
-def add_displacement_modifier(ref, modname):
+def add_displace_modifier(ref, modname):
     mod_displace = ref.modifiers.new(modname, "DISPLACE")
     return mod_displace
-#endregion
-#region 3D VIEW
-def get_cursor_location():
-    return bpy.contex.scene.cursor_location
-
-def set_cursor_location(newloc):
-    bpy.context.scene.cursor_location = newloc
 #endregion
 #region TEXT OBJECTS
 def create_text_object(textname):
@@ -302,4 +565,8 @@ def make_vector(data):
 #region MISC
 def run_python_from_string(pycode):
     exec(pycode)
+def clear_unwanted_data():
+    clear_unused_data()
+def clear_unused_data():
+    bpy.ops.outliner.orphans_purge()
 #endregion
