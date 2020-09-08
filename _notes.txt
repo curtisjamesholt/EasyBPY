@@ -21,6 +21,7 @@ OBJECTS                             TESTED
 - duplicate_object                  X
 - instance_object                   X
 - get_object                        X
+- get_obj                           X
 - object_exists                     X
 - rename_object                     X
 
@@ -45,7 +46,7 @@ VISIBILITY
 TRANSFORMATIONS
 - location                          X
 - rotation                          X
-- scale
+- scale                             X
 
 3D CURSOR   
 - selection_to_cursor_without_offset
@@ -65,26 +66,32 @@ SHADING
 
 MESHES
 - create_mesh                       X
-- get_vertices                      X (todo: type check)
-- get_edges                         X (todo: type check)
-- get_faces                         X (todo: type check)
+- get_vertices                      X 
+- get_edges                         X 
+- get_faces                         X 
 
 VERTEX GROUPS
 - create_vertex_group
+- delete_vertex_group
 
 COLLECTIONS
 - create_collection                 X
-- collection_exists                 
 - delete_collection                 X
 - delete_objects_in_colletion       X
-- delete_hierarchy
-- duplicate_collection
-- get_objects_from_collection
+- delete_hierarchy                  X
+- duplicate_collection              X
+- get_objects_from_collection       X
 - get_collection                    X
+- get_col                           X
 - get_list_of_collections           X
 - link_object_to_collection         X
-- unlink_object_from_collection     
+- link_objects_to_collection        X
+- unlink_object_from_collection     X
+- unlink_objects_from_collection    X
+- move_object_to_collection         X
+- move_objects_to_collection        X
 - get_object_collection             X
+- get_object_collections            X
 - collection_exists                 X
 
 MATERIALS

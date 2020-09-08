@@ -169,6 +169,9 @@ def get_object(ref):
     else:
         return False
 
+def get_obj(ref):
+    return get_object(ref)
+
 def object_exists(ref):
     if is_string(ref):
         if ref in bpy.data.objects:
@@ -497,18 +500,33 @@ def create_mesh(name):
     return bpy.data.meshes.new(name)
 
 def get_vertices(ref):
-    return ref.data.vertices
+    if is_string(ref):
+        return get_object(ref).data.vertices
+    else:
+        return ref.data.vertices
 
 def get_edges(ref):
-    return ref.data.edges
+    if is_string(ref):
+        return get_object(ref).data.edges
+    else:
+        return ref.data.edges
 
 def get_faces(ref):
-    return ref.data.faces
+    return get_polygons(ref)
+
+def get_polygons(ref):
+    if is_string(ref):
+        return get_object(ref).data.polygons
+    else:
+        return ref.data.polygons
 #endregion
 #region VERTEX GROUPS
 def create_vertex_group(ref, group_name):
     ref.vertex_groups.new(name=group_name)
     return ref.vertex_groups[group_name]
+
+def delete_vertex_group(ref, group_name):
+    pass
 #endregion
 #region COLLECTIONS
 def create_collection(name):
@@ -556,21 +574,43 @@ def delete_objects_in_collection(col):
         co.select_set(True)
     delete_selected_objects()
 
-def delete_hierarchy(name):
+def delete_hierarchy(col):
+    colref = None
+    if is_string(col):
+        colref = get_collection(col)
+    else:
+        colref = col
+        pass
+    deselect_all_objects()
+    delete_objects_in_collection(colref)
+    delete_collection(colref)
 
-    pass
+def duplicate_collection(col):
+    colref = None
+    if is_string(col):
+        colref = get_collection(col)
+    else:
+        colref = col
+    new_name = "Copy of " + colref.name
+    new_col = create_collection(new_name)
+    to_copy = get_objects_from_collection(colref.name)
+    for o in to_copy:
+        copy_object(o,new_col)
 
-def duplicate_collection(colname):
-    pass
-
-def get_objects_from_collection(colname):
-    pass
+def get_objects_from_collection(col):
+    if is_string(col):
+        return bpy.data.collections[col].objects
+    else:
+        return col.objects
 
 def get_collection(ref):
     if ref in bpy.data.collections:
         return bpy.data.collections[ref]
     else:
         return False
+
+def get_col(ref):
+    return get_collection(ref)
 
 def get_list_of_collections():
     return bpy.data.collections
@@ -589,6 +629,15 @@ def link_object_to_collection(ref, col):
         else:
             col.objects.link(ref)
 
+def link_objects_to_collection(ref, col):
+    if is_string(col):
+        for o in ref:
+            bpy.data.collections[col].objects.link(o)
+    else:
+        for o in ref:
+            col.objects.link(o)
+        pass
+
 def unlink_object_from_collection(ref, col):
     #ref.users_collection[0].unlink(ref)
     if is_string(col):
@@ -604,8 +653,69 @@ def unlink_object_from_collection(ref, col):
         else:
             col.objects.unlink(ref)
 
+def unlink_objects_from_collection(ref, col):
+
+    # we assume that ref is a list
+    colref = None
+
+    if is_string(col):
+        colref = get_collection(col)
+    else:
+        colref = col
+
+    for o in ref:
+        colref.objects.unlink(o)
+
+def move_object_to_collection(ref, col):
+
+    objref = None
+    colref = None
+
+    if is_string(ref):
+        objref = get_object(ref)
+    else:
+        objref = ref
+
+    if is_string(col):
+        colref = get_collection(col)
+    else:
+        colref = col
+
+    cols = objref.users_collection
+    for c in cols:
+        c.objects.unlink(objref)
+    link_object_to_collection(objref, colref)
+
+def move_objects_to_collection(ref, col):
+
+    colref = None
+
+    if is_string(col):
+        colref = get_collection(col)
+    else:
+        colref = col
+    
+    # we assume that ref is object list
+    for o in ref:
+        for c in o.users_collection:
+            c.objects.unlink(o)
+        link_object_to_collection(o, colref)
+
 def get_object_collection(ref):
-    return ref.users_collection
+    objref = None
+    if is_string(ref):
+        objref = get_object(ref)
+    else:
+        objref = ref
+    return objref.users_collection[0]
+
+def get_object_collections(ref):
+    objref = None
+    if is_string(ref):
+        objref = get_object(ref)
+    else:
+        objref = ref
+    return objref.users_collection
 
 def collection_exists(col):
     if is_string(col):
