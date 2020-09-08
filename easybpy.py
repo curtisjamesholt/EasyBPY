@@ -91,6 +91,9 @@ def get_selected_object():
 def selected_object():
     return get_selected_object()
 
+def invert_selection():
+    bpy.ops.object.select_all(action='INVERT')
+
 def so():
     return get_selected_object()
 
@@ -198,6 +201,53 @@ def rename_object(obj, newname):
         return True
     else:
         return False
+#endregion
+#region OBJECTS - SELECTION
+def select_all_meshes():
+    bpy.ops.object.select_by_type(type='MESH')
+
+def select_all_curves():
+    bpy.ops.object.select_by_type(type='CURVE')
+
+def select_all_surfaces():
+    bpy.ops.object.select_by_type(type='SURFACE')
+
+def select_all_metas():
+    bpy.ops.object.select_by_type(type='META')
+
+def select_all_text():
+    bpy.ops.object.select_by_type(type='FONT')
+
+def select_all_hair():
+    bpy.ops.object.select_by_type(type='HAIR')
+
+def select_all_point_clouds():
+    bpy.ops.object.select_by_type(type='POINTCLOUD')
+
+def select_all_volumes():
+    bpy.ops.object.select_by_type(type='VOLUME')
+
+def select_all_armatures():
+    bpy.ops.object.select_by_type(type='ARMATURE')
+
+def select_all_lattices():
+    bpy.ops.object.select_by_type(type='LATTICE')
+
+def select_all_empties():
+    bpy.ops.object.select_by_type(type='EMPTY')
+
+def select_all_greace_pencils():
+    bpy.ops.object.select_by_type(type='GPENCIL')
+
+def select_all_cameras():
+    bpy.ops.object.select_by_type(type='CAMERA')
+
+def select_all_speakers():
+    bpy.ops.object.select_by_type(type='SPEAKER')
+
+def select_all_light_probes():
+    bpy.ops.object.select_by_type(type='LIGHT_PROBE')
+
 #endregion
 #region OBJECTS - PRIMITIVES
 def create_cube():
@@ -732,14 +782,72 @@ def collection_exists(col):
 #region MATERIALS
 def create_material(name):
     return bpy.data.materials.new(name)
+
 def delete_material(name):
-    bpy.data.materials.remove(name)
-    pass
-def add_material_to_object(objname, matname):
-    pass
-def remove_material_from_object(objref, matname):
+    matref = None
+    if is_string(name):
+        matref = get_material(name)
+    else:
+        matref = name
+    bpy.data.materials.remove(matref)
+
+def get_material(name):
+    if name in bpy.data.materials:
+        return bpy.data.materials[name]
+
+def add_material_to_object(ref, matname):
+    objref = None
+    matref = None
+    if is_string(ref):
+        objref = get_object(ref)
+    else:
+        objref = ref
+    
+    if is_string(matname):
+        matref = get_material(matname)
+    else:
+        matref = matname
+
+    if matref != None:
+        objref.data.materials.append(matref)
+
+def remove_material_from_object(ref, matname):
+    objref = None
+    if is_string(ref):
+        objref = get_object(ref)
+    else:
+        objref = ref
+
     matindex = objref.data.materials.find(matname)
-    objref.data.materials.pop(index=matindex)
+    if matname in objref.data.materials:
+        objref.data.materials.pop(index=matindex)
+
+def remove_material(ref, matname):
+    return remove_material_from_object(ref, matname)
+
+def get_materials_from_object(ref):
+    objref = None
+    if is_string(ref):
+        objref = get_object(ref)
+    else:
+        objref = ref
+    mat_list = []
+    mats = objref.data.materials.items()
+    for m in mats:
+        mat_list.append(m[1])
+    return mat_list
+
+def get_material_names_from_object(ref):
+    objref = None
+    if is_string(ref):
+        objref = get_object(ref)
+    else:
+        objref = ref
+    name_list = []
+    mats = objref.data.materials.items()
+    for m in mats:
+        name_list.append(m[0])
+    return name_list
 #endregion
 #region NODES
 def set_material_use_nodes(matref, value):

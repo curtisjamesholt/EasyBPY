@@ -25,6 +25,23 @@ OBJECTS                             TESTED
 - object_exists                     X
 - rename_object                     X
 
+OBJECTS - SELECTION
+- select_all_meshes                 X
+- select_all_curves                 X
+- select_all_surfaces               X
+- select_all_metas                  X
+- select_all_text                   X
+- select_all_hair                   X
+- select_all_point_clouds           X
+- select_all_volumes                X
+- select_all_armatures              X
+- select_all_lattices               X
+- select_all_empties                X
+- select_all_greace_pencils         X
+- select_all_cameras                X
+- select_all_speakers               X
+- select_all_light_probes           X
+
 PRIMITIVE OBJECTS
 - create_cube                       X
 - create_cylinder                   X
@@ -95,10 +112,14 @@ COLLECTIONS
 - collection_exists                 X
 
 MATERIALS
-- create_material
-- delete_material
-- add_material_to_object
-- remove_material_from_object
+- create_material                   X
+- delete_material                   X
+- get_material                      X
+- add_material_to_object            X   
+- remove_material_from_object       X
+- remove_material                   X
+- get_materials_from_object         X 
+- get_material_names_from_object    X
 
 NODES
 - set_material_use_nodes
