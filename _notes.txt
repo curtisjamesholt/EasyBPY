@@ -22,6 +22,7 @@ OBJECTS                             TESTED
 - instance_object                   X
 - get_object                        X
 - object_exists                     X
+- rename_object                     X
 
 PRIMITIVE OBJECTS
 - create_cube                       X
@@ -42,8 +43,8 @@ VISIBILITY
 - display_as_wire                   X
 
 TRANSFORMATIONS
-- location
-- rotation
+- location                          X
+- rotation                          X
 - scale
 
 3D CURSOR   
