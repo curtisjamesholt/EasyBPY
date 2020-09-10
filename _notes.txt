@@ -133,11 +133,10 @@ TEXTURES
 - delete_texture
 
 MODIFIERS
-- add_modifier
-- get_modifier
-- remove_modifier
-- add_subfurf_modifier
-- add_displace_modifier
+- add_modifier                      
+- get_modifier                      
+- remove_modifier                   
+- (all modifier types)                        
 
 TEXT OBJECTS
 - create_text_object
@@ -151,7 +150,7 @@ DATA CONSTRUCTORS
 - make_vector                       X
 
 MISC
-- run_python_from_string            X
+- run_python                        X
 - clear_unwanted_data               X
 - clear_unsaved_data                X
 
