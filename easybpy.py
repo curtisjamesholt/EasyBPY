@@ -1,7 +1,8 @@
 #region INFO
 '''
-    == EasyBPY ==
+    == EasyBPY 0.0.1 ==
     Created by Curtis Holt
+    https://curtisholt.online/links
     ---
     https://YouTube.com/CurtisHolt
     https://curtisholt.online
@@ -36,6 +37,7 @@
 #region IMPORTS
 import bpy
 from mathutils import Vector
+from math import radians
 #endregion
 #region OBJECTS
 def create_object(name, col):
@@ -74,7 +76,8 @@ def copy_object(tocopy, col):
         col_ref = col
     # Perform action
     new_obj = to_copy.copy()
-    new_obj.data = to_copy.data.copy()
+    if new_obj.data != None:
+        new_obj.data = to_copy.data.copy()
     new_obj.animation_data_clear()
     col_ref.objects.link(new_obj)
     return new_obj
@@ -90,9 +93,6 @@ def get_selected_object():
 
 def selected_object():
     return get_selected_object()
-
-def invert_selection():
-    bpy.ops.object.select_all(action='INVERT')
 
 def so():
     return get_selected_object()
@@ -248,6 +248,8 @@ def select_all_speakers():
 def select_all_light_probes():
     bpy.ops.object.select_by_type(type='LIGHT_PROBE')
 
+def invert_selection():
+    bpy.ops.object.select_all(action='INVERT')
 #endregion
 #region OBJECTS - PRIMITIVES
 def create_cube():
@@ -570,6 +572,16 @@ def shade_object_flat(ref = None):
 
 def shade_flat(ref = None):
     shade_object_flat(ref)
+
+def set_smooth_angle(ref, degrees = 60):
+    objref = None
+    if is_string(ref):
+        objref = get_object(ref)
+    else:
+        objref = ref
+    if objref.data.use_auto_smooth == False:
+        objref.data.use_auto_smooth = True
+    objref.data.auto_smooth_angle = radians(degrees)
 #endregion
 #region MESHES
 # Creates a mesh - (string) name
@@ -596,14 +608,24 @@ def get_polygons(ref):
         return get_object(ref).data.polygons
     else:
         return ref.data.polygons
+
+def get_mesh_from_object(ref):
+    objref = None
+    if is_string(ref):
+        objref = get_object(ref)
+    else:
+        objref = ref
+    return objref.data
 #endregion
 #region VERTEX GROUPS
+''' NEXT UPDATE
 def create_vertex_group(ref, group_name):
     ref.vertex_groups.new(name=group_name)
     return ref.vertex_groups[group_name]
 
 def delete_vertex_group(ref, group_name):
     pass
+'''
 #endregion
 #region COLLECTIONS
 def create_collection(name):
@@ -673,6 +695,7 @@ def duplicate_collection(col):
     to_copy = get_objects_from_collection(colref.name)
     for o in to_copy:
         copy_object(o,new_col)
+    return get_collection(new_name)
 
 def get_objects_from_collection(col):
     if is_string(col):
@@ -810,6 +833,19 @@ def collection_exists(col):
 def create_material(name):
     return bpy.data.materials.new(name)
 
+def material_exists(ref):
+    if is_string(ref):
+        if ref in bpy.data.materials:
+            return True
+        else:
+            return False
+    # redundant but for safety
+    else:
+        if ref.name in bpy.data.materials:
+            return True
+        else:
+            return False
+
 def delete_material(name):
     matref = None
     if is_string(name):
@@ -898,10 +934,12 @@ def create_node_link(matref, point1, point2):
     return links.new(point1,point2)
 #endregion
 #region TEXTURES 
+''' NEXT UPDATE
 def create_texture(name, type):
     pass
 def delete_texture(name):
     pass
+'''
 #endregion
 #region MODIFIERS
 def add_modifier(obj, name, id):
@@ -926,8 +964,19 @@ def get_modifier(obj, name):
     else:
         return False
 
-def remove_modifier(obj, name):
-    pass
+def remove_modifier(ref, name):
+    objref = None
+    if is_string(ref):
+        objref = get_object(ref)
+    else:
+        objref = ref
+
+    if is_string(name):
+        if name in objref.modifiers:
+            mod = get_modifier(objref,name)
+            objref.modifiers.remove(mod)
+    else:
+        objref.modifiers.remove(name)
 
 # Specific Modiiers
 def add_data_transfer(ref, modname):
@@ -1095,9 +1144,14 @@ def add_simulation(ref,modname):
 #region TEXT OBJECTS
 def create_text_object(textname):
     return bpy.data.texts.new(textname)
+
 def delete_text_object(textname):
-    t = bpy.data.texts[textname]
-    bpy.data.texts.remove(t)
+    if is_string(textname):
+        t = bpy.data.texts[textname]
+        bpy.data.texts.remove(t)
+    else:
+        bpy.data.texts.remove(textname)
+    
 def get_lines_in_text_object(textname):
     return bpy.data.texts[textname].lines
 #endregion
@@ -1113,8 +1167,6 @@ def make_vector(data):
     return Vector((data[0],data[1],data[2]))
 #endregion
 #region MISC
-def run_python(pycode):
-    exec(pycode)
 def clear_unwanted_data():
     clear_unused_data()
 def clear_unused_data():
