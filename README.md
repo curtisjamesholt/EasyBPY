@@ -153,7 +153,9 @@ NODES
 - create_node_link
 
 TEXTURES
-( coming soon )
+( more coming soon )
+- create_texture
+- delete_texture
 
 MODIFIERS
 - add_modifier                      
