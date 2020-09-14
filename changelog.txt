@@ -1,4 +1,15 @@
 === 0.0.2 - 14/09/2020 ===
+[ Curtis Holt ]
+- + get_all_objects
+- + get_list_of_objects
+- + create_texture
+- + get_texture
+- + get_all_textures
+- + get_list_of_textures
+- + rename_texture
+- + delete_texture
+- + get_all_collections
+
 [ 3D_Bubble ]
 - create_object now works without collection reference (uses active).
 - copy_object now works without a collection reference (uses active).

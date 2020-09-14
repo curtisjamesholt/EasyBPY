@@ -32,7 +32,8 @@
 #region IMPORTS
 import bpy
 import bpy.types
-from mathutils import Vector
+from mathutils import Vector, Matrix
+import math
 from math import radians
 #endregion
 #region OBJECTS
@@ -101,6 +102,12 @@ def so():
 
 def get_selected_objects():
     return bpy.context.selected_objects
+
+def get_all_objects():
+    return bpy.data.objects
+
+def get_list_of_objects():
+    get_all_objects()
 
 def select_object(ref):
     # ref is string
@@ -572,6 +579,7 @@ def scale(obj = None, scale = None):
             # case 4 - no obj and no scale provided
             return so().scale
     pass
+
 #endregion
 #region 3D CURSOR
 def selection_to_cursor_without_offset():
@@ -811,8 +819,11 @@ def set_active_collection(ref):
         return False
 '''
 
-def get_list_of_collections():
+def get_all_collections():
     return bpy.data.collections
+
+def get_list_of_collections():
+    return get_all_collections()
 
 def link_object_to_collection(ref, col):
     if is_string(col):
@@ -1033,12 +1044,37 @@ def create_node_link(matref, point1, point2):
     return links.new(point1,point2)
 #endregion
 #region TEXTURES 
-''' NEXT UPDATE
-def create_texture(name, type):
-    pass
-def delete_texture(name):
-    pass
-'''
+
+def create_texture(name="Texture", type='CLOUDS'):
+    if type is not None:
+        return bpy.data.textures.new(name, type)
+    
+def get_texture(name):
+    if name is not None:
+        if name in bpy.data.textures:
+            return bpy.data.textures[name]
+
+def get_all_textures():
+    return bpy.data.textures
+
+def get_list_of_textures():
+    return get_all_textures()
+
+def rename_texture(ref, name):
+    tex_ref = None
+    if is_string(ref):
+        tex_ref = get_texture(ref)
+    else:
+        tex_ref = ref
+    if name is not None:
+        tex_ref.name = name
+
+def delete_texture(ref):
+    if is_string(ref):
+        bpy.data.textures.remove(get_texture(ref))
+    else:
+        bpy.data.textures.remove(ref)
+        
 #endregion
 #region MODIFIERS
 def add_modifier(obj, name, id):

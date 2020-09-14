@@ -29,7 +29,9 @@ OBJECTS
 - selected_object                   
 - so
 - ao
-- get_selected_objects              
+- get_selected_objects    
+- get_all_objects 
+- get_list_of_objects         
 - select_object                     
 - select_all_objects                
 - deselect_object                   
@@ -131,7 +133,8 @@ COLLECTIONS
 - duplicate_collection              
 - get_objects_from_collection       
 - get_collection                    
-- get_col                           
+- get_col               
+- get_all_collections            
 - get_list_of_collections           
 - link_object_to_collection         
 - link_objects_to_collection        
@@ -163,7 +166,11 @@ NODES
 - create_node_link
 
 TEXTURES
-( coming soon )
+- create_texture
+- get_texture
+- get_all_textures
+- rename_texture
+- delete_texture
 
 MODIFIERS
 - add_modifier                      
