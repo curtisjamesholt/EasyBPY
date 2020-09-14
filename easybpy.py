@@ -934,12 +934,19 @@ def create_node_link(matref, point1, point2):
     return links.new(point1,point2)
 #endregion
 #region TEXTURES 
-''' NEXT UPDATE
-def create_texture(name, type):
-    pass
+def create_texture(name, type='clouds'):
+    texture_noise_types = ['BLEND', 'CLOUDS', 'DISTORTED_NOISE', 'IMAGE', 'MAGIC', 'MARBLE', 'MUSGRAVE', 'NOISE', 'STUCCI', 'VORONOI', 'WOOD']
+    bpy.ops.texture.new()
+    newTexture = bpy.data.textures[-1]
+    if type.upper() in texture_noise_types:
+        newTexture.type = type.upper()
+    newTexture.name = name
+    return newTexture
+    
 def delete_texture(name):
-    pass
-'''
+    # remove the texture if it exists
+    if name in bpy.data.textures:
+        bpy.data.textures.remove(bpy.data.textures[name])
 #endregion
 #region MODIFIERS
 def add_modifier(obj, name, id):
