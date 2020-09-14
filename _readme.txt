@@ -1,11 +1,11 @@
-== EasyBPY 0.0.1 ==
+== EasyBPY 0.0.2 ==
 Created by Curtis Holt.
 https://curtisholt.online/links
 
 ---
 This purpose of this module is to simplify the use of the Blender API
 (bpy) by creating an extra layer of abstraction that is more human-
-readable, memorizable and reduces the user's exposure to complex code 
+readable, memorable and reduces the user's exposure to complex code 
 paths.
 EasyBPY can be added to Blender by installing it into the:
             ../scripts/modules
@@ -16,8 +16,8 @@ the GPL license.
 Documentation will become available over time as the project evolves.
 In the meantime, a list of all available functions is provided below.
 
-Extra Thanks:
-- Charan from Just 3D Things for contributing some functions and motivational support.
+Extra Credits:
+Charan (Just 3D Things), JYoshi, 3D_Bubble
 ---
 
 OBJECTS
@@ -28,6 +28,7 @@ OBJECTS
 - get_selected_object               
 - selected_object                   
 - so
+- ao
 - get_selected_objects              
 - select_object                     
 - select_all_objects                
@@ -70,10 +71,19 @@ PRIMITIVE OBJECTS
 - create_cone                       
 
 VISIBILITY
-- hide_in_viewport                  
+- hide_object
+- hide
+- show_object
+- show
+- unhide
+- unhide_object
+- hide_in_viewport
+- show_in_viewport
+- unhide_in_viewport
 - show_in_viewport                  
-- hide_in_render                    
-- show_in_render                    
+- hide_in_render
+- show_in_render
+- unhide_in_render
 - display_as_bounds                 
 - display_as_textured               
 - display_as_solid                  

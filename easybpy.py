@@ -1,13 +1,8 @@
 #region INFO
 '''
-    == EasyBPY 0.0.1 ==
+    == EasyBPY 0.0.2 ==
     Created by Curtis Holt
     https://curtisholt.online/links
-    ---
-    https://YouTube.com/CurtisHolt
-    https://curtisholt.online
-    https://twitter.com/curtisjamesholt
-    https://instagram.com/curtisjamesholt
     ---
     This purpose of this module is to simplify the use of the Blender API
     (bpy) by creating an extra layer of abstraction that is more human-
@@ -36,27 +31,29 @@
 #endregion
 #region IMPORTS
 import bpy
+import bpy.types
 from mathutils import Vector
 from math import radians
 #endregion
 #region OBJECTS
-def create_object(name, col):
+def create_object(name, col = None):
     m = bpy.data.meshes.new(name)
     o = bpy.data.objects.new(name, m)
     col_ref = None
     # Assess col
-    if is_string(col):
+    if col == None:
+        col_ref=bpy.context.view_layer.active_layer_collection.collection
+    elif is_string(col):
         if col in bpy.data.collections:
             col_ref = bpy.data.collections[col]
         else:
             col_ref = create_collection(col)
     else:
         col_ref = col
-        pass
     col_ref.objects.link(o)
     return o
 
-def copy_object(tocopy, col):
+def copy_object(tocopy, col = None):
     # Set up vars
     new_obj = None
     to_copy = None
@@ -67,7 +64,9 @@ def copy_object(tocopy, col):
     else:
         to_copy = tocopy
     # Assess col
-    if is_string(col):
+    if col == None:
+        col_ref=bpy.context.view_layer.active_layer_collection.collection
+    elif is_string(col):
         if collection_exists(col):
             col_ref = get_collection(col)
         else:
@@ -76,7 +75,7 @@ def copy_object(tocopy, col):
         col_ref = col
     # Perform action
     new_obj = to_copy.copy()
-    if new_obj.data != None:
+    if new_obj.data is not None:
         new_obj.data = to_copy.data.copy()
     new_obj.animation_data_clear()
     col_ref.objects.link(new_obj)
@@ -93,6 +92,9 @@ def get_selected_object():
 
 def selected_object():
     return get_selected_object()
+
+def ao():
+    return get_active_object()
 
 def so():
     return get_selected_object()
@@ -111,9 +113,21 @@ def select_object(ref):
     else:
         ref.select_set(True)
 
-def select_all_objects():
-    for co in bpy.context.scene.objects:
-        co.select_set(True)
+def select_all_objects(col = None):
+    if col == None:
+        for co in bpy.context.scene.objects:
+            co.select_set(True)
+    else:
+        col_ref = None
+        if is_string(col):
+            if collection_exists(col):
+                col_ref = get_collection(col)
+            else:
+                col_ref = create_collection(col)
+        else:
+            col_ref = col
+        for c in col_ref.objects:
+            c.select_set(True)
 
 def deselect_object(ref):
     # ref is string
@@ -159,9 +173,9 @@ def instance_object(ref, newname = None, col = None):
     select_object(ref)
     bpy.ops.object.duplicate_move_linked()
     o = selected_object()
-    if newname != None:
+    if newname is not None:
         o.name = newname
-    if col != None:
+    if col is not None:
         link_object_to_collection(o,col)
     return o
 
@@ -276,6 +290,52 @@ def create_cone():
     return bpy.data.objects["Cone"]
 #endregion
 #region VISIBILITY
+def hide_object(ref=None):
+    if ref is not None:
+        # ref is string
+        if is_string(ref):
+            if object_exists(ref):
+                obj = get_object(ref)
+                obj.hide_set(True)
+            pass
+        # ref is object reference
+        else:
+            if object_exists(ref):
+                ref.hide_set(True)
+    else:
+        obj = selected_object()
+        if obj is not None:
+            obj.hide_set(True)
+
+def hide(ref = None):
+    hide_object(ref)
+
+def show_object(ref = None):
+    if ref is not None:
+        # ref is string
+        if is_string(ref):
+            if object_exists(ref):
+                obj = get_object(ref)
+                obj.hide_set(False)
+            pass
+        # ref is object reference
+        else:
+            if object_exists(ref):
+                ref.hide_set(False)
+    else:
+        obj = selected_object()
+        if obj is not None:
+            obj.hide_set(False)
+
+def show(ref = None):
+    show_object(ref)
+
+def unhide(ref = None):
+    show_object(ref)
+
+def unhide_object(ref = None):
+    show_object(ref)
+
 def hide_in_viewport(ref):
     # ref is string
     if is_string(ref):
@@ -302,6 +362,9 @@ def show_in_viewport(ref):
         else:
             return False
 
+def unhide_in_viewport(ref):
+    show_in_viewport(ref)
+
 def hide_in_render(ref):
     # ref is string
     if is_string(ref):
@@ -327,6 +390,9 @@ def show_in_render(ref):
             ref.hide_render = False
         else:
             return False
+
+def unhide_in_render(ref):
+    show_in_render(ref)
 
 def display_as_bounds(ref):
     # ref is string
@@ -389,7 +455,7 @@ def location(obj = None, loc = None):
     loc_provided = False
 
     # obj checks
-    if obj != None:
+    if obj is not None:
         obj_provided = True
         # obj has been provided
         if is_string(obj):
@@ -398,7 +464,7 @@ def location(obj = None, loc = None):
             objref = obj
 
     # loc checks
-    if loc != None:
+    if loc is not None:
         # loc has been provided
         loc_provided = True
 
@@ -428,7 +494,7 @@ def rotation(obj = None, rot = None):
     rot_provided = False
 
     # obj checks
-    if obj != None:
+    if obj is not None:
         obj_provided = True
         # obj has been provided
         if is_string(obj):
@@ -437,7 +503,7 @@ def rotation(obj = None, rot = None):
             objref = obj
 
     # newloc checks
-    if rot != None:
+    if rot is not None:
         # rot has been provided
         rot_provided = True
 
@@ -471,7 +537,7 @@ def scale(obj = None, scale = None):
     scale_provided = False
 
     # obj checks
-    if obj != None:
+    if obj is not None:
         obj_provided = True
         # obj has been provided
         if is_string(obj):
@@ -480,7 +546,7 @@ def scale(obj = None, scale = None):
             objref = obj
 
     # newloc checks
-    if scale != None:
+    if scale is not None:
         # rot has been provided
         scale_provided = True
 
@@ -533,15 +599,22 @@ def cursor_to_grid():
     bpy.ops.view3d.snap_cursor_to_grid()
     
 def get_cursor_location():
-    return bpy.contex.scene.cursor_location
+    return bpy.context.scene.cursor.location
 
 def set_cursor_location(newloc):
-    bpy.context.scene.cursor_location = newloc
+    bpy.context.scene.cursor.location = newloc
+
+def get_cursor_rotation():
+    return bpy.context.scene.cursor.rotation_euler
+
+def get_cursor_rotation_mode():
+    return bpy.context.scene.cursor.rotation_mode
+
 #endregion
 #region SHADING
 def shade_object_smooth(ref = None):
     objref = None
-    if ref != None:
+    if ref is not None:
         if is_string(ref):
             objref = get_object(ref)
         else:
@@ -558,7 +631,7 @@ def shade_smooth(ref = None):
 
 def shade_object_flat(ref = None):
     objref = None
-    if ref != None:
+    if ref is not None:
         if is_string(ref):
             objref = get_object(ref)
         else:
@@ -637,7 +710,7 @@ def create_collection(name):
     else:
         return False
 
-def delete_collection(name, delete_objects = True):
+def delete_collection(name, delete_objects = False):
     # Make sure collection exists
     if collection_exists(name):
         # String or reference check
@@ -646,13 +719,17 @@ def delete_collection(name, delete_objects = True):
         else:
             col = name
         # See if deleting the children
-        if delete_objects != None:
-            if delete_objects:
-                deselect_all_objects()
-                if len(col.objects) > 0:
-                    for co in col.objects:
-                        co.select_set(True)
-                    delete_selected_objects()
+        if delete_objects:
+            deselect_all_objects()
+            if len(col.objects) > 0:
+                for co in col.objects:
+                    co.select_set(True)
+                delete_selected_objects()
+        else:
+            deselect_all_objects()
+            if len(col.objects) > 0:
+                for co in col.objects:
+                    bpy.context.scene.collection.objects.link(co)
         # Now remove collection
         bpy.data.collections.remove(col)
     else:
@@ -679,7 +756,9 @@ def delete_hierarchy(col):
         colref = get_collection(col)
     else:
         colref = col
-        pass
+    for co in colref.children:
+        if isinstance(co, bpy.types.Collection):
+            delete_hierarchy(co)
     deselect_all_objects()
     delete_objects_in_collection(colref)
     delete_collection(colref)
@@ -703,14 +782,34 @@ def get_objects_from_collection(col):
     else:
         return col.objects
 
-def get_collection(ref):
-    if ref in bpy.data.collections:
-        return bpy.data.collections[ref]
+def get_collection(ref = None):
+    if ref is None:
+        return bpy.context.view_layer.active_layer_collection
+    else:
+        if ref in bpy.data.collections:
+            return bpy.data.collections[ref]
+        else:
+            return False
+
+def get_col(ref = None):
+    return get_collection(ref)
+
+def get_active_collection():
+    return bpy.context.view_layer.active_layer_collection
+
+''' REQUIRES FIXING
+def set_active_collection(ref):
+    
+    colref = None
+    if is_string(ref):
+        colref = get_collection(ref)
+    else:
+        colref = ref
+    if colref.name in bpy.data.collections:
+        bpy.context.view_layer.active_layer_collection = colref
     else:
         return False
-
-def get_col(ref):
-    return get_collection(ref)
+'''
 
 def get_list_of_collections():
     return bpy.data.collections
@@ -871,7 +970,7 @@ def add_material_to_object(ref, matname):
     else:
         matref = matname
 
-    if matref != None:
+    if matref is not None:
         objref.data.materials.append(matref)
 
 def remove_material_from_object(ref, matname):

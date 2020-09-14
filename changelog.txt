@@ -1,0 +1,31 @@
+=== 0.0.2 - 14/09/2020 ===
+[ 3D_Bubble ]
+- create_object now works without collection reference (uses active).
+- copy_object now works without a collection reference (uses active).
+- select_all_objects now allows collection argument to choose objects in a specific collection.
+- + hide_object for hiding object (same as pressing 'H')
+    C Note: I've also changed this to hide the selected object if no argument given.
+- + show_object for showing hidden object (like 'Alt+H', but for single object)
+    C Note: Like before, added selected object support.
+- + hide con-func.
+- + show con-func.
+- + unhide con-func.
+- + unhide_object con-func.
+- + unhide_in_viewport con-func.
+- + unhide_in_render con-func.
+- get_cursor_location fix.
+- set_cursor_location fix.
+- + get_cursor_rotation
+- + get_cursor_rotation_mode
+- delete_collection delete_object argument fix.
+- delete_hierarchy now recursive to delete child collections
+    C Note: Needed to add an isinstance check for the collection type in children.
+- get_collection will return active if no argument provided.
+- get_col adjusted to return selected when calling get_collection
+- + get_active_collection
+- + set_active_collection 
+    C Note: String check was missing, added.
+- + set_active_collection - REQUIRES FIXING
+
+[ JYoshi ]
+- Converting != to 'is not' where appropriate.
