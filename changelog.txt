@@ -1,3 +1,57 @@
+=== 0.0.3 - 15/09/2020 ===
+[ Curtis Holt ]
+- + get_materials con-func (get_materials_from_object).
+
+[ 3D_Bubble ]
+- get_collection added .collection after .active_layer_collection
+- get_active_collection same change as above.
+- set_active_collection fixed and included.
+- get_object supports no arguments to return selected object.
+- + get_scene
+    C Note: I've put this in a new category (SCENES)
+- + set_pivot_point_to_cursor
+    C Note: I've put this in a new category (PIVOT POINT)
+- + set_pivot_point_to_median
+- + set_pivot_point_to_individual_origins
+- + set_pivot_point_to_active_elSement
+- + set_pivot_point_to_bounding_box_center
+- + translate_along_axis
+- + translate_along_x
+- + translate_along_y
+- + translate_along_z
+- + translate_along_global_x
+- + translate_along_global_y
+- + translate_along_global_z
+- + translate_along_local_x
+- + translate_along_local_y
+- + translate_along_local_z
+- + rotate_vector
+- + rotate_around_axis
+- + rotate_around_global_x
+- + rotate_around_global_y
+- + rotate_around_global_z
+- + rotate_around_x
+- + rotate_around_y
+- + rotate_around_z
+- + rotate_around_local_x
+- + rotate_around_local_y
+- + rotate_around_local_z
+- + scale_vector
+- + scale_uniform
+- + scale_along_axis
+- + scale_along_x
+- + scale_along_y
+- + scale_along_z
+- + scale_along_local_x
+- + scale_along_local_y
+- + scale_along_local_z
+- + scale_along_global_x
+- + scale_along_global_y
+- + scale_along_global_z
+- + scale_perpendicular_to_x
+- + scale_perpendicular_to_y
+- + scale_perpendicular_to_z
+
 === 0.0.2 - 14/09/2020 ===
 [ Curtis Holt ]
 - + get_all_objects

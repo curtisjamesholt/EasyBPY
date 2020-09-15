@@ -1,4 +1,4 @@
-== EasyBPY 0.0.2 ==
+== EasyBPY 0.0.3 ==
 Created by Curtis Holt.
 https://curtisholt.online/links
 
@@ -64,6 +64,9 @@ OBJECTS - SELECTION
 - select_all_light_probes    
 - invert_selection       
 
+SCENES
+- get_scene
+
 PRIMITIVE OBJECTS
 - create_cube                       
 - create_cylinder                   
@@ -94,7 +97,42 @@ VISIBILITY
 TRANSFORMATIONS
 - location                          
 - rotation                          
-- scale                             
+- scale
+- translate_along_axis
+- translate_along_x
+- translate_along_y
+- translate_along_z
+- translate_along_global_x
+- translate_along_global_y
+- translate_along_global_z
+- translate_along_local_x
+- translate_along_local_y
+- translate_along_local_z
+- rotate_around_axis
+- rotate_around_global_x
+- rotate_around_global_y
+- rotate_around_global_z
+- rotate_around_x
+- rotate_around_y
+- rotate_around_z
+- rotate_around_local_x
+- rotate_around_local_y
+- rotate_around_local_z
+- scale_vector
+- scale_uniform
+- scale_along_axis
+- scale_along_x
+- scale_along_y
+- scale_along_z
+- scale_along_local_x
+- scale_along_local_y
+- scale_along_local_z
+- scale_along_global_x
+- scale_along_global_y
+- scale_along_global_z
+- scale_perpendicular_to_x
+- scale_perpendicular_to_y
+- scale_perpendicular_to_z                             
 
 3D CURSOR   
 - selection_to_cursor_without_offset
@@ -107,6 +145,13 @@ TRANSFORMATIONS
 - cursor_to_grid
 - get_cursor_location
 - set_cursor_location
+
+PIVOT POINT
+- set_pivot_point_to_cursor
+- set_pivot_point_to_median
+- set_pivot_point_to_individual_origins
+- set_pivot_point_to_active_element
+- set_pivot_point_to_bounding_box_center
 
 SHADING
 - shade_object_smooth               
@@ -153,7 +198,8 @@ MATERIALS
 - get_material                      
 - add_material_to_object            
 - remove_material_from_object       
-- remove_material                   
+- remove_material
+- get_materials                   
 - get_materials_from_object         
 - get_material_names_from_object    
 
