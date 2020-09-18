@@ -81,6 +81,15 @@ def set_render_percentage(percent = None):
 def set_render_percent(percent = None):
     set_render_resolution_percentage(percent)
 
+def get_render_resolution_percentage():
+    return get_scene().render.resolution_percentage
+
+def render_resolution_percentage(percent = None):
+    if percent is not None:
+        set_render_resolution_percentage(percent)
+    else:
+        return get_render_resolution_percentage()
+
 def set_render_pixel_aspect_ratio(x, y):
     get_scene().render.pixel_aspect_x = x
     get_scene().render.pixel_aspect_y = y
@@ -1063,6 +1072,52 @@ def set_pivot_point_to_active_element():
 
 def set_pivot_point_to_bounding_box_center():
     get_scene().tool_settings.transform_pivot_point = 'BOUNDING_BOX_CENTER'
+#endregion
+#region ORIGINS
+def set_geometry_to_origin(ref = None):
+    objref = get_object(ref)
+    if objref is not None:
+        select_object(objref)
+    bpy.ops.object.origin_set(type='GEOMETRY_ORIGIN')
+
+def geometry_to_origin(ref = None):
+    set_geometry_to_origin(ref)
+
+def set_origin_to_geometry(ref = None):
+    objref = get_object(ref)
+    if objref is not None:
+        select_object(objref)
+    bpy.ops.object.origin_set(type='ORIGIN_GEOMETRY')
+
+def origin_to_geometry(ref = None):
+    set_origin_to_geometry(ref)
+
+def set_origin_to_cursor(ref = None):
+    objref = get_object(ref)
+    if objref is not None:
+        select_object(objref)
+    bpy.ops.object.origin_set(type='ORIGIN_CURSOR')
+
+def origin_to_cursor(ref = None):
+    set_origin_to_cursor(ref)
+
+def set_origin_to_centermass_surface(ref = None):
+    objref = get_object(ref)
+    if objref is not None:
+        select_object(objref)
+    bpy.ops.object.origin_set(type='ORIGIN_CENTER_OF_MASS')
+
+def origin_to_centermass_surface(ref = None):
+    set_origin_to_centermass_surface(ref)
+
+def set_origin_to_centermass_volume(ref = None):
+    objref = get_object(ref)
+    if objref is not None:
+        select_object(objref)
+    bpy.ops.object.origin_set(type='ORIGIN_CENTER_OF_VOLUME')
+
+def origin_to_centermass_volume(ref = None):
+    set_origin_to_centermass_volume(ref)
 #endregion
 #region SHADING
 def shade_object_smooth(ref = None):

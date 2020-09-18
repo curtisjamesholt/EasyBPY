@@ -33,6 +33,8 @@ RENDER SETTINGS
 - set_render_resolution_percentage
 - set_render_percentage
 - set_render_percent
+- get_render_resolution_percentage
+- render_resolution_percentage
 - set_render_pixel_aspect_ratio
 - get_render_pixel_aspect_ratio
 - render_aspect_ratio
@@ -189,6 +191,18 @@ PIVOT POINT
 - set_pivot_point_to_individual_origins
 - set_pivot_point_to_active_element
 - set_pivot_point_to_bounding_box_center
+
+ORIGINS
+- set_geometry_to_origin
+- geometry_to_origin
+- set_origin_to_geometry
+- origin_to_geometry
+- set_origin_to_cursor
+- origin_to_cursor
+- set_origin_to_centermass_surface
+- origin_to_centermass_surface
+- set_origin_to_centermass_volume
+- origin_to_centermass_volume
 
 SHADING
 - shade_object_smooth               

@@ -7,11 +7,24 @@
 - + set_render_engine_eevee con-func.
 - + set_frame con-func to current_frame(val).
 - + get_render_resolution to get render resolution.
+- + get_render_resolution_percentage to get render res percentage.
 - + render_resolution as a getter and setter.
 - + set_render_percentage con-func.
 - + set_render_percent con_func.
 - = get_render_pixel_aspect_ratio to get aspect ratio for render.
 - + render_aspect_ratio as a getter and setter.
+- + render_resolution_percentage as a getter and setter.
+- Created a new section 'ORIGINS' for origin functions.
+- + set_geometry_to_origin
+- + geometry_to_origin
+- + set_origin_to_geometry
+- + origin_to_geometry
+- + set_origin_to_cursor
+- + origin_to_cursor
+- + set_origin_to_centermass_surface
+- + origin_to_centermass_surface
+- + set_origin_to_centermass_volume
+- + origin_to_centermass_volume
 
 [ JYoshi ]
 - create_modifier force redraw of interface.
