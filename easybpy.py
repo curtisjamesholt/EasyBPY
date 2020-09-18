@@ -1,6 +1,6 @@
 #region INFO
 '''
-    == EasyBPY 0.0.3 ==
+    == EasyBPY 0.0.4 ==
     Created by Curtis Holt
     https://curtisholt.online/links
     ---
@@ -32,9 +32,117 @@
 #region IMPORTS
 import bpy
 import bpy.types
-from mathutils import Vector, Matrix
+from mathutils import Vector, Matrix, Euler
 import math
 from math import radians
+#endregion
+#region RENDER SETTINGS
+def set_render_engine_to_cycles():
+    get_scene().render.engine = 'CYCLES'
+
+def set_render_engine_cycles():
+    set_render_engine_to_cycles()
+
+def set_render_engine_to_eevee():
+    get_scene().render.engine = 'BLENDER_EEVEE'
+
+def set_render_engine_eevee():
+    set_render_engine_to_eevee()
+
+def render_image(use_view = False):
+    bpy.ops.render.render(use_viewport=use_view)
+    return bpy.data.images['Render Result']
+
+def render_animation(use_view = False):
+    bpy.ops.render.render(animation=True, use_viewport=use_view)
+
+def set_render_resolution(x, y):
+    get_scene().render.resolution_x = x
+    get_scene().render.resolution_y = y
+
+def get_render_resolution():
+    reslist = []
+    reslist.append(get_scene().render.resolution_x)
+    reslist.append(get_scene().render.resolution_y)
+    return reslist
+
+def render_resolution(x = None, y = None):
+    if x is not None and y is not None:
+        set_render_resolution(x,y)
+    else:
+        return get_render_resolution()
+
+def set_render_resolution_percentage(percent):
+    get_scene().render.resolution_percentage = percent
+
+def set_render_percentage(percent = None):
+    set_render_resolution_percentage(percent)
+
+def set_render_percent(percent = None):
+    set_render_resolution_percentage(percent)
+
+def set_render_pixel_aspect_ratio(x, y):
+    get_scene().render.pixel_aspect_x = x
+    get_scene().render.pixel_aspect_y = y
+
+def get_render_pixel_aspect_ratio():
+    aspectlist = []
+    aspectlist.append(get_scene().render.pixel_aspect_x)
+    aspectlist.append(get_scene().render.pixel_aspect_y)
+    return aspectlist
+
+def render_aspect_ratio(x = None, y = None):
+    if x is not None and y is not None:
+        set_render_pixel_aspect_ratio(x,y)
+    else:
+        return get_render_pixel_aspect_ratio()
+
+def current_frame(val = None):
+    if val is None:
+        return get_scene().frame_current
+    else:
+        get_scene().frame_current = val
+
+def set_frame(val = None):
+    current_frame(val)
+
+def frame_start(val = None):
+    if val is None:
+        return get_scene().frame_start
+    else:
+        get_scene().frame_start = val
+
+def frame_end(val = None):
+    if val is None:
+        return get_scene().frame_end
+    else:
+        get_scene().frame_end = val
+
+def set_current_frame(val = None):
+    current_frame(val)
+
+def set_frame_start(val = None):
+    frame_start(val)
+
+def set_frame_end(val = None):
+    frame_end(val)
+
+def set_start_frame(val = None):
+    frame_start(val)
+
+def set_end_frame(val = None):
+    frame_end(val)
+
+def set_frame_interval(start = None, end = None):
+    frame_start(start)
+    frame_end(end)
+
+def set_frame_step(val):
+    get_scene().frame_step = val
+
+def set_render_fps(val, base = 1.0):
+    get_scene().render.fps = val
+    get_scene().render.fps_base = base
 #endregion
 #region OBJECTS
 def create_object(name, col = None):
@@ -282,26 +390,26 @@ def invert_selection():
 #region OBJECTS - PRIMITIVES
 def create_cube():
     bpy.ops.mesh.primitive_cube_add()
-    return bpy.data.objects["Cube"]
+    return active_object()
 
 def create_cylinder():
     bpy.ops.mesh.primitive_cylinder_add()
-    return bpy.data.objects["Cylinder"]
+    return active_object()
 
 def create_ico_sphere():
     bpy.ops.mesh.primitive_ico_sphere_add()
-    return bpy.data.objects["Icosphere"]
+    return active_object()
 
 def create_suzanne():
     bpy.ops.mesh.primitive_monkey_add()
-    return bpy.data.objects["Suzanne"]
+    return active_object()
 
 def create_monkey():
     create_suzanne()
 
 def create_cone():
     bpy.ops.mesh.primitive_cone_add()
-    return bpy.data.objects["Cone"]
+    return active_object()
 #endregion
 #region SCENES
 def get_scene():
@@ -591,20 +699,60 @@ def scale(obj = None, scale = None):
             return so().scale
     pass
 
+# Applying Transformations:
+
+def apply_location(ref = None):
+    if ref is not None:
+        deselect_all_objects()
+        select_object(ref)
+    bpy.ops.object.transform_apply(location=True, rotation=False, scale=False)
+
+def apply_rotation(ref = None):
+    if ref is not None:
+        deselect_all_objects()
+        select_object(ref)
+    bpy.ops.object.transform_apply(location=False, rotation=True, scale=False)
+
+def apply_scale(ref = None):
+    if ref is not None:
+        deselect_all_objects()
+        select_object(ref)
+    bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
+
+def apply_all_transforms(ref = None):
+    if ref is not None:
+        deselect_all_objects()
+        select_object(ref)
+    bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
+
+def apply_rotation_and_scale(ref = None):
+    if ref is not None:
+        deselect_all_objects()
+        select_object(ref)
+    bpy.ops.object.transform_apply(location=False, rotation=True, scale=True)
+
+# Translations:
+
 def translate_vector(vec, ref = None):
     obj = get_object(ref)
     obj.location[0] += vec[0]
     obj.location[1] += vec[1]
     obj.location[2] += vec[2]
 
-# Translations:
-
 def translate_along_axis(val, axis : Vector, ref = None):
-    refobj = get_object(ref)
+    objref = None
+    if ref is not None:
+        if is_string(ref):
+            objref = get_object(ref)
+        else:
+            objref = ref
+    else:
+        objref = active_object()
+        
     axis.normalize()
-    refobj.location[0] += (val * axis[0])
-    refobj.location[1] += (val * axis[1])
-    refobj.location[2] += (val * axis[2])
+    objref.location[0] += (val * axis[0])
+    objref.location[1] += (val * axis[1])
+    objref.location[2] += (val * axis[2])
 
 def translate_along_x(val, ref = None):
     translate_along_axis(val, Vector((1.0,0.0,0.0)), ref)
@@ -645,10 +793,10 @@ def translate_along_local_z(val, ref = None):
 # Rotations:
 # Needs more testing
 def rotate_vector(vec, ref = None):
-    obj = get_object(ref)
-    obj.rotation_euler[0] += vec[0]
-    obj.rotation_euler[1] += vec[1]
-    obj.rotation_euler[2] += vec[2]
+    objref = get_object(ref)
+    objref.rotation_euler[0] += vec[0]
+    objref.rotation_euler[1] += vec[1]
+    objref.rotation_euler[2] += vec[2]
 
 def rotate_around_axis(deg, axis, obj = None, point = None):
     objref = get_object(obj)
@@ -702,6 +850,16 @@ def rotate_around_local_z(deg, obj = None, point = None):
     axis = Vector((0.0,0.0,1.0))
     axis.rotate(objref.rotation_euler)
     rotate_around_axis(deg, axis, obj, point)
+
+def revese_rotation_on_euler(rot : Euler):
+    if rot is not None:
+        temp = rot
+        temp.x *= -1
+        temp.y *= -1
+        temp.z *= -1
+        temp.order = 'ZYX'
+    else:
+        return False
 
 # Scaling:
 
@@ -792,6 +950,30 @@ def scale_along_global_z(factor, ref = None, point = None):
     temp.z *= -1
     axis.rotate(temp)
     scale_along_axis(factor, axis, ref, point)
+
+''' WAITING FOR 'TEMP' QUERY
+def scale_along_global_x(factor, ref = None, point = None):
+    obj = get_object(ref)
+    axis = Vector((1.0, 0.0, 0.0))
+    revese_rotation_on_euler(obj.rotation_euler.copy())
+    axis.rotate(temp)
+    scale_along_axis(factor, axis, ref, point)
+
+def scale_along_global_y(factor, ref = None, point = None):
+    obj = get_object(ref)
+    axis = Vector((0.0, 1.0, 0.0))
+    revese_rotation_on_euler(obj.rotation_euler.copy())
+    axis.rotate(temp)
+    print(axis)
+    scale_along_axis(factor, axis, ref, point)
+
+def scale_along_global_z(factor, ref = None, point = None):
+    obj = get_object(ref)
+    axis = Vector((0.0, 0.0, 1.0))
+    revese_rotation_on_euler(obj.rotation_euler.copy())
+    axis.rotate(temp)
+    scale_along_axis(factor, axis, ref, point)
+'''
 
 #Need some optimization in these. Like function to get the entered point or else pivot point
 def scale_perpendicular_to_x(fac, ref = None, point = None):

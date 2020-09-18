@@ -20,6 +20,35 @@ Extra Credits:
 Charan (Just 3D Things), JYoshi, 3D_Bubble
 ---
 
+RENDER SETTINGS
+- set_render_engine_to_cycles
+- set_render_engine_cycles
+- set_render_engine_to_eevee
+- set_render_engine_eevee
+- render_image
+- render_animation
+- set_render_resolution
+- get_render_resolution
+- render_resolution
+- set_render_resolution_percentage
+- set_render_percentage
+- set_render_percent
+- set_render_pixel_aspect_ratio
+- get_render_pixel_aspect_ratio
+- render_aspect_ratio
+- current_frame
+- set_frame
+- frame_start
+- frame_end
+- set_current_frame
+- set_frame_start
+- set_frame_end
+- set_start_frame
+- set_end_frame
+- set_frame_interval
+- set_frame_step
+- set_render_fps
+
 OBJECTS
 - create_object                     
 - copy_object                       
@@ -98,6 +127,12 @@ TRANSFORMATIONS
 - location                          
 - rotation                          
 - scale
+- apply_location
+- apply_rotation
+- apply_scale
+- apply_all_transforms
+- apply_rotation_and_scale
+- translate_vector
 - translate_along_axis
 - translate_along_x
 - translate_along_y
@@ -118,6 +153,7 @@ TRANSFORMATIONS
 - rotate_around_local_x
 - rotate_around_local_y
 - rotate_around_local_z
+- reverse_rotation_on_euler
 - scale_vector
 - scale_uniform
 - scale_along_axis
@@ -127,9 +163,9 @@ TRANSFORMATIONS
 - scale_along_local_x
 - scale_along_local_y
 - scale_along_local_z
-- scale_along_global_x
-- scale_along_global_y
-- scale_along_global_z
+- scale_along_global_x  (testing)
+- scale_along_global_y  (testing)
+- scale_along_global_z  (testing)
 - scale_perpendicular_to_x
 - scale_perpendicular_to_y
 - scale_perpendicular_to_z                             

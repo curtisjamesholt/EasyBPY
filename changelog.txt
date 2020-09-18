@@ -1,3 +1,49 @@
+=== 0.0.4 - 18/09/2020 ===
+
+[ Curtis Holt ]
+- Fixed creating primitives return types.
+- Importing Euler class for rotations.
+- + set_render_engine_cycles con-func.
+- + set_render_engine_eevee con-func.
+- + set_frame con-func to current_frame(val).
+- + get_render_resolution to get render resolution.
+- + render_resolution as a getter and setter.
+- + set_render_percentage con-func.
+- + set_render_percent con_func.
+- = get_render_pixel_aspect_ratio to get aspect ratio for render.
+- + render_aspect_ratio as a getter and setter.
+
+[ 3D_Bubble ]
+- + reverse_rotation_on_euler
+- C Note: For the render functions below, I have created a new
+          category: RENDER SETTINGS, which comes before OBJECTS.
+- + set_render_engine_to_cycles
+- + set_render_engine_to_eevee
+- + render_image
+- + render_animation
+- + set_render_resolution
+- + set_render_resolution_percentage
+- + set_render_pixel_aspect_ratio
+- + current_frame
+- + frame_start
+- + frame_end
+- + set_current_frame
+- + set_frame_start
+- + set_frame_end
+- + set_start_frame
+- + set_end_frame
+- + set_frame_interval
+- + set_frame_step
+- + set_render_fps
+    C Note: Base argument was not used, fixed.
+- C Note: For applying transforms below, I added consideration for
+          passing an object ref argument.
+- + apply_location
+- + apply_rotataion
+- + apply_scale
+- + apply_all_transforms
+- + apply_rotation_and_scale
+
 === 0.0.3 - 15/09/2020 ===
 [ Curtis Holt ]
 - + get_materials con-func (get_materials_from_object).
