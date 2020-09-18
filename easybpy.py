@@ -917,63 +917,39 @@ def scale_along_local_y(factor, ref = None, point = None):
 def scale_along_local_z(factor, ref = None, point = None):
     scale_along_axis(factor, Vector((0.0, 0.0, 1.0)), ref, point)
 
-#Scaling along global axis doesn't work as we mostly expect it.
-#It behaves even more weirdly than what happens in bender if we do it manually
-#These functions really need to be revised
-def scale_along_global_x(factor, ref = None, point = None):
+def scale_along_global_axis(factor, axis : Vector, ref = None, pointref = None):
     obj = get_object(ref)
-    axis = Vector((1.0, 0.0, 0.0))
-    temp = obj.rotation_euler.copy()
-    temp.x *= -1
-    temp.y *= -1
-    temp.z *= -1
-    axis.rotate(temp)
-    scale_along_axis(factor, axis, ref, point)
+    point = None
+    if pointref is None:
+        if get_scene().tool_settings.transform_pivot_point == 'MEDIAN_POINT':
+            point = obj.location
+        elif get_scene().tool_settings.transform_pivot_point == 'CURSOR':
+            point = get_cursor_location()
+        else:
+            point = obj.location
+    else:
+        point = point
+    loc, rot, scale = obj.matrix_world.decompose()
+    loc_mat = Matrix.Translation(loc)
+    new_loc_mat = loc_mat.copy()
+    new_loc_mat.invert()
+    obj.matrix_world = new_loc_mat @ obj.matrix_world
+    orig_rot = obj.rotation_euler.copy()
+    orig_loc = obj.location
+    obj.matrix_world = Matrix.Scale(factor, 4, axis) @ obj.matrix_world
+    obj.matrix_world = loc_mat @ obj.matrix_world
+    obj.rotation_euler = orig_rot
+    fac = (obj.location - point).dot(axis) * (factor-1)
+    translate_along_axis(fac, axis, obj)
+
+def scale_along_global_x(factor, ref = None, point = None):
+    scale_along_global_axis(factor, Vector((1.0, 0.0, 0.0)), ref, point)
 
 def scale_along_global_y(factor, ref = None, point = None):
-    obj = get_object(ref)
-    axis = Vector((0.0, 1.0, 0.0))
-    temp = obj.rotation_euler.copy()
-    temp.x *= -1
-    temp.y *= -1
-    temp.z *= -1
-    axis.rotate(temp)
-    print(axis)
-    scale_along_axis(factor, axis, ref, point)
+    scale_along_global_axis(factor, Vector((0.0, 1.0, 0.0)), ref, point)
 
 def scale_along_global_z(factor, ref = None, point = None):
-    obj = get_object(ref)
-    axis = Vector((0.0, 0.0, 1.0))
-    temp = obj.rotation_euler.copy()
-    temp.x *= -1
-    temp.y *= -1
-    temp.z *= -1
-    axis.rotate(temp)
-    scale_along_axis(factor, axis, ref, point)
-
-''' WAITING FOR 'TEMP' QUERY
-def scale_along_global_x(factor, ref = None, point = None):
-    obj = get_object(ref)
-    axis = Vector((1.0, 0.0, 0.0))
-    revese_rotation_on_euler(obj.rotation_euler.copy())
-    axis.rotate(temp)
-    scale_along_axis(factor, axis, ref, point)
-
-def scale_along_global_y(factor, ref = None, point = None):
-    obj = get_object(ref)
-    axis = Vector((0.0, 1.0, 0.0))
-    revese_rotation_on_euler(obj.rotation_euler.copy())
-    axis.rotate(temp)
-    print(axis)
-    scale_along_axis(factor, axis, ref, point)
-
-def scale_along_global_z(factor, ref = None, point = None):
-    obj = get_object(ref)
-    axis = Vector((0.0, 0.0, 1.0))
-    revese_rotation_on_euler(obj.rotation_euler.copy())
-    axis.rotate(temp)
-    scale_along_axis(factor, axis, ref, point)
-'''
+    scale_along_global_axis(factor, Vector((0.0, 0.0, 1.0)), ref, point)
 
 #Need some optimization in these. Like function to get the entered point or else pivot point
 def scale_perpendicular_to_x(fac, ref = None, point = None):
@@ -1553,6 +1529,9 @@ def add_modifier(obj, name, id):
     else:
         objref = obj
     new_mod = objref.modifiers.new(name, id)
+    for area in bpy.context.screen.areas:
+        if area.type == 'PROPERTIES':
+            area.tag_redraw()
     return new_mod
 
 def get_modifier(obj, name):
@@ -1581,168 +1560,172 @@ def remove_modifier(ref, name):
             objref.modifiers.remove(mod)
     else:
         objref.modifiers.remove(name)
+    
+    for area in bpy.context.screen.areas:
+        if area.type == 'PROPERTIES':
+            area.tag_redraw()
 
 # Specific Modiiers
-def add_data_transfer(ref, modname):
+def add_data_transfer(ref, modname = "DataTransfer"):
     return add_modifier(ref,modname,'DATA_TRANSFER')
 
-def add_mesh_cache(ref, modname):
+def add_mesh_cache(ref, modname = "MeshCache"):
     return add_modifier(ref,modname,'MESH_CACHE')
 
-def add_mesh_sequence_cache(ref,modname):
+def add_mesh_sequence_cache(ref, modname = "MeshSequenceCache"):
     return add_modifier(ref,modname,'MESH_SEQUENCE_CACHE')
 
-def add_normal_edit(ref,modname):
+def add_normal_edit(ref, modname = "NormalEdit"):
     return add_modifier(ref,modname,'NORMAL_EDIT')
 
-def add_weighted_normal(ref,modname):
+def add_weighted_normal(ref, modname = "WeightedNormal"):
     return add_modifier(ref,modname,'WEIGHTED_NORMAL')
 
-def add_uv_project(ref,modname):
+def add_uv_project(ref, modname = "UVProject"):
     return add_modifier(ref,modname,'UV_PROJECT')
 
-def add_uv_warp(ref,modname):
+def add_uv_warp(ref, modname = "Warp"):
     return add_modifier(ref,modname,'UV_WARP')
 
-def add_vertex_weight_edit(ref,modname):
+def add_vertex_weight_edit(ref, modname = "VertexWeightEdit"):
     return add_modifier(ref,modname,'VERTEX_WEIGHT_EDIT')
 
-def add_vertex_weight_mix(ref,modname):
+def add_vertex_weight_mix(ref, modname = "VertexWeightMix"):
     return add_modifier(ref,modname,'VERTEX_WEIGHT_MIX')
 
-def add_vertex_weight_proximity(ref,modname):
+def add_vertex_weight_proximity(ref, modname = "VertexWeightProximity"):
     return add_modifier(ref,modname,'VERTEX_WEIGHT_PROXIMITY')
 
-def add_array(ref,modname):
+def add_array(ref, modname = "Array"):
     return add_modifier(ref,modname,'ARRAY')
 
-def add_bevel(ref,modname):
+def add_bevel(ref, modname = "Bevel"):
     return add_modifier(ref,modname,'BEVEL')
 
-def add_boolean(ref,modname):
+def add_boolean(ref, modname = "Boolean"):
     return add_modifier(ref,modname,'BOOLEAN')
 
-def add_build(ref,modname):
+def add_build(ref, modname = "Build"):
     return add_modifier(ref,modname,'BUILD')
 
-def add_decimate(ref,modname):
-    return add_decimate(ref,modname,'DECIMATE')
+def add_decimate(ref, modname = "Decimate"):
+    return add_modifier(ref,modname,'DECIMATE')
 
-def add_edge_split(ref,modname):
+def add_edge_split(ref, modname = "EdgeSplit"):
     return add_modifier(ref,modname,'EDGE_SPLIT')
 
-def add_mask(ref,modname):
+def add_mask(ref, modname = "Mask"):
     return add_modifier(ref,modname,'MASK')
 
-def add_mirror(ref, modname):
+def add_mirror(ref, modname = "Mirror"):
     return add_modifier(ref,modname,'MIRROR')
 
-def add_multires(ref,modname):
+def add_multires(ref, modname = "Multires"):
     return add_modifier(ref,modname,'MULTIRES')
 
-def add_remesh(ref,modname):
+def add_remesh(ref, modname = "Remesh"):
     return add_modifier(ref,modname,'REMESH')
 
-def add_screw(ref,modname):
+def add_screw(ref, modname = "Screw"):
     return add_modifier(ref,modname,'SCREW')
 
-def add_skin(ref,modname):
+def add_skin(ref, modname = "Skin"):
     return add_modifier(ref,modname,'SKIN')
 
-def add_solidify(ref,modname):
+def add_solidify(ref, modname = "Solidify"):
     return add_modifier(ref,modname,'SOLIDIFY')
 
-def add_subsurf(ref,modname):
+def add_subsurf(ref, modname = "Subsurf"):
     return add_modifier(ref,modname,'SUBSURF')
 
-def add_triangulate(ref,modname):
+def add_triangulate(ref, modname = "Triangulate"):
     return add_modifier(ref,modname,'TRIANGULATE')
 
-def add_weld(ref,modname):
+def add_weld(ref, modname = "Weld"):
     return add_modifier(ref,modname,'WELD')
 
-def add_wireframe(ref,modname):
+def add_wireframe(ref, modname = "Wireframe"):
     return add_modifier(ref,modname,'WIREFRAME')
 
-def add_armature(ref,modname):
+def add_armature(ref, modname = "Armature"):
     return add_modifier(ref,modname,'ARMATURE')
 
-def add_cast(ref,modname):
+def add_cast(ref, modname = "Cast"):
     return add_modifier(ref,modname,'CAST')
 
-def add_curve(ref,modname):
+def add_curve(ref, modname = "Curve"):
     return add_modifier(ref,modname,'CURVE')
 
-def add_displace(ref, modname):
+def add_displace(ref, modname = "Displace"):
     return add_modifier(ref,modname,'DISPLACE')
 
-def add_hook(ref,modname):
+def add_hook(ref, modname = "Hook"):
     return add_modifier(ref,modname,'HOOK')
 
-def add_laplacian_deform(ref,modname):
+def add_laplacian_deform(ref, modname = "LaplacianDeform"):
     return add_modifier(ref,modname,'LAPLACIANDEFORM')
 
-def add_lattice(ref,modname):
+def add_lattice(ref, modname = "Lattice"):
     return add_modifier(ref,modname,'LATTICE')
 
-def add_mesh_deform(ref,modname):
+def add_mesh_deform(ref, modname = "Deform"):
     return add_modifier(ref,modname,'MESH_DEFORM')
 
-def add_shrinkwrap(ref,modname):
+def add_shrinkwrap(ref, modname = "Shrinkwrap"):
     return add_modifier(ref,modname,'SHRINKWRAP')
 
-def add_simple_deform(ref,modname):
+def add_simple_deform(ref, modname = "SimpleDeform"):
     return add_modifier(ref,modname,'SIMPLE_DEFORM')
 
-def add_smooth(ref,modname):
+def add_smooth(ref, modname = "Smooth"):
     return add_modifier(ref,modname,'SMOOTH')
 
-def add_corrective_smooth(ref,modname):
+def add_corrective_smooth(ref, modname = "CorrectiveSmooth"):
     return add_modifier(ref,modname,'CORRECTIVE_SMOOTH')
 
-def add_laplacian_smooth(ref,modname):
+def add_laplacian_smooth(ref, modname = "LaplacianSmooth"):
     return add_modifier(ref,modname,'LAPLACIANSMOOTH')
 
-def add_surface_deform(ref,modname):
+def add_surface_deform(ref, modname = "SurfaceDeform"):
     return add_modifier(ref,modname,'SURFACE_DEFORM')
 
-def add_warp(ref,modname):
+def add_warp(ref, modname = "Warp"):
     return add_modifier(ref,modname,'WARP')
 
-def add_wave(ref,modname):
+def add_wave(ref, modname = "Wave"):
     return add_modifier(ref,modname,'WAVE')
 
-def add_cloth(ref,modname):
+def add_cloth(ref, modname = "Cloth"):
     return add_modifier(ref,modname,'CLOTH')
 
-def add_collision(ref,modname):
+def add_collision(ref, modname = "Collision"):
     return add_modifier(ref,modname,'COLLISION')
 
-def add_dynamic_paint(ref,modname):
+def add_dynamic_paint(ref, modname = "DynamicPaint"):
     return add_modifier(ref,modname,'DYNAMIC_PAINT')
 
-def add_explode(ref,modname):
+def add_explode(ref, modname = "Explode"):
     return add_modifier(ref,modname,'EXPLODE')
 
-def add_fluid(ref,modname):
+def add_fluid(ref, modname = "Fluid"):
     return add_modifier(ref,modname,'FLUID')
 
-def add_ocean(ref,modname):
+def add_ocean(ref, modname = "Ocean"):
     return add_modifier(ref,modname,'OCEAN')
 
-def add_particle_instance(ref,modname):
+def add_particle_instance(ref, modname = "ParticleInstance"):
     return add_modifier(ref,modname,'PARTICLE_INSTANCE')
 
-def add_particle_system(ref,modname):
+def add_particle_system(ref, modname = "ParticleSystem"):
     return add_modifier(ref,modname,'PARTICLE_SYSTEM')
 
-def add_soft_body(ref,modname):
+def add_soft_body(ref, modname = "SoftBody"):
     return add_modifier(ref,modname,'SOFT_BODY')
 
-def add_surface(ref,modname):
+def add_surface(ref, modname = ""):
     return add_modifier(ref,modname,'SURFACE')
 
-def add_simulation(ref,modname):
+def add_simulation(ref, modname = ""):
     return add_modifier(ref,modname,'SIMULATION')
 #endregion
 #region TEXT OBJECTS

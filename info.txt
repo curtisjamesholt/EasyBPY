@@ -163,9 +163,10 @@ TRANSFORMATIONS
 - scale_along_local_x
 - scale_along_local_y
 - scale_along_local_z
-- scale_along_global_x  (testing)
-- scale_along_global_y  (testing)
-- scale_along_global_z  (testing)
+- scale_along_global_axis
+- scale_along_global_x
+- scale_along_global_y
+- scale_along_global_z
 - scale_perpendicular_to_x
 - scale_perpendicular_to_y
 - scale_perpendicular_to_z                             

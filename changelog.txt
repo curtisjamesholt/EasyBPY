@@ -13,6 +13,11 @@
 - = get_render_pixel_aspect_ratio to get aspect ratio for render.
 - + render_aspect_ratio as a getter and setter.
 
+[ JYoshi ]
+- create_modifier force redraw of interface.
+- remove_modifier force redraw of interface.
+- Added default values for 'modname' argument in every specific modifier function.
+
 [ 3D_Bubble ]
 - + reverse_rotation_on_euler
 - C Note: For the render functions below, I have created a new
@@ -43,6 +48,7 @@
 - + apply_scale
 - + apply_all_transforms
 - + apply_rotation_and_scale
+- + scale_along_global_axis used by scale_along_global functions.
 
 === 0.0.3 - 15/09/2020 ===
 [ Curtis Holt ]
