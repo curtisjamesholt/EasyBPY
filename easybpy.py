@@ -419,6 +419,11 @@ def create_monkey():
 def create_cone():
     bpy.ops.mesh.primitive_cone_add()
     return active_object()
+
+def create_plane():
+    bpy.ops.mesh.primitive_plane_add()
+    return active_object()
+
 #endregion
 #region SCENES
 def get_scene():
