@@ -1,6 +1,6 @@
 #region INFO
 '''
-    == EasyBPY 0.0.4 ==
+    == EasyBPY 0.0.5 ==
     Created by Curtis Holt
     https://curtisholt.online/links
     ---
@@ -397,16 +397,40 @@ def invert_selection():
     bpy.ops.object.select_all(action='INVERT')
 #endregion
 #region OBJECTS - PRIMITIVES
+def create_plane():
+    bpy.ops.mesh.primitive_plane_add()
+    return active_object()
+
 def create_cube():
     bpy.ops.mesh.primitive_cube_add()
+    return active_object()
+
+def create_circle():
+    bpy.ops.mesh.primitive_circle_add()
     return active_object()
 
 def create_cylinder():
     bpy.ops.mesh.primitive_cylinder_add()
     return active_object()
 
+def create_uv_sphere():
+    bpy.ops.mesh.primitive_uv_sphere_add()
+    return active_object()
+
 def create_ico_sphere():
     bpy.ops.mesh.primitive_ico_sphere_add()
+    return active_object()
+
+def create_cone():
+    bpy.ops.mesh.primitive_cone_add()
+    return active_object()
+
+def create_torus():
+    bpy.ops.mesh.primitive_torus_add()
+    return active_object()
+
+def create_grid():
+    bpy.ops.mesh.primitive_grid_add()
     return active_object()
 
 def create_suzanne():
@@ -415,10 +439,51 @@ def create_suzanne():
 
 def create_monkey():
     create_suzanne()
+#endregion
+#region MODES
+def set_mode(newmode, ref=None):
+    objref = get_object(ref)
+    bpy.context.view_layer.objects.active = objref
+    bpy.ops.object.mode_set(mode=newmode)
 
-def create_cone():
-    bpy.ops.mesh.primitive_cone_add()
-    return active_object()
+def get_mode():
+    return bpy.context.mode
+
+def set_object_mode(ref=None):
+    set_mode('OBJECT', ref)
+
+def object_mode(ref=None):
+    set_object_mode(ref)
+
+def set_edit_mode(ref=None):
+    set_mode('EDIT', ref)
+
+def edit_mode(ref=None):
+    set_edit_mode(ref)
+
+def set_sculpt_mode(ref=None):
+    set_mode('SCULPT', ref)
+
+def sculpt_mode(ref=None):
+    set_sculpt_mode(ref)
+
+def set_vertex_paint_mode(ref=None):
+    set_mode('VERTEX_PAINT', ref)
+
+def vertex_paint_mode(ref=None):
+    set_vertex_paint_mode(ref)
+
+def set_weight_paint_mode(ref=None):
+    set_mode('WEIGHT_PAINT', ref)
+
+def weight_paint_mode(ref=None):
+    set_weight_paint_mode(ref)
+
+def set_texture_paint_mode(ref=None):
+    set_mode('TEXTURE_PAINT', ref)
+
+def texture_paint_mode(ref=None):
+    set_texture_paint_mode(ref)
 #endregion
 #region SCENES
 def get_scene():
@@ -1199,7 +1264,7 @@ def get_mesh_from_object(ref):
     return objref.data
 #endregion
 #region VERTEX GROUPS
-''' NEXT UPDATE
+''' FUTURE UPDATE
 def create_vertex_group(ref, group_name):
     ref.vertex_groups.new(name=group_name)
     return ref.vertex_groups[group_name]
@@ -1577,12 +1642,8 @@ def delete_texture(ref):
         
 #endregion
 #region MODIFIERS
-def add_modifier(obj, name, id):
-    objref = None
-    if is_string(obj):
-        objref = get_object(obj)
-    else:
-        objref = obj
+def add_modifier(ref, name, id):
+    objref = get_object(ref)
     new_mod = objref.modifiers.new(name, id)
     for area in bpy.context.screen.areas:
         if area.type == 'PROPERTIES':
@@ -1621,167 +1682,199 @@ def remove_modifier(ref, name):
             area.tag_redraw()
 
 # Specific Modiiers
-def add_data_transfer(ref, modname = "DataTransfer"):
+def add_data_transfer(ref=None, modname = "DataTransfer"):
     return add_modifier(ref,modname,'DATA_TRANSFER')
 
-def add_mesh_cache(ref, modname = "MeshCache"):
+def add_mesh_cache(ref=None, modname = "MeshCache"):
     return add_modifier(ref,modname,'MESH_CACHE')
 
-def add_mesh_sequence_cache(ref, modname = "MeshSequenceCache"):
+def add_mesh_sequence_cache(ref=None, modname = "MeshSequenceCache"):
     return add_modifier(ref,modname,'MESH_SEQUENCE_CACHE')
 
-def add_normal_edit(ref, modname = "NormalEdit"):
+def add_normal_edit(ref=None, modname = "NormalEdit"):
     return add_modifier(ref,modname,'NORMAL_EDIT')
 
-def add_weighted_normal(ref, modname = "WeightedNormal"):
+def add_weighted_normal(ref=None, modname = "WeightedNormal"):
     return add_modifier(ref,modname,'WEIGHTED_NORMAL')
 
-def add_uv_project(ref, modname = "UVProject"):
+def add_uv_project(ref=None, modname = "UVProject"):
     return add_modifier(ref,modname,'UV_PROJECT')
 
-def add_uv_warp(ref, modname = "Warp"):
+def add_uv_warp(ref=None, modname = "Warp"):
     return add_modifier(ref,modname,'UV_WARP')
 
-def add_vertex_weight_edit(ref, modname = "VertexWeightEdit"):
+def add_vertex_weight_edit(ref=None, modname = "VertexWeightEdit"):
     return add_modifier(ref,modname,'VERTEX_WEIGHT_EDIT')
 
-def add_vertex_weight_mix(ref, modname = "VertexWeightMix"):
+def add_vertex_weight_mix(ref=None, modname = "VertexWeightMix"):
     return add_modifier(ref,modname,'VERTEX_WEIGHT_MIX')
 
-def add_vertex_weight_proximity(ref, modname = "VertexWeightProximity"):
+def add_vertex_weight_proximity(ref=None, modname = "VertexWeightProximity"):
     return add_modifier(ref,modname,'VERTEX_WEIGHT_PROXIMITY')
 
-def add_array(ref, modname = "Array"):
+def add_array(ref=None, modname = "Array"):
     return add_modifier(ref,modname,'ARRAY')
 
-def add_bevel(ref, modname = "Bevel"):
+def add_bevel(ref=None, modname = "Bevel"):
     return add_modifier(ref,modname,'BEVEL')
 
-def add_boolean(ref, modname = "Boolean"):
+def add_boolean(ref=None, modname = "Boolean"):
     return add_modifier(ref,modname,'BOOLEAN')
 
-def add_build(ref, modname = "Build"):
+def add_build(ref=None, modname = "Build"):
     return add_modifier(ref,modname,'BUILD')
 
-def add_decimate(ref, modname = "Decimate"):
+def add_decimate(ref=None, modname = "Decimate"):
     return add_modifier(ref,modname,'DECIMATE')
 
-def add_edge_split(ref, modname = "EdgeSplit"):
+def add_edge_split(ref=None, modname = "EdgeSplit"):
     return add_modifier(ref,modname,'EDGE_SPLIT')
 
-def add_mask(ref, modname = "Mask"):
+def add_mask(ref=None, modname = "Mask"):
     return add_modifier(ref,modname,'MASK')
 
-def add_mirror(ref, modname = "Mirror"):
+def add_mirror(ref=None, modname = "Mirror"):
     return add_modifier(ref,modname,'MIRROR')
 
-def add_multires(ref, modname = "Multires"):
+def add_multires(ref=None, modname = "Multires"):
     return add_modifier(ref,modname,'MULTIRES')
 
-def add_remesh(ref, modname = "Remesh"):
+def add_remesh(ref=None, modname = "Remesh"):
     return add_modifier(ref,modname,'REMESH')
 
-def add_screw(ref, modname = "Screw"):
+def add_screw(ref=None, modname = "Screw"):
     return add_modifier(ref,modname,'SCREW')
 
-def add_skin(ref, modname = "Skin"):
+def add_skin(ref=None, modname = "Skin"):
     return add_modifier(ref,modname,'SKIN')
 
-def add_solidify(ref, modname = "Solidify"):
+def add_solidify(ref=None, modname = "Solidify"):
     return add_modifier(ref,modname,'SOLIDIFY')
 
-def add_subsurf(ref, modname = "Subsurf"):
+def add_subsurf(ref=None, modname = "Subsurf"):
     return add_modifier(ref,modname,'SUBSURF')
 
-def add_triangulate(ref, modname = "Triangulate"):
+def add_triangulate(ref=None, modname = "Triangulate"):
     return add_modifier(ref,modname,'TRIANGULATE')
 
-def add_weld(ref, modname = "Weld"):
+def add_weld(ref=None, modname = "Weld"):
     return add_modifier(ref,modname,'WELD')
 
-def add_wireframe(ref, modname = "Wireframe"):
+def add_wireframe(ref=None, modname = "Wireframe"):
     return add_modifier(ref,modname,'WIREFRAME')
 
-def add_armature(ref, modname = "Armature"):
+def add_armature(ref=None, modname = "Armature"):
     return add_modifier(ref,modname,'ARMATURE')
 
-def add_cast(ref, modname = "Cast"):
+def add_cast(ref=None, modname = "Cast"):
     return add_modifier(ref,modname,'CAST')
 
-def add_curve(ref, modname = "Curve"):
+def add_curve(ref=None, modname = "Curve"):
     return add_modifier(ref,modname,'CURVE')
 
-def add_displace(ref, modname = "Displace"):
+def add_displace(ref=None, modname = "Displace"):
     return add_modifier(ref,modname,'DISPLACE')
 
-def add_hook(ref, modname = "Hook"):
+def add_hook(ref=None, modname = "Hook"):
     return add_modifier(ref,modname,'HOOK')
 
-def add_laplacian_deform(ref, modname = "LaplacianDeform"):
+def add_laplacian_deform(ref=None, modname = "LaplacianDeform"):
     return add_modifier(ref,modname,'LAPLACIANDEFORM')
 
-def add_lattice(ref, modname = "Lattice"):
+def add_lattice(ref=None, modname = "Lattice"):
     return add_modifier(ref,modname,'LATTICE')
 
-def add_mesh_deform(ref, modname = "Deform"):
+def add_mesh_deform(ref=None, modname = "Deform"):
     return add_modifier(ref,modname,'MESH_DEFORM')
 
-def add_shrinkwrap(ref, modname = "Shrinkwrap"):
+def add_shrinkwrap(ref=None, modname = "Shrinkwrap"):
     return add_modifier(ref,modname,'SHRINKWRAP')
 
-def add_simple_deform(ref, modname = "SimpleDeform"):
+def add_simple_deform(ref=None, modname = "SimpleDeform"):
     return add_modifier(ref,modname,'SIMPLE_DEFORM')
 
-def add_smooth(ref, modname = "Smooth"):
+def add_smooth(ref=None, modname = "Smooth"):
     return add_modifier(ref,modname,'SMOOTH')
 
-def add_corrective_smooth(ref, modname = "CorrectiveSmooth"):
+def add_corrective_smooth(ref=None, modname = "CorrectiveSmooth"):
     return add_modifier(ref,modname,'CORRECTIVE_SMOOTH')
 
-def add_laplacian_smooth(ref, modname = "LaplacianSmooth"):
+def add_laplacian_smooth(ref=None, modname = "LaplacianSmooth"):
     return add_modifier(ref,modname,'LAPLACIANSMOOTH')
 
-def add_surface_deform(ref, modname = "SurfaceDeform"):
+def add_surface_deform(ref=None, modname = "SurfaceDeform"):
     return add_modifier(ref,modname,'SURFACE_DEFORM')
 
-def add_warp(ref, modname = "Warp"):
+def add_warp(ref=None, modname = "Warp"):
     return add_modifier(ref,modname,'WARP')
 
-def add_wave(ref, modname = "Wave"):
+def add_wave(ref=None, modname = "Wave"):
     return add_modifier(ref,modname,'WAVE')
 
-def add_cloth(ref, modname = "Cloth"):
+def add_cloth(ref=None, modname = "Cloth"):
     return add_modifier(ref,modname,'CLOTH')
 
-def add_collision(ref, modname = "Collision"):
+def add_collision(ref=None, modname = "Collision"):
     return add_modifier(ref,modname,'COLLISION')
 
-def add_dynamic_paint(ref, modname = "DynamicPaint"):
+def add_dynamic_paint(ref=None, modname = "DynamicPaint"):
     return add_modifier(ref,modname,'DYNAMIC_PAINT')
 
-def add_explode(ref, modname = "Explode"):
+def add_explode(ref=None, modname = "Explode"):
     return add_modifier(ref,modname,'EXPLODE')
 
-def add_fluid(ref, modname = "Fluid"):
+def add_fluid(ref=None, modname = "Fluid"):
     return add_modifier(ref,modname,'FLUID')
 
-def add_ocean(ref, modname = "Ocean"):
+def add_ocean(ref=None, modname = "Ocean"):
     return add_modifier(ref,modname,'OCEAN')
 
-def add_particle_instance(ref, modname = "ParticleInstance"):
+def add_particle_instance(ref=None, modname = "ParticleInstance"):
     return add_modifier(ref,modname,'PARTICLE_INSTANCE')
 
-def add_particle_system(ref, modname = "ParticleSystem"):
+def add_particle_system(ref=None, modname = "ParticleSystem"):
     return add_modifier(ref,modname,'PARTICLE_SYSTEM')
 
-def add_soft_body(ref, modname = "SoftBody"):
+def add_soft_body(ref=None, modname = "SoftBody"):
     return add_modifier(ref,modname,'SOFT_BODY')
 
-def add_surface(ref, modname = ""):
+def add_surface(ref=None, modname = ""):
     return add_modifier(ref,modname,'SURFACE')
 
-def add_simulation(ref, modname = ""):
+def add_simulation(ref=None, modname = ""):
     return add_modifier(ref,modname,'SIMULATION')
+#endregion
+#region PHYSICS
+def add_force_field_physics(ref=None):
+    objref = get_object(ref)
+    bpy.context.view_layer.objects.active = objref
+    if objref.field.type == 'NONE':
+        bpy.ops.object.forcefield_toggle()
+
+def add_collision_physics(ref=None):
+    add_collision(ref)
+
+def add_cloth_physics(ref=None):
+    add_cloth(ref)
+
+def add_dynamic_paint_physics(ref=None):
+    add_dynamic_paint(ref)
+
+def add_soft_body_physics(ref=None):
+    add_soft_body(ref)
+
+def add_fluid_physics(ref=None):
+    add_fluid(ref)
+
+def add_rigid_body_physics(ref=None):
+    objref = get_object(ref)
+    bpy.context.view_layer.objects.active = objref
+    bpy.ops.rigidbody.object_add()
+
+def add_rigid_body_constraint_physics(ref=None):
+    objref = get_object(ref)
+    bpy.context.view_layer.objects.active = objref
+    bpy.ops.rigidbody.constraint_add()
 #endregion
 #region TEXT OBJECTS
 def create_text_object(textname):

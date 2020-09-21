@@ -1,3 +1,36 @@
+=== 0.0.5 - 21/09/2020 ===
+
+[ Curtis Holt ]
+- Added more object argument contexts to modifier functions, so no object
+  needs to be provided (default to active object).
+- Added missing primitive ops mesh functions.
+- + create_plane
+- + create_circle
+- + create_uv_sphere
+- + create_torus
+- + create_grid
+
+[ JYoshi ]
+- C Note: New category 'MODES' created for mode functions.
+- + set_mode
+- + get_mode
+- C Note: I have added extra convenience functions for each of the mode setters below.
+- + set_object_mode
+- + set_edit_mode
+- + set_sculpt_mode
+- + set_vertex_paint_mode
+- + set_weight_paint_mode
+- + set_texture_paint_mode
+- C Note: New category 'PHYSICS' created for physics functions.
+- + add_force_field_physics
+- + add_collision_physics
+- + add_cloth_physics
+- + add_dynamic_paint_physics
+- + add_soft_body_physics
+- + add_fluid_physics
+- + add_rigid_body_physics
+- + add_rigid_body_constraint_physics
+
 === 0.0.4 - 18/09/2020 ===
 
 [ Curtis Holt ]

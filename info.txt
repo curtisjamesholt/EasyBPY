@@ -1,4 +1,4 @@
-== EasyBPY 0.0.3 ==
+== EasyBPY 0.0.5 ==
 Created by Curtis Holt.
 https://curtisholt.online/links
 
@@ -95,16 +95,37 @@ OBJECTS - SELECTION
 - select_all_light_probes    
 - invert_selection       
 
+PRIMITIVE OBJECTS
+- create_plane
+- create_cube 
+- create_circle                      
+- create_cylinder
+- create_uv_sphere                   
+- create_ico_sphere
+- create_cone
+- create_torus
+- create_grid                 
+- create_suzanne                    
+- create_monkey                          
+
+MODES
+- set_mode
+- get_mode
+- set_object_mode
+- object_mode
+- set_edit_mode
+- edit_mode
+- set_sculpt_mode
+- sculpt_mode
+- set_vertex_paint_mode
+- vertex_paint_mode
+- set_weight_paint_mode
+- weight_paint_mode
+- set_texture_paint_mode
+- texture_paint_mode
+
 SCENES
 - get_scene
-
-PRIMITIVE OBJECTS
-- create_cube                       
-- create_cylinder                   
-- create_ico_sphere                 
-- create_suzanne                    
-- create_monkey                     
-- create_cone                       
 
 VISIBILITY
 - hide_object
@@ -326,7 +347,17 @@ MODIFIERS
 - add_particle_system
 - add_soft_body
 - add_surface
-- add_simulation                       
+- add_simulation   
+
+PHYSICS
+- add_force_field_physics
+- add_collision_physics
+- add_cloth_physics
+- add_dynamic_paint_physics
+- add_soft_body_physics
+- add_fluid_physics
+- add_rigid_body_physics
+- add_rigid_body_constraint_physics                   
 
 TEXT OBJECTS
 - create_text_object
