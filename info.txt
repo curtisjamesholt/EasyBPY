@@ -1,5 +1,5 @@
-== EasyBPY 0.0.5 ==
-Created by Curtis Holt.
+== EasyBPY 0.0.6 ==
+Managed by Curtis Holt.
 https://curtisholt.online/links
 
 ---
@@ -16,7 +16,7 @@ the GPL license.
 Documentation will become available over time as the project evolves.
 In the meantime, a list of all available functions is provided below.
 
-Extra Credits:
+Extra Contributors:
 Charan (Just 3D Things), JYoshi, 3D_Bubble
 ---
 
@@ -93,9 +93,10 @@ OBJECTS - SELECTION
 - select_all_cameras                
 - select_all_speakers               
 - select_all_light_probes    
-- invert_selection       
+- invert_selection
+- select_objects_with_modifiers   
 
-PRIMITIVE OBJECTS
+OBJECTS - PRIMITIVES
 - create_plane
 - create_cube 
 - create_circle                      
@@ -106,7 +107,32 @@ PRIMITIVE OBJECTS
 - create_torus
 - create_grid                 
 - create_suzanne                    
-- create_monkey                          
+- create_monkey   
+- create_bezier_curve
+- create_bezier
+- create_circle
+- create_nurbs_curve
+- create_nurbs_circle
+- create_nurbs_path
+- create_path    
+- create_nurbs_surface_curve
+- create_curve_surface    
+- create_nurbs_circle_surface
+- create_circle_surface
+- create_nurbs_surface
+- create_nurbs_cylinder_surface
+- create_cylinder_surface con-funct
+- create_nurbs_sphere_surface
+- create_sphere_surface
+- create_nurbs_torus_surface
+- create_torus_surface
+- create_metaball
+- create_metaball_capsule
+- create_metaball_plane
+- create_metaball_ellipsiod
+- create_metaball_cube
+- create_text_object
+- create_text
 
 MODES
 - set_mode
@@ -157,15 +183,25 @@ TRANSFORMATIONS
 - apply_rotation_and_scale
 - translate_vector
 - translate_along_axis
+- move_along_axis
 - translate_along_x
+- move_along_x
 - translate_along_y
+- move_along_y
 - translate_along_z
+- move_along_z
 - translate_along_global_x
+- move_along_global_x
 - translate_along_global_y
+- move_along_global_y
 - translate_along_global_z
+- move_along_global_z
 - translate_along_local_x
+- move_along_local_x
 - translate_along_local_y
+- move_along_local_y
 - translate_along_local_z
+- move_along_local_z
 - rotate_around_axis
 - rotate_around_global_x
 - rotate_around_global_y
@@ -193,6 +229,10 @@ TRANSFORMATIONS
 - scale_perpendicular_to_x
 - scale_perpendicular_to_y
 - scale_perpendicular_to_z                             
+
+ANIMATION / KEYFRAMES
+- add_keyframe
+- remove_keyframe
 
 3D CURSOR   
 - selection_to_cursor_without_offset
@@ -271,17 +311,21 @@ MATERIALS
 - add_material_to_object            
 - remove_material_from_object       
 - remove_material
+- get_all_materials
 - get_materials                   
 - get_materials_from_object         
 - get_material_names_from_object    
 
 NODES
-( more coming soon )
+( more coming in the future )
 - set_material_use_nodes
+- set_material_to_use_nodes
+- get_material_nodes
 - get_node_tree
 - create_node
 - get_node_links
 - create_node_link
+- get_world_nodes
 
 TEXTURES
 - create_texture
@@ -360,8 +404,8 @@ PHYSICS
 - add_rigid_body_constraint_physics                   
 
 TEXT OBJECTS
-- create_text_object
-- delete_text_object
+- create_text_file
+- delete_text_file
 - get_lines_in_text_object
 
 DATA CHECKS

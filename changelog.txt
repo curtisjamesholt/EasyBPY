@@ -1,3 +1,73 @@
+=== 0.0.6 - ===
+
+[ Curtis Holt ]
+- Changed get_materials so if no object is provided, it returns a list of all materials.
+- + get_all_materials
+- + get_world_nodes, allows user to specify index for the world, if not then default [0].
+- + get_material_nodes
+- Added more selection contexts to get_material so if nothing is provided, look at
+  selected object and grab the first material instead.
+- + set_material_to_use_nodes con-func.
+- Changed select_object to make object added to selection the active for the view_layer.
+  Also added make_active argument and set to true to allow override.
+- + create_sphere con-func
+- Curve Primitives:
+- + create_bezier_curve
+- + create_bezier con-func
+- + create_circle
+- + create_nurbs_curve
+- + create_nurbs_circle
+- + create_nurbs_path
+- Surface Primitives:
+- + create_nurbs_surface_curve
+- + create_curve_surface con-func
+- + create_nurbs_circle_surface
+- + create_circle_surface con-func
+- + create_nurbs_surface
+- + create_nurbs_cylinder_surface
+- + create_cylinder_surface con-funct
+- + create_nurbs_sphere_surface
+- + create_sphere_surface
+- + create_nurbs_torus_surface
+- + create_torus_surface
+- Metaball Primitives:
+- + create_metaball
+- + create_metaball_capsule
+- + create_metaball_plane
+- + create_metaball_ellipsiod
+- + create_metaball_cube
+- Text Object:
+- + create_text_object
+- + create_text con-func
+- Renamed create_text_object to create_text_file to avoid conflict with text objects.
+- Renamed delete_text_object to delete_text_file to avoid conflict with text objects.
+- For Transformations - Translation functions, moved 'ref' argument to first in order.
+- translate_vector - check for unprovided vec.
+- translate_along_axis - optimized object reference getting.
+- For Transformations - Rotation functions, renamed and moved 'ref' argument to first in order.
+- rotate_vector - check for unprovided vec.
+- For Transformations - Scaling functions, moved 'ref' argument to first in order.
+- scale_vector - check for unprovided vec.
+- + move_along_axis con-func
+- + move_along_x con-func
+- + move_along_y con-func
+- + move_along_z con-func
+- + move_along_global_x con-func
+- + move_along_global_y con-func
+- + move_along_global_z con-func
+- + move_along_local_x con-func
+- + move_along_local_y con-func
+- + move_along_local_z con-func
+- + get_objects_with_modifiers to accompany select_objects_with_modifiers
+
+[ JYoshi ]
+- C Note: Created new category 'ANIMATION / KEYFRAMES' for following functions.
+- + add_keyframe
+- + remove_keyframe
+
+[ 3D_Bubble ]
+- + select_objects_with_modifiers
+
 === 0.0.5 - 21/09/2020 ===
 
 [ Curtis Holt ]
