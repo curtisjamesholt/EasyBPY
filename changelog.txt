@@ -1,4 +1,4 @@
-=== 0.0.6 - ===
+=== 0.0.6 - 02/10/2020 ===
 
 [ Curtis Holt ]
 - Changed get_materials so if no object is provided, it returns a list of all materials.
