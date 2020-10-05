@@ -1,7 +1,7 @@
 #region INFO
 '''
     == EasyBPY 0.0.6 ==
-    Created by Curtis Holt
+    Managed by Curtis Holt
     https://curtisholt.online/links
     ---
     This purpose of this module is to simplify the use of the Blender API
@@ -374,7 +374,7 @@ def select_all_lattices():
 def select_all_empties():
     bpy.ops.object.select_by_type(type='EMPTY')
 
-def select_all_greace_pencils():
+def select_all_grease_pencils():
     bpy.ops.object.select_by_type(type='GPENCIL')
 
 def select_all_cameras():
@@ -549,10 +549,11 @@ def create_text():
 
 #endregion
 #region MODES
-def set_mode(newmode, ref=None):
-    objref = get_object(ref)
-    bpy.context.view_layer.objects.active = objref
-    bpy.ops.object.mode_set(mode=newmode)
+def set_mode(ref=None, newmode=None):
+    if newmode is not None:
+        objref = get_object(ref)
+        bpy.context.view_layer.objects.active = objref
+        bpy.ops.object.mode_set(mode=newmode)
 
 def get_mode():
     return bpy.context.mode
@@ -1688,21 +1689,21 @@ def material_exists(ref):
         else:
             return False
 
-def delete_material(name):
+def delete_material(ref):
     matref = None
-    if is_string(name):
-        matref = get_material(name)
+    if is_string(ref):
+        matref = get_material(ref)
     else:
-        matref = name
+        matref = ref
     bpy.data.materials.remove(matref)
 
-def get_material(name=None):
-    if name is not None:
-        if is_string(name):
-            if name in bpy.data.materials:
-                return bpy.data.materials[name]
+def get_material(ref=None):
+    if ref is not None:
+        if is_string(ref):
+            if ref in bpy.data.materials:
+                return bpy.data.materials[ref]
         else:
-            return name
+            return ref
     else:
         objref = active_object()
         return objref.material_slots[0].material
@@ -1879,7 +1880,7 @@ def remove_modifier(ref, name):
         if area.type == 'PROPERTIES':
             area.tag_redraw()
 
-# Specific Modiiers
+# Specific Modifiers
 def add_data_transfer(ref=None, modname = "DataTransfer"):
     return add_modifier(ref,modname,'DATA_TRANSFER')
 
