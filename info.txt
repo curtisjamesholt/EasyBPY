@@ -234,6 +234,10 @@ ANIMATION / KEYFRAMES
 - add_keyframe
 - remove_keyframe
 
+DRIVERS
+- add_driver
+- remove_driver
+
 3D CURSOR   
 - selection_to_cursor_without_offset
 - selection_to_cursor_with_offset   

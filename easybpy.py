@@ -1255,6 +1255,20 @@ def remove_keyframe(keyframe):
     for area in bpy.context.screen.areas:
         area.tag_redraw()
 #endregion
+#region DRIVERS
+def add_driver(path,property,index=-1):
+    fcurves = path.driver_add(property,index)
+    for area in bpy.context.screen.areas:   #update interface
+        area.tag_redraw()
+    if type(fcurves) is list:
+        return [fcurve.driver for fcurve in fcurves]
+    return fcurves.driver
+
+def remove_driver(driver):
+    for fcurve in driver.id_data.animation_data.drivers: 
+        if fcurve.driver == driver:
+            driver.id_data.animation_data.drivers.remove(fcurve)
+#endregion
 #region 3D CURSOR
 def selection_to_cursor_without_offset():
     bpy.ops.view3d.snap_selected_to_cursor(use_offset=False)
@@ -1708,7 +1722,7 @@ def get_material(ref=None):
         objref = active_object()
         return objref.material_slots[0].material
 
-def add_material_to_object(ref, matname):
+def add_material_to_object(ref, mat):
     objref = None
     matref = None
     if is_string(ref):
@@ -1716,10 +1730,10 @@ def add_material_to_object(ref, matname):
     else:
         objref = ref
     
-    if is_string(matname):
-        matref = get_material(matname)
+    if is_string(mat):
+        matref = get_material(mat)
     else:
-        matref = matname
+        matref = mat
 
     if matref is not None:
         objref.data.materials.append(matref)
