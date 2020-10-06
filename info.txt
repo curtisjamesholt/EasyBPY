@@ -75,7 +75,12 @@ OBJECTS
 - get_object                        
 - get_obj                           
 - object_exists                     
-- rename_object                     
+- rename_object
+
+OBJECTS - CONVERSION
+- convert_to_mesh
+- convert_to_grease_pencil
+- convert_to_curve
 
 OBJECTS - SELECTION
 - select_all_meshes                 
@@ -341,7 +346,9 @@ TEXTURES
 MODIFIERS
 - add_modifier                      
 - get_modifier                      
-- remove_modifier                   
+- remove_modifier
+- apply_all_modifiers
+- apply_modifiers
 - add_data_transfer
 - add_mesh_cache
 - add_mesh_sequence_cache

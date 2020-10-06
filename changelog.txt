@@ -59,11 +59,20 @@
 - + move_along_local_y con-func
 - + move_along_local_z con-func
 - + get_objects_with_modifiers to accompany select_objects_with_modifiers
+- + apply_all_modifiers
+- + apply_modifiers con-func
+- Created new category OBJECTS - CONVERSION for object conversion functions.
+- + convert_to_mesh
+- + convert_to_grease_pencil
+- + convert_to_curve
 
 [ JYoshi ]
 - C Note: Created new category 'ANIMATION / KEYFRAMES' for following functions.
 - + add_keyframe
 - + remove_keyframe
+- C Note: Added a new category 'DRIVERS' for driver functions.
+- + add_driver
+- + remove_driver
 
 [ 3D_Bubble ]
 - + select_objects_with_modifiers

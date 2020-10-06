@@ -340,6 +340,25 @@ def rename_object(obj, newname):
     else:
         return False
 #endregion
+#region OBJECTS - CONVERSION
+def convert_to_mesh(ref):
+    objref = get_object(ref)
+    deselect_all_objects()
+    select_object(objref)
+    bpy.ops.object.convert(target='MESH')
+
+def convert_to_grease_pencil(ref):
+    objref = get_object(ref)
+    deselect_all_objects()
+    select_object(objref)
+    bpy.ops.object.convert(target='GPENCIL')
+
+def convert_to_curve(ref):
+    objref = get_object(ref)
+    deselect_all_objects()
+    select_object(objref)
+    bpy.ops.object.convert(target='CURVE')
+#endregion
 #region OBJECTS - SELECTION
 def select_all_meshes():
     bpy.ops.object.select_by_type(type='MESH')
@@ -1822,7 +1841,6 @@ def get_world_nodes(index=None):
 
 #endregion
 #region TEXTURES 
-
 def create_texture(name="Texture", type='CLOUDS'):
     if type is not None:
         return bpy.data.textures.new(name, type.upper())
@@ -1854,7 +1872,7 @@ def delete_texture(ref):
         bpy.data.textures.remove(ref)
         
 #endregion
-#region MODIFIERS
+#region MODIFIERS 
 def add_modifier(ref, name, id):
     objref = get_object(ref)
     new_mod = objref.modifiers.new(name, id)
@@ -1893,6 +1911,15 @@ def remove_modifier(ref, name):
     for area in bpy.context.screen.areas:
         if area.type == 'PROPERTIES':
             area.tag_redraw()
+
+def apply_all_modifiers(ref):
+    objref = get_object(ref)
+    select_object(objref)
+    for mod in objref.modifiers:
+        bpy.ops.object.modifier_apply(modifier=mod.name)
+
+def apply_modifiers(ref = None):
+    apply_all_modifiers(ref)
 
 # Specific Modifiers
 def add_data_transfer(ref=None, modname = "DataTransfer"):
