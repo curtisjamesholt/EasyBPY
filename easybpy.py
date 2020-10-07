@@ -1275,7 +1275,7 @@ def remove_keyframe(keyframe):
         area.tag_redraw()
 #endregion
 #region DRIVERS
-'''
+''' Need Testing
 def add_driver(path,property,index=-1):
     fcurves = path.driver_add(property,index)
     for area in bpy.context.screen.areas:   #update interface
@@ -1565,10 +1565,13 @@ def get_collection(ref = None):
     if ref is None:
         return bpy.context.view_layer.active_layer_collection.collection
     else:
-        if ref in bpy.data.collections:
-            return bpy.data.collections[ref]
+        if is_string(ref):
+            if ref in bpy.data.collections:
+                return bpy.data.collections[ref]
+            else:
+                return False
         else:
-            return False
+            return ref
 
 def get_col(ref = None):
     return get_collection(ref)
