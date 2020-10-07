@@ -1275,6 +1275,7 @@ def remove_keyframe(keyframe):
         area.tag_redraw()
 #endregion
 #region DRIVERS
+'''
 def add_driver(path,property,index=-1):
     fcurves = path.driver_add(property,index)
     for area in bpy.context.screen.areas:   #update interface
@@ -1287,6 +1288,7 @@ def remove_driver(driver):
     for fcurve in driver.id_data.animation_data.drivers: 
         if fcurve.driver == driver:
             driver.id_data.animation_data.drivers.remove(fcurve)
+'''
 #endregion
 #region 3D CURSOR
 def selection_to_cursor_without_offset():
@@ -1781,27 +1783,19 @@ def get_materials(ref = None):
         return bpy.data.materials
 
 def get_materials_from_object(ref):
-    objref = None
-    if is_string(ref):
-        objref = get_object(ref)
-    else:
-        objref = ref
+    objref = get_object(ref)
     mat_list = []
-    mats = objref.data.materials.items()
+    mats = objref.material_slots
     for m in mats:
-        mat_list.append(m[1])
+        mat_list.append(m.material)
     return mat_list
 
 def get_material_names_from_object(ref):
-    objref = None
-    if is_string(ref):
-        objref = get_object(ref)
-    else:
-        objref = ref
+    objref = get_object(ref)
     name_list = []
-    mats = objref.data.materials.items()
+    mats = objref.material_slots
     for m in mats:
-        name_list.append(m[0])
+        name_list.append(m.name)
     return name_list
 #endregion
 #region NODES
@@ -1881,12 +1875,8 @@ def add_modifier(ref, name, id):
             area.tag_redraw()
     return new_mod
 
-def get_modifier(obj, name):
-    objref = None
-    if is_string(obj):
-        objref = get_object(obj)
-    else:
-        objref = obj
+def get_modifier(ref, name):
+    objref = get_object(ref)
 
     # we assume name is string
     if name in objref.modifiers:
