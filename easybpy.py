@@ -1245,7 +1245,9 @@ def scale_perpendicular_to_z(ref = None, fac = None, point = None):
 #endregion
 #region ANIMATION / KEYFRAMES
 # Example: path is the object and property is 'location'
-def add_keyframe(path, property, frame = bpy.context.scene.frame_current):
+def add_keyframe(path, property, frame = None):
+    if frame is None:
+        frame = current_frame
     path.keyframe_insert(data_path=property,frame=frame)
     keyframes = []
     for i in range(len(path.animation_data.action.fcurves)):
@@ -1275,7 +1277,7 @@ def remove_keyframe(keyframe):
         area.tag_redraw()
 #endregion
 #region DRIVERS
-''' Need Testing
+
 def add_driver(path,property,index=-1):
     fcurves = path.driver_add(property,index)
     for area in bpy.context.screen.areas:   #update interface
@@ -1288,7 +1290,7 @@ def remove_driver(driver):
     for fcurve in driver.id_data.animation_data.drivers: 
         if fcurve.driver == driver:
             driver.id_data.animation_data.drivers.remove(fcurve)
-'''
+
 #endregion
 #region 3D CURSOR
 def selection_to_cursor_without_offset():
