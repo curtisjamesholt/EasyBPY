@@ -1,6 +1,6 @@
 #region INFO
 '''
-    == EasyBPY 0.0.6 ==
+    == EasyBPY 0.0.7 ==
     Managed by Curtis Holt
     https://curtisholt.online/links
     ---
@@ -267,22 +267,14 @@ def deselect_all_objects():
 def delete_selected_objects():
     bpy.ops.object.delete()
 
-def delete_object(ref):
-    deselect_all_objects()
-    # ref is string
-    if is_string(ref):
-        obj = get_object(ref)
-        obj.select_set(True)
-    # ref is object reference
-    else:
-        ref.select_set(True)
-    delete_selected_objects()
+def delete_object(ref = None):
+    ref = get_object(ref)
+    bpy.data.objects.remove(ref, do_unlink=True)
 
 def delete_objects(objlist):
-    deselect_all_objects()
-    for ob in objlist:
-        ob.select_set(True)
-    bpy.ops.object.delete()
+    for obj in objlist:
+        ref = get_object(obj)
+        bpy.data.objects.remove(ref, do_unlink=True)
 
 def duplicate_object(tocopy,col):
     return copy_object(tocopy,col)
@@ -339,6 +331,32 @@ def rename_object(obj, newname):
         return True
     else:
         return False
+
+def get_parent(ref = None):
+    return get_object(ref).parent
+
+def get_children(ref = None):
+    return get_object(ref).children
+
+def set_parent(child = None,parent = None):
+    child = get_object(child)
+    parent = get_object(parent)
+    child.parent = parent 
+    child.matrix_parent_inverse = parent.matrix_world.inverted()
+
+def clear_parent(ref = None, keep_location = True):
+    ref = get_object(ref)
+    loc = ref.matrix_world.to_translation()
+    print(loc)
+    ref.parent = None
+    if keep_location:
+        ref.location = loc
+
+def get_bounding_box(ref = None):
+    return get_object(ref).bound_box
+
+def get_bounding_box_corners(ref = None):
+    return [ref.matrix_world @ Vector(corner) for corner in get_bounding_box(ref)]
 #endregion
 #region OBJECTS - CONVERSION
 def convert_to_mesh(ref):
@@ -478,7 +496,7 @@ def create_bezier_curve():
 def create_bezier():
     return create_bezier_curve()
 
-def create_circle():
+def create_circle_curve():
     bpy.ops.curve.primitive_circle_add()
     return active_object()
 
@@ -1041,7 +1059,6 @@ def rotate_around_axis(ref = None, deg = None, axis = None, point = None):
     else:
         pointref = point
     
-    axis.normalize()
     mat = (Matrix.Translation(pointref) @ Matrix.Rotation(math.radians(deg), 4, axis) @ Matrix.Translation(-pointref))
     objref.matrix_world = mat @ objref.matrix_world
 
@@ -2138,7 +2155,37 @@ def make_vector(data):
 #endregion
 #region MISC
 def clear_unwanted_data():
-    clear_unused_data()
+    delete_unused_data()
 def clear_unused_data():
-    bpy.ops.outliner.orphans_purge()
+    #bpy.ops.outliner.orphans_purge()
+    delete_unused_data()
+def delete_unused_data():
+    #bpy.data.orphans_purge() # is considered experimental
+    for block in bpy.data.lights:
+        if block.users == 0:
+            bpy.data.lights.remove(block)
+    
+    for block in bpy.data.curves:
+        if block.users == 0:
+            bpy.data.curves.remove(block)
+    
+    for block in bpy.data.cameras:
+        if block.users == 0:
+            bpy.data.cameras.remove(block)
+            
+    for block in bpy.data.meshes:
+        if block.users == 0:
+            bpy.data.meshes.remove(block)
+
+    for block in bpy.data.materials:
+        if block.users == 0:
+            bpy.data.materials.remove(block)
+
+    for block in bpy.data.textures:
+        if block.users == 0:
+            bpy.data.textures.remove(block)
+
+    for block in bpy.data.images:
+        if block.users == 0:
+            bpy.data.images.remove(block)
 #endregion

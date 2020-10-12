@@ -1,3 +1,14 @@
+=== 0.0.7 - ===
+
+[ JYoshi ]
+- Changes to how delete_object and delete_objects work.
+- + get_parent
+- + get_children
+- + set_parent
+- + clear_parent
+- + delete_unused_data
+- C Note: Pointed clear_unused_data and clear_unwanted_data to delete_unused_data
+
 === 0.0.6 - 02/10/2020 ===
 
 [ Curtis Holt ]
@@ -73,6 +84,8 @@
 - C Note: Added a new category 'DRIVERS' for driver functions.
 - + add_driver
 - + remove_driver
+- + get_bounding_box
+- + get_bounding_box_corners
 
 [ 3D_Bubble ]
 - + select_objects_with_modifiers

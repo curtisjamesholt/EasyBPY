@@ -1,4 +1,4 @@
-== EasyBPY 0.0.6 ==
+== EasyBPY 0.0.7 ==
 Managed by Curtis Holt.
 https://curtisholt.online/links
 
@@ -76,6 +76,12 @@ OBJECTS
 - get_obj                           
 - object_exists                     
 - rename_object
+- get_parent
+- get_children
+- set_parent
+- clear_parent
+- get_bounding_box
+- get_bounding_box_corners
 
 OBJECTS - CONVERSION
 - convert_to_mesh
@@ -427,4 +433,5 @@ DATA CONSTRUCTORS
 
 MISC
 - clear_unwanted_data               
-- clear_unsaved_data                
+- clear_unsaved_data  
+- delete_unused_data              
