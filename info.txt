@@ -73,7 +73,9 @@ OBJECTS
 - duplicate_object                  
 - instance_object                   
 - get_object                        
-- get_obj                           
+- get_obj      
+- get_objects
+- get_median_point_of_objects
 - object_exists                     
 - rename_object
 - get_parent
@@ -207,6 +209,7 @@ TRANSFORMATIONS
 - move_along_global_y
 - translate_along_global_z
 - move_along_global_z
+- translate_along_local_axis
 - translate_along_local_x
 - move_along_local_x
 - translate_along_local_y
@@ -220,6 +223,10 @@ TRANSFORMATIONS
 - rotate_around_x
 - rotate_around_y
 - rotate_around_z
+- rotate_in_x
+- rotate_in_y
+- rotate_in_z
+- rotate_around_local_axis
 - rotate_around_local_x
 - rotate_around_local_y
 - rotate_around_local_z
@@ -233,6 +240,9 @@ TRANSFORMATIONS
 - scale_along_local_x
 - scale_along_local_y
 - scale_along_local_z
+- scale_in_x
+- scale_in_y
+- scale_in_z
 - scale_along_global_axis
 - scale_along_global_x
 - scale_along_global_y

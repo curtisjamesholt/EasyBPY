@@ -34,6 +34,7 @@ import bpy
 import bpy.types
 from mathutils import Vector, Matrix, Euler
 import math
+import random
 from math import radians
 #endregion
 #region RENDER SETTINGS
@@ -174,16 +175,12 @@ def create_object(name, col = None):
 def copy_object(tocopy, col = None):
     # Set up vars
     new_obj = None
-    to_copy = None
+    to_copy = get_object(tocopy)
     col_ref = None
-    # Assess tocopy
-    if is_string(tocopy):
-        to_copy = get_object(tocopy)
-    else:
-        to_copy = tocopy
+    
     # Assess col
     if col == None:
-        col_ref=bpy.context.view_layer.active_layer_collection.collection
+        col_ref = get_active_collection()
     elif is_string(col):
         if collection_exists(col):
             col_ref = get_collection(col)
@@ -215,7 +212,7 @@ def ao():
     return get_active_object()
 
 def so():
-    return get_selected_object()
+    return get_selected_objects()
 
 def get_selected_objects():
     return bpy.context.selected_objects
@@ -232,6 +229,9 @@ def select_object(ref, make_active=True):
     if make_active:
         bpy.context.view_layer.objects.active = objref
 
+def selected_objects():
+    return get_selected_objects()
+
 def select_all_objects(col = None):
     if col == None:
         for co in bpy.context.scene.objects:
@@ -241,27 +241,17 @@ def select_all_objects(col = None):
         if is_string(col):
             if collection_exists(col):
                 col_ref = get_collection(col)
-            else:
-                col_ref = create_collection(col)
         else:
             col_ref = col
         for c in col_ref.objects:
             c.select_set(True)
 
 def deselect_object(ref):
-    # ref is string
-    if is_string(ref):
-        if object_exists(ref):
-            bpy.data.objects[ref].select_set(False)
-        else:
-            return False
-    # ref is object reference
-    else:
-        ref.select_set(False)
-    pass
+    objref = get_object(ref)
+    objref.select_set(False)
 
 def deselect_all_objects():
-    for ob in bpy.context.selected_objects:
+    for ob in so():
         ob.select_set(False)
 
 def delete_selected_objects():
@@ -293,17 +283,47 @@ def instance_object(ref, newname = None, col = None):
 def get_object(ref):
     objref = None
     if ref is None:
-        objref = so()
+        objref = ao()
     else:
         if is_string(ref):
             if object_exists(ref):
                 objref = bpy.data.objects[ref]
-        else :
+        else:
             objref = ref
     return objref
 
 def get_obj(ref):
     return get_object(ref)
+
+def get_objects(ref = None):
+    objref = []
+    if ref is None:
+        objref = so()
+    else:
+        if isinstance(ref, list):
+            if len(ref) > 0:
+                if isinstance(ref[0], bpy.types.Object):
+                    objref = ref
+                elif isinstance(ref[0], str):
+                    for ob_name in ref:
+                        if object_exists(ref):
+                            objref.append(bpy.data.objects[ref])
+        elif is_string(ref):
+            if object_exists(ref):
+                objref.append(bpy.data.objects[ref])
+        elif isinstance(ref, bpy.types.Object) :
+            objref.append(ref)
+    return objref
+
+def get_objs(ref = None):
+    return get_objects(ref)
+
+def get_median_point_of_objects(objs):
+    point_loc = Vector()
+    for obj in objs:
+        point_loc += obj.location
+    point_loc /= len(objs)
+    return point_loc
 
 def object_exists(ref):
     if is_string(ref):
@@ -637,41 +657,17 @@ def get_scene():
 #endregion
 #region VISIBILITY
 def hide_object(ref=None):
-    if ref is not None:
-        # ref is string
-        if is_string(ref):
-            if object_exists(ref):
-                obj = get_object(ref)
-                obj.hide_set(True)
-            pass
-        # ref is object reference
-        else:
-            if object_exists(ref):
-                ref.hide_set(True)
-    else:
-        obj = selected_object()
-        if obj is not None:
-            obj.hide_set(True)
+    objs = get_objects(ref)
+    for obj in objs:
+        obj.hide_set(True)
 
 def hide(ref = None):
     hide_object(ref)
 
 def show_object(ref = None):
-    if ref is not None:
-        # ref is string
-        if is_string(ref):
-            if object_exists(ref):
-                obj = get_object(ref)
-                obj.hide_set(False)
-            pass
-        # ref is object reference
-        else:
-            if object_exists(ref):
-                ref.hide_set(False)
-    else:
-        obj = selected_object()
-        if obj is not None:
-            obj.hide_set(False)
+    objs = get_objects(ref)
+    for obj in objs:
+        obj.hide_set(False)
 
 def show(ref = None):
     show_object(ref)
@@ -683,241 +679,72 @@ def unhide_object(ref = None):
     show_object(ref)
 
 def hide_in_viewport(ref):
-    # ref is string
-    if is_string(ref):
-        if object_exists(ref):
-            obj = get_object(ref)
-            obj.hide_viewport = True
-    # ref is an object reference
-    else:
-        if object_exists(ref):
-            ref.hide_viewport = True
-        else:
-            return False
+    objs = get_objects(ref)
+    for obj in objs:
+        obj.hide_viewport = True
 
 def show_in_viewport(ref):
-    # ref is string
-    if is_string(ref):
-        if object_exists(ref):
-            obj = get_object(ref)
-            obj.hide_viewport = False
-    # ref is an object reference
-    else:
-        if object_exists(ref):
-            ref.hide_viewport = False
-        else:
-            return False
+    objs = get_objects(ref)
+    for obj in objs:
+        obj.hide_viewport = False
 
 def unhide_in_viewport(ref):
     show_in_viewport(ref)
 
 def hide_in_render(ref):
-    # ref is string
-    if is_string(ref):
-        if object_exists(ref):
-            obj = get_object(ref)
-            obj.hide_render = True
-    # ref is an object reference
-    else:
-        if object_exists(ref):
-            ref.hide_render = True
-        else:
-            return False
+    objs = get_objects(ref)
+    for obj in objs:
+        obj.hide_render = True
 
 def show_in_render(ref):
-    # ref is string
-    if is_string(ref):
-        if object_exists(ref):
-            obj = get_object(ref)
-            obj.hide_render = False
-    # ref is an object reference
-    else:
-        if object_exists(ref):
-            ref.hide_render = False
-        else:
-            return False
+    objs = get_objects(ref)
+    for obj in objs:
+        obj.hide_render = False
 
 def unhide_in_render(ref):
     show_in_render(ref)
 
 def display_as_bounds(ref):
-    # ref is string
-    if is_string(ref):
-        if object_exists(ref):
-            obj = get_object(ref)
-            obj.display_type = 'BOUNDS'
-    # ref is an object reference
-    else:
-        if object_exists(ref):
-            ref.display_type = 'BOUNDS'
-        else:
-            return False
+    objs = get_objects(ref)
+    for obj in objs:
+        obj.display_type = 'BOUNDS'
 
 def display_as_textured(ref):
-    # ref is string
-    if is_string(ref):
-        if object_exists(ref):
-            obj = get_object(ref)
-            obj.display_type = 'TEXTURED'
-    # ref is an object reference
-    else:
-        if object_exists(ref):
-            ref.display_type = 'TEXTURED'
-        else:
-            return False
+    objs = get_objects(ref)
+    for obj in objs:
+        obj.display_type = 'TEXTURED'
 
 def display_as_solid(ref):
-    # ref is string
-    if is_string(ref):
-        if object_exists(ref):
-            obj = get_object(ref)
-            obj.display_type = 'SOLID'
-    # ref is an object reference
-    else:
-        if object_exists(ref):
-            ref.display_type = 'SOLID'
-        else:
-            return False
+    objs = get_objects(ref)
+    for obj in objs:
+        obj.display_type = 'SOLID'
 
 def display_as_wire(ref):
-    # ref is string
-    if is_string(ref):
-        if object_exists(ref):
-            obj = get_object(ref)
-            obj.display_type = 'WIRE'
-    # ref is an object reference
-    else:
-        if object_exists(ref):
-            ref.display_type = 'WIRE'
-        else:
-            return False
+    objs = get_objects(ref)
+    for obj in objs:
+        obj.display_type = 'WIRE'
 #endregion
 #region TRANSFORMATIONS
-def location(obj = None, loc = None):
-
-    # set up vars
-    objref = None
-    obj_provided = False
-    loc_provided = False
-
-    # obj checks
-    if obj is not None:
-        obj_provided = True
-        # obj has been provided
-        if is_string(obj):
-            objref = get_object(obj)
-        else:
-            objref = obj
-
-    # loc checks
+def location(ref = None, loc = None):
+    objref = get_object(ref)
     if loc is not None:
-        # loc has been provided
-        loc_provided = True
-
-    if obj_provided:
-        # obj has been provided
-        if loc_provided:
-            # case 1 - obj and loc provided
-            objref.location = Vector((loc[0],loc[1],loc[2]))
-        else:
-            # case 2 - obj but no loc provided
-            return objref.location
+        objref.location = Vector((loc[0],loc[1],loc[2]))
     else:
-        # obj has not been provided
-        if loc_provided:
-            # case 3 - obj not provided but loc is
-            objref = so()
-            objref.location = Vector((loc[0],loc[1],loc[2]))
-        else:
-            # case 4 - no obj and no loc provided
-            return so().location
+        return objref.location
 
-def rotation(obj = None, rot = None):
-
-    # set up vars
-    objref = None
-    obj_provided = False
-    rot_provided = False
-
-    # obj checks
-    if obj is not None:
-        obj_provided = True
-        # obj has been provided
-        if is_string(obj):
-            objref = get_object(obj)
-        else:
-            objref = obj
-
-    # newloc checks
+def rotation(ref = None, rot = None):
+    objref = get_object(ref)
     if rot is not None:
-        # rot has been provided
-        rot_provided = True
-
-    if obj_provided:
-        # obj has been provided
-        if rot_provided:
-            # case 1 - obj and rot provided
-            objref.rotation_euler[0] = rot[0]
-            objref.rotation_euler[1] = rot[1]
-            objref.rotation_euler[2] = rot[2]
-        else:
-            # case 2 - obj but no rot provided
-            return objref.rotation_euler
+        objref.rotation_euler = Vector((rot[0],rot[1],rot[2]))
     else:
-        # obj has not been provided
-        if rot_provided:
-            # case 3 - obj not provided but rot is
-            objref = so()
-            objref.rotation_euler[0] = rot[0]
-            objref.rotation_euler[1] = rot[1]
-            objref.rotation_euler[2] = rot[2]
-        else:
-            # case 4 - no obj and no rot provided
-            return so().rotation_euler
+        return objref.rotation_euler
             
-def scale(obj = None, scale = None):
-
-    # set up vars
-    objref = None
-    obj_provided = False
-    scale_provided = False
-
-    # obj checks
-    if obj is not None:
-        obj_provided = True
-        # obj has been provided
-        if is_string(obj):
-            objref = get_object(obj)
-        else:
-            objref = obj
-
-    # newloc checks
+def scale(ref = None, scale = None):
+    objref = get_object(ref)
     if scale is not None:
-        # rot has been provided
-        scale_provided = True
-
-    if obj_provided:
-        # obj has been provided
-        if scale_provided:
-            # case 1 - obj and scale provided
-            objref.scale[0] = scale[0]
-            objref.scale[1] = scale[1]
-            objref.scale[2] = scale[2]
-        else:
-            # case 2 - obj but no scale provided
-            return objref.scale
+        objref.scale = Vector((scale[0],scale[1],scale[2]))
     else:
-        # obj has not been provided
-        if scale_provided:
-            # case 3 - obj not provided but scale is
-            objref = so()
-            objref.scale[0] = scale[0]
-            objref.scale[1] = scale[1]
-            objref.scale[2] = scale[2]
-        else:
-            # case 4 - no obj and no scale provided
-            return so().scale
-    pass
+        return objref.scale
 
 # Applying Transformations:
 
@@ -953,311 +780,348 @@ def apply_rotation_and_scale(ref = None):
 
 # Translations:
 
-def translate_vector(ref = None, vec = None):
-    if vec is not None:
-        objref = get_object(ref)
-        objref.location[0] += vec[0]
-        objref.location[1] += vec[1]
-        objref.location[2] += vec[2]
-    else:
-        return False
+def translate_vector(vec = Vector(), ref = None):
+    objs = get_objects(ref)
+    for obj in objs :
+        obj.location[0] += vec[0]
+        obj.location[1] += vec[1]
+        obj.location[2] += vec[2]
 
-def translate_along_axis(ref = None, val = None, axis : Vector = None):
-    objref = get_object(ref)        
+def translate_along_axis(val, axis, ref = None):
+    objs = get_objects(ref)
     axis.normalize()
-    objref.location[0] += (val * axis[0])
-    objref.location[1] += (val * axis[1])
-    objref.location[2] += (val * axis[2])
+    for obj in objs:
+        obj.location[0] += (val * axis[0])
+        obj.location[1] += (val * axis[1])
+        obj.location[2] += (val * axis[2])
 
-def move_along_axis(ref = None, val = None, axis : Vector = None):
-    translate_along_axis(ref, val, axis)
+def move_along_axis(val, axis, ref = None):
+    translate_along_axis(val, axis, ref)
 
-def translate_along_x(ref = None, val = None):
-    translate_along_axis(ref, val, Vector((1.0,0.0,0.0)))
+def translate_along_x(val, ref = None):
+    translate_along_axis(val, Vector((1.0,0.0,0.0)), ref)
 
-def move_along_x(ref = None, val = None):
-    translate_along_x(ref, val)
+def move_along_x(val, ref = None):
+    translate_along_x(val, ref)
 
-def translate_along_y(ref = None, val = None):
-    translate_along_axis(ref, val, Vector((0.0,1.0,0.0)))
+def translate_along_y(val, ref = None):
+    translate_along_axis(val, Vector((0.0,1.0,0.0)), ref)
 
-def move_along_y(ref = None, val = None):
-    translate_along_y(ref, val)
+def move_along_y(val, ref = None):
+    translate_along_y(val, ref)
 
-def translate_along_z(ref = None, val = None):
-    translate_along_axis(ref, val, Vector((0.0,0.0,1.0)))
+def translate_along_z(val, ref = None):
+    translate_along_axis(val, Vector((0.0,0.0,1.0)), ref)
 
-def move_along_z(ref = None, val = None):
-    translate_along_z(ref,val)
+def move_along_z(val, ref = None):
+    translate_along_z(val, ref)
 
-def translate_along_global_x(ref = None, val = None):
-    translate_along_x(ref, val)
+def translate_along_global_x(val, ref = None):
+    translate_along_x(val, ref)
 
-def move_along_global_x(ref = None, val = None):
-    translate_along_global_x(ref, val)
+def move_along_global_x(val, ref = None):
+    translate_along_x(val, ref)
 
-def translate_along_global_y(ref = None, val = None):
-    translate_along_y(ref, val)
+def translate_along_global_y(val, ref = None):
+    translate_along_y(val, ref)
 
-def move_along_global_y(ref = None, val = None):
-    translate_along_global_y(ref, val)
+def move_along_global_y(val, ref = None):
+    translate_along_y(val, ref)
 
-def translate_along_global_z(ref = None, val = None):
-    translate_along_z(ref, val)
+def translate_along_global_z(val, ref = None):
+    translate_along_z(val, ref)
 
-def move_along_global_z(ref = None, val = None):
-    translate_along_global_z(ref, val)
+def move_along_global_z(val, ref = None):
+    translate_along_z(val, ref)
 
-def translate_along_local_x(ref = None, val = None):
-    objref = get_object(ref)
-    axis = Vector((1.0,0.0,0.0))
-    axis.rotate(objref.rotation_euler)
-    translate_along_axis(ref, val, axis)
+def translate_in_x(val, ref = None):
+    translate_along_x(val, ref)
 
-def move_along_local_x(ref = None, val = None):
-    translate_along_local_x(ref, val)
+def move_in_x(val, ref = None):
+    translate_along_x(val, ref)
 
-def translate_along_local_y(ref = None, val = None):
-    objref = get_object(ref)
-    axis = Vector((0.0,1.0,0.0))
-    axis.rotate(objref.rotation_euler)
-    translate_along_axis(ref, val, axis)
+def translate_in_y(val, ref = None):
+    translate_along_y(val, ref)
 
-def move_along_local_y(ref = None, val = None):
-    translate_along_local_y(ref, val)
+def move_in_y(val, ref = None):
+    translate_along_y(val, ref)
 
-def translate_along_local_z(ref = None, val = None):
-    objref = get_object(ref)
-    axis = Vector((0.0,0.0,1.0))
-    axis.rotate(objref.rotation_euler)
-    translate_along_axis(ref, val, axis)
+def translate_in_z(val, ref = None):
+    translate_along_z(val, ref)
 
-def move_along_local_z(ref = None, val = None):
-    translate_along_local_z(ref, val)
+def move_in_z(val, ref = None):
+    translate_along_z(val, ref)
+
+def translate_along_local_axis(val, axis, ref = None):
+    objs = get_objects(ref)
+    axis.normalize()
+    for obj in objs:
+        tempaxis = axis.copy()
+        tempaxis.rotate(obj.rotation_euler)
+        obj.location[0] += (val * tempaxis[0])
+        obj.location[1] += (val * tempaxis[1])
+        obj.location[2] += (val * tempaxis[2])
+
+def translate_along_local_x(val, ref = None):
+    translate_along_local_axis(val, Vector((1.0,0.0,0.0)), ref)
+
+def move_along_local_x(val, ref = None):
+    translate_along_local_x(val, ref)
+
+def translate_along_local_y(val, ref = None):
+    translate_along_local_axis(val, Vector((0.0,1.0,0.0)), ref)
+
+def move_along_local_y(val, ref = None):
+    translate_along_local_y(val, ref)
+
+def translate_along_local_z(val, ref = None):
+    translate_along_local_axis(val, Vector((0.0,0.0,1.0)), ref)
+
+def move_along_local_z(val, ref = None):
+    translate_along_local_z(val, ref)
 
 # Rotations:
 
-def rotate_vector(ref = None, vec = None):
-    if vec is not None:
-        objref = get_object(ref)
-        objref.rotation_euler[0] += vec[0]
-        objref.rotation_euler[1] += vec[1]
-        objref.rotation_euler[2] += vec[2]
-    else:
-        return False
+def rotate_vector(vec = Vector(), ref = None):
+    objs = get_objects(ref)
+    for obj in objs:
+        obj.rotation_euler[0] += vec[0]
+        obj.rotation_euler[1] += vec[1]
+        obj.rotation_euler[2] += vec[2]
 
-def rotate_around_axis(ref = None, deg = None, axis = None, point = None):
-    objref = get_object(ref)
+def rotate_around_axis(deg, axis = Vector(), ref = None, point = None):
+    objs = get_objects(ref)
     pointref = None
     if point is None:
         if get_scene().tool_settings.transform_pivot_point == 'MEDIAN_POINT':
-            pointref = objref.location
+            pointref = get_median_point_of_objects(objs)
         elif get_scene().tool_settings.transform_pivot_point == 'CURSOR':
             pointref = get_cursor_location()
         else:
-            pointref = objref.location
+            pointref = get_median_point_of_objects(objs)
+    else:
+        pointref = point
+    axis.normalize()
+    for obj in objs:
+        mat = (Matrix.Translation(pointref) @ Matrix.Rotation(math.radians(deg), 4, axis) @ Matrix.Translation(-pointref))
+        obj.matrix_world = mat @ obj.matrix_world
+
+def rotate_around_global_x(deg, ref = None, point = None):
+    rotate_around_axis(deg, Vector((1.0,0.0,0.0)), ref, point)
+
+def rotate_around_global_y(deg, ref = None, point = None):
+    rotate_around_axis(deg, Vector((0.0,1.0,0.0)), ref, point)
+
+def rotate_around_global_z(deg, ref = None, point = None):
+    rotate_around_axis(deg, Vector((0.0,0.0,1.0)), ref, point)
+
+def rotate_around_x(deg, ref = None,point = None):
+    rotate_around_global_x(deg, ref, point)
+
+def rotate_around_y(deg, ref = None,point = None):
+    rotate_around_global_y(deg, ref, point)
+
+def rotate_around_z(deg, ref = None,point = None):
+    rotate_around_global_z(deg, ref, point)
+
+def rotate_in_x(deg, ref = None,point = None):
+    rotate_around_global_x(deg, ref, point)
+
+def rotate_in_y(deg, ref = None,point = None):
+    rotate_around_global_y(deg, ref, point)
+
+def rotate_in_z(deg, ref = None,point = None):
+    rotate_around_global_z(deg, ref, point)
+
+def rotate_around_local_axis(deg, axis = Vector(), ref = None, point = None):
+    objs = get_objects(ref)
+    pointref = None
+    if point is None:
+        if get_scene().tool_settings.transform_pivot_point == 'MEDIAN_POINT':
+            pointref = get_median_point_of_objects(objs)
+        elif get_scene().tool_settings.transform_pivot_point == 'CURSOR':
+            pointref = get_cursor_location()
+        else:
+            pointref = get_median_point_of_objects(objs)
     else:
         pointref = point
     
-    mat = (Matrix.Translation(pointref) @ Matrix.Rotation(math.radians(deg), 4, axis) @ Matrix.Translation(-pointref))
-    objref.matrix_world = mat @ objref.matrix_world
+    axis.normalize()
+    for obj in objs:
+        tempaxis = axis.copy()
+        tempaxis.rotate(obj.rotation_euler)
+        mat = (Matrix.Translation(pointref) @ Matrix.Rotation(math.radians(deg), 4, tempaxis) @ Matrix.Translation(-pointref))
+        obj.matrix_world = mat @ obj.matrix_world
 
-def rotate_around_global_x(ref = None, deg = None, point = None):
-    rotate_around_axis(ref, deg, Vector((1.0,0.0,0.0)), point)
+def rotate_around_local_x(deg, ref = None, point = None):
+    rotate_around_local_axis(deg, Vector((1.0,0.0,0.0)), ref, point)
 
-def rotate_around_global_y(ref = None, deg = None, point = None):
-    rotate_around_axis(ref, deg, Vector((0.0,1.0,0.0)), point)
+def rotate_around_local_y(deg, ref = None, point = None):
+    rotate_around_local_axis(deg, Vector((0.0,1.0,0.0)), ref, point)
 
-def rotate_around_global_z(ref = None, deg = None, point = None):
-    rotate_around_axis(ref, deg, Vector((0.0,0.0,1.0)), point)
-
-def rotate_around_x(ref = None, deg = None, point = None):
-    rotate_around_global_x(ref, deg, point)
-
-def rotate_around_y(ref = None, deg = None, point = None):
-    rotate_around_global_y(ref, deg, point)
-
-def rotate_around_z(ref = None, deg = None, point = None):
-    rotate_around_global_z(ref, deg, point)
-
-def rotate_around_local_x(ref = None, deg = None, point = None):
-    objref = get_object(ref)
-    axis = Vector((1.0,0.0,0.0))
-    axis.rotate(objref.rotation_euler)
-    rotate_around_axis(ref, deg, axis, point)
-
-def rotate_around_local_y(ref = None, deg = None, point = None):
-    objref = get_object(ref)
-    axis = Vector((0.0,1.0,0.0))
-    axis.rotate(objref.rotation_euler)
-    rotate_around_axis(ref, deg, axis, point)
-
-def rotate_around_local_z(ref = None, deg = None, point = None):
-    objref = get_object(ref)
-    axis = Vector((0.0,0.0,1.0))
-    axis.rotate(objref.rotation_euler)
-    rotate_around_axis(ref, deg, axis, point)
-
-def revese_rotation_on_euler(rot : Euler):
-    if rot is not None:
-        temp = rot
-        temp.x *= -1
-        temp.y *= -1
-        temp.z *= -1
-        temp.order = 'ZYX'
-    else:
-        return False
+def rotate_around_local_z(deg, ref = None, point = None):
+    rotate_around_local_axis(deg, Vector((0.0,0.0,1.0)), ref, point)
 
 # Scaling:
 
-def scale_vector(ref = None, vec = None):
-    if vec is not None:
+def scale_vector(vec, ref = None):
+    objs = get_objects(ref)
+    for obj in objs:
         obj = get_object(ref)
         obj.scale[0] *= vec[0]
         obj.scale[1] *= vec[1]
         obj.scale[2] *= vec[2]
-    else:
-        return False
 
-def scale_uniform(ref = None, val = None, point = None):
-    scale_vector(ref, Vector((val, val, val)))
+def scale_uniform(val, ref = None):
+    scale_vector(Vector((val, val, val)), ref)
 
-def scale_along_axis(ref = None, factor = None, axis = None, point = None):
-    objref = get_object(ref)
+def scale_along_axis(val, axis, ref = None, point = None):
+    objs = get_objects(ref)
     pointref = None
     if point is None:
         if get_scene().tool_settings.transform_pivot_point == 'MEDIAN_POINT':
-            pointref = objref.location
+            pointref = get_median_point_of_objects(objs)
         elif get_scene().tool_settings.transform_pivot_point == 'CURSOR':
             pointref = get_cursor_location()
         else:
-            pointref = objref.location
+            pointref = get_median_point_of_objects(objs)
     else:
         pointref = point
 
     axis.normalize()
     temp = Vector()
-    temp[0] = 1 + ((factor - 1)/(1 - 0)) * (axis[0] - 0)
-    temp[1] = 1 + ((factor - 1)/(1 - 0)) * (axis[1] - 0)
-    temp[2] = 1 + ((factor - 1)/(1 - 0)) * (axis[2] - 0)
-    objref.scale[0] *= temp[0]
-    objref.scale[1] *= temp[1]
-    objref.scale[2] *= temp[2]
-    
-    axis.rotate(objref.rotation_euler)
-    axis.normalize()                    #Unneeded. Just there for safety
-    fac = (objref.location - pointref).dot(axis) * (factor-1)
-    translate_along_axis(objref, fac, axis)
+    temp[0] = 1 + ((val - 1)/(1 - 0)) * (axis[0] - 0)
+    temp[1] = 1 + ((val - 1)/(1 - 0)) * (axis[1] - 0)
+    temp[2] = 1 + ((val - 1)/(1 - 0)) * (axis[2] - 0)
+    for obj in objs:
+        obj.scale[0] *= temp[0]
+        obj.scale[1] *= temp[1]
+        obj.scale[2] *= temp[2]
+        
+        tempaxis = axis.copy()
+        tempaxis.rotate(obj.rotation_euler)
+        fac = (obj.location - pointref).dot(tempaxis) * (val-1)
+        translate_along_axis(fac, tempaxis, obj)
 
-def scale_along_x(ref = None, factor = None, point = None):
-    scale_along_axis(ref, factor, Vector((1.0, 0.0, 0.0)), point)
+def scale_along_x(val, ref = None, point = None):
+    scale_along_axis(val, Vector((1.0, 0.0, 0.0)), ref, point)
 
-def scale_along_y(ref = None, factor = None, point = None):
-    scale_along_axis(ref, factor, Vector((0.0, 1.0, 0.0)), point)
+def scale_along_y(val, ref = None, point = None):
+    scale_along_axis(val, Vector((0.0, 1.0, 0.0)), ref, point)
 
-def scale_along_z(ref = None, factor = None, point = None):
-    scale_along_axis(ref, factor, Vector((0.0, 0.0, 1.0)), point)
+def scale_along_z(val, ref = None, point = None):
+    scale_along_axis(val, Vector((0.0, 0.0, 1.0)), ref, point)
 
-def scale_along_local_x(ref = None, factor = None, point = None):
-    scale_along_axis(ref, factor, Vector((1.0, 0.0, 0.0)), point)
+def scale_along_local_x(val, ref = None, point = None):
+    scale_along_axis(val, Vector((1.0, 0.0, 0.0)), ref, point)
 
-def scale_along_local_y(ref = None, factor = None, point = None):
-    scale_along_axis(ref, factor, Vector((0.0, 1.0, 0.0)), point)
+def scale_along_local_y(val, ref = None, point = None):
+    scale_along_axis(val, Vector((0.0, 1.0, 0.0)), ref, point)
 
-def scale_along_local_z(ref = None, factor = None, point = None):
-    scale_along_axis(ref, factor, Vector((0.0, 0.0, 1.0)), point)
+def scale_along_local_z(val, ref = None, point = None):
+    scale_along_axis(val, Vector((0.0, 0.0, 1.0)), ref, point)
 
-def scale_along_global_axis(ref = None, factor = None, axis : Vector = None, pointref = None):
-    objref = get_object(ref)
-    point = None
-    if pointref is None:
+def scale_in_x(val, ref = None, point = None):
+    scale_along_axis(val, Vector((1.0, 0.0, 0.0)), ref, point)
+
+def scale_in_y(val, ref = None, point = None):
+    scale_along_axis(val, Vector((0.0, 1.0, 0.0)), ref, point)
+
+def scale_in_z(val, ref = None, point = None):
+    scale_along_axis(val, Vector((0.0, 0.0, 1.0)), ref, point)
+
+def scale_along_global_axis(val, axis, ref = None, point = None):
+    objs = get_objects(ref)
+    pointref = None
+    if point is None:
         if get_scene().tool_settings.transform_pivot_point == 'MEDIAN_POINT':
-            point = objref.location
+            point = get_median_point_of_objects(objs)
         elif get_scene().tool_settings.transform_pivot_point == 'CURSOR':
             point = get_cursor_location()
         else:
-            point = objref.location
+            point = get_median_point_of_objects(objs)
     else:
-        point = point
-    loc, rot, scale = objref.matrix_world.decompose()
-    loc_mat = Matrix.Translation(loc)
-    new_loc_mat = loc_mat.copy()
-    new_loc_mat.invert()
-    objref.matrix_world = new_loc_mat @ objref.matrix_world
-    orig_rot = objref.rotation_euler.copy()
-    orig_loc = objref.location
-    objref.matrix_world = Matrix.Scale(factor, 4, axis) @ objref.matrix_world
-    objref.matrix_world = loc_mat @ objref.matrix_world
-    objref.rotation_euler = orig_rot
-    fac = (objref.location - point).dot(axis) * (factor-1)
-    translate_along_axis(objref, fac, axis)
+        pointref = point
+    for obj in objs:
+        loc, rot, scale = obj.matrix_world.decompose()
+        loc_mat = Matrix.Translation(loc)
+        new_loc_mat = loc_mat.copy()
+        new_loc_mat.invert()
+        obj.matrix_world = new_loc_mat @ obj.matrix_world
+        orig_rot = obj.rotation_euler.copy()
+        orig_loc = obj.location
+        obj.matrix_world = Matrix.Scale(val, 4, axis) @ obj.matrix_world
+        obj.matrix_world = loc_mat @ obj.matrix_world
+        obj.rotation_euler = orig_rot
+        fac = (obj.location - point).dot(axis) * (val-1)
+        translate_along_axis(fac, axis, obj)
 
-def scale_along_global_x(ref = None, factor = None, point = None):
-    scale_along_global_axis(ref, factor, Vector((1.0, 0.0, 0.0)), point)
+def scale_along_global_x(val, ref = None, point = None):
+    scale_along_global_axis(val, Vector((1.0, 0.0, 0.0)), ref, point)
 
-def scale_along_global_y(ref = None, factor = None, point = None):
-    scale_along_global_axis(ref, factor, Vector((0.0, 1.0, 0.0)), point)
+def scale_along_global_y(val, ref = None, point = None):
+    scale_along_global_axis(val, Vector((0.0, 1.0, 0.0)), ref, point)
 
-def scale_along_global_z(ref = None, factor = None, point = None):
-    scale_along_global_axis(ref, factor, Vector((0.0, 0.0, 1.0)), point)
+def scale_along_global_z(val, ref = None, point = None):
+    scale_along_global_axis(val, Vector((0.0, 0.0, 1.0)), ref, point)
 
-#Need some optimization in these. Like function to get the entered point or else pivot point
-def scale_perpendicular_to_x(ref = None, fac = None, point = None):
-    scale_vector(ref, Vector((1.0, fac, fac)))
-    
-    objref = get_object(ref)
+#Need to be revised, not working as expected
+def scale_perpendicular_to_x(val, ref = None, point = None):
+    objs = get_objects(ref)
     pointref = None
     if point is None:
         if get_scene().tool_settings.transform_pivot_point == 'MEDIAN_POINT':
-            pointref = objref.location
+            pointref = get_median_point_of_objects(objs)
         elif get_scene().tool_settings.transform_pivot_point == 'CURSOR':
             pointref = get_cursor_location()
         else:
-            pointref = objref.location
+            pointref = get_median_point_of_objects(objs)
     else:
         pointref = point
     
-    axis = (objref.location - pointref) * Vector((0.0, 1.0, 1.0))
-    factor = axis.magnitude * (fac-1)
-    translate_along_axis(objref, factor, axis)
+    for obj in objs:
+        scale_vector(Vector((1.0, val, val)), obj)
+        axis = (obj.location - pointref) * Vector((0.0, 1.0, 1.0))
+        fac = axis.magnitude * (val-1)
+        translate_along_axis(fac, axis, obj)
 
-def scale_perpendicular_to_y(ref = None, fac = None, point = None):
-    scale_vector(ref, Vector((fac, 1.0, fac)))
-    
-    objref = get_object(ref)
+def scale_perpendicular_to_y(val, ref = None, point = None):
+    objs = get_objects(ref)
     pointref = None
     if point is None:
         if get_scene().tool_settings.transform_pivot_point == 'MEDIAN_POINT':
-            pointref = objref.location
+            pointref = get_median_point_of_objects(objs)
         elif get_scene().tool_settings.transform_pivot_point == 'CURSOR':
             pointref = get_cursor_location()
         else:
-            pointref = objref.location
+            pointref = get_median_point_of_objects(objs)
     else:
         pointref = point
     
-    axis = (objref.location - pointref) * Vector((1.0, 0.0, 1.0))
-    factor = axis.magnitude * (fac-1)
-    translate_along_axis(objref, factor, axis)
+    for obj in objs:
+        scale_vector(Vector((val, 1.0, val)), obj)
+        axis = (obj.location - pointref) * Vector((1.0, 0.0, 1.0))
+        fac = axis.magnitude * (val-1)
+        translate_along_axis(fac, axis, obj)
 
-def scale_perpendicular_to_z(ref = None, fac = None, point = None):
-    scale_vector(ref, Vector((fac, fac, 1.0)))
-    
-    objref = get_object(ref)
+def scale_perpendicular_to_z(val, ref = None, point = None):
+    objs = get_objects(ref)
     pointref = None
     if point is None:
         if get_scene().tool_settings.transform_pivot_point == 'MEDIAN_POINT':
-            pointref = objref.location
+            pointref = get_median_point_of_objects(objs)
         elif get_scene().tool_settings.transform_pivot_point == 'CURSOR':
             pointref = get_cursor_location()
         else:
-            pointref = objref.location
+            pointref = get_median_point_of_objects(objs)
     else:
         pointref = point
     
-    axis = (objref.location - pointref) * Vector((1.0, 1.0, 0.0))
-    factor = axis.magnitude * (fac-1)
-    translate_along_axis(objref, factor, axis)
+    for obj in objs:
+        scale_vector(Vector((val, val, 1.0)), obj)
+        axis = (obj.location - pointref) * Vector((1.0, 1.0, 0.0))
+        fac = axis.magnitude * (val-1)
+        translate_along_axis(fac, axis, obj)
 
 #endregion
 #region ANIMATION / KEYFRAMES
@@ -1604,10 +1468,17 @@ def set_active_collection(ref):
         colref = get_collection(ref)
     else:
         colref = ref
-    if colref.name in bpy.data.collections:
-        bpy.context.view_layer.active_layer_collection = bpy.context.view_layer.layer_collection.children[colref.name]
-    else:
-        return False
+    hir = bpy.context.view_layer.layer_collection
+    search_layer_collection_in_hierarchy_and_set_active(colref, hir)
+
+# CONVINIENCE RECURSIVE FUNCTION, NOT FOR USER
+def search_layer_collection_in_hierarchy_and_set_active(colref, hir) :
+    if isinstance(hir, bpy.types.LayerCollection):
+        if hir.collection == colref:
+            bpy.context.view_layer.active_layer_collection = hir
+        else:
+            for child in hir.children:
+                search_layer_collection_in_hierarchy_and_set_active(colref, child)
 
 def get_all_collections():
     return bpy.data.collections
@@ -1617,65 +1488,42 @@ def get_list_of_collections():
 
 def link_object_to_collection(ref, col):
     if is_string(col):
-        if is_string(ref):
-            objref = get_object(ref)
-            bpy.data.collections[col].objects.link(objref)
-        else:
-            bpy.data.collections[col].objects.link(ref)
+        objref = get_object(ref)
+        bpy.data.collections[col].objects.link(objref)
     else:
-        if is_string(ref):
-            objref = get_object(ref)
-            col.objects.link(objref)
-        else:
-            col.objects.link(ref)
+        objref = get_object(ref)
+        col.objects.link(objref)
 
 def link_objects_to_collection(ref, col):
+    objs = get_objects(ref)
     if is_string(col):
-        for o in ref:
+        for o in objs:
             bpy.data.collections[col].objects.link(o)
     else:
-        for o in ref:
+        for o in objs:
             col.objects.link(o)
-        pass
 
 def unlink_object_from_collection(ref, col):
-    #ref.users_collection[0].unlink(ref)
     if is_string(col):
-        if is_string(ref):
-            objref = get_object(ref)
-            bpy.data.collections[col].objects.unlink(objref)
-        else:
-            bpy.data.collections[col].objects.unlink(ref)
+        objref = get_object(ref)
+        bpy.data.collections[col].objects.unlink(objref)
     else:
-        if is_string(ref):
-            objref = get_object(ref)
-            col.objects.unlink(objref)
-        else:
-            col.objects.unlink(ref)
+        objref = get_object(ref)
+        col.objects.unlink(objref)
 
 def unlink_objects_from_collection(ref, col):
-
-    # we assume that ref is a list
+    objs = get_objects(ref)
     colref = None
-
     if is_string(col):
         colref = get_collection(col)
     else:
         colref = col
-
-    for o in ref:
+    for o in objs:
         colref.objects.unlink(o)
 
 def move_object_to_collection(ref, col):
-
-    objref = None
+    objref = get_object(ref)
     colref = None
-
-    if is_string(ref):
-        objref = get_object(ref)
-    else:
-        objref = ref
-
     if is_string(col):
         colref = get_collection(col)
     else:
@@ -1687,34 +1535,23 @@ def move_object_to_collection(ref, col):
     link_object_to_collection(objref, colref)
 
 def move_objects_to_collection(ref, col):
-
+    objs = get_objects(ref)
     colref = None
-
     if is_string(col):
         colref = get_collection(col)
     else:
         colref = col
-    
-    # we assume that ref is object list
-    for o in ref:
+    for o in objs:
         for c in o.users_collection:
             c.objects.unlink(o)
         link_object_to_collection(o, colref)
 
 def get_object_collection(ref):
-    objref = None
-    if is_string(ref):
-        objref = get_object(ref)
-    else:
-        objref = ref
+    objref = get_object(ref)
     return objref.users_collection[0]
 
 def get_object_collections(ref):
-    objref = None
-    if is_string(ref):
-        objref = get_object(ref)
-    else:
-        objref = ref
+    objref = get_object(ref)
     return objref.users_collection
 
 def collection_exists(col):
@@ -2061,7 +1898,9 @@ def add_warp(ref=None, modname = "Warp"):
     return add_modifier(ref,modname,'WARP')
 
 def add_wave(ref=None, modname = "Wave"):
-    return add_modifier(ref,modname,'WAVE')
+    mod = add_modifier(ref,modname,'WAVE')
+    mod.time_offset = random.random() * get_scene().render.fps
+    return mod
 
 def add_cloth(ref=None, modname = "Cloth"):
     return add_modifier(ref,modname,'CLOTH')

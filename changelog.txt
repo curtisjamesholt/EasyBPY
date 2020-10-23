@@ -1,5 +1,9 @@
 === 0.0.7 - ===
 
+[ Curtis Holt ]
+- Rearranged arguments for object transformation functions to allow only
+  a single value to be provided for ease of use.
+
 [ JYoshi ]
 - Changes to how delete_object and delete_objects work.
 - + get_parent
@@ -8,6 +12,41 @@
 - + clear_parent
 - + delete_unused_data
 - C Note: Pointed clear_unused_data and clear_unwanted_data to delete_unused_data
+- Changes to get_object(), get_selected_objects(), so()
+- + selected_objects
+- Shortened location(), rotation() and scale() by making use of pre-existing functions.
+
+[ 3D_Bubble ]
+- set_active_collection fix
+- + search_layer_collection_in_hierarchy_and_set_active (only for use in other functions)
+- + add_wave set time_offset to random.
+- + get_objects
+- + get_objs (con-func)
+- + get_median_point_of_objects
+- Updated copy_object
+- Updated deselect_object
+- Updated deselect_all_objects
+- Optimize hide and show functions, and allow for passing object lists.
+- Translate functions now accept lists of objects.
+- + translate_along_local_axis
+- + translate_in_x (con-func)
+- + move_in_x (con-func)
+- + translate_in_y (con-func)
+- + move_in_y (con-func)
+- + translate_in_z (con-func)
+- + move_in_z (con-func)
+- Rotations functions now accept lists of objects.
+- + rotate_in_x (con-func)
+- + rotate_in_y (con-func)
+- + rotate_in_z (con-func)
+- + rotate_around_local_axis
+- Removed reverse_rotation_on_euler
+- Scaling functions now accept lists of objects.
+- Factor renamed to val in scaling functions for argument consistency.
+- + scale_in_x
+- + scale_in_y
+- + scale_in_z
+- Functions for linking and unlinking objects from collections updated.
 
 === 0.0.6 - 02/10/2020 ===
 
