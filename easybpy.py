@@ -781,14 +781,14 @@ def apply_rotation_and_scale(ref = None):
 # Translations:
 
 def translate_vector(vec = Vector(), ref = None):
-    objs = get_objects(ref)
-    for obj in objs :
+    objs = make_obj_list(ref)
+    for obj in objs:
         obj.location[0] += vec[0]
         obj.location[1] += vec[1]
         obj.location[2] += vec[2]
 
 def translate_along_axis(val, axis, ref = None):
-    objs = get_objects(ref)
+    objs = make_obj_list(ref)
     axis.normalize()
     for obj in objs:
         obj.location[0] += (val * axis[0])
@@ -853,7 +853,7 @@ def move_in_z(val, ref = None):
     translate_along_z(val, ref)
 
 def translate_along_local_axis(val, axis, ref = None):
-    objs = get_objects(ref)
+    objs = make_obj_list(ref)
     axis.normalize()
     for obj in objs:
         tempaxis = axis.copy()
@@ -883,14 +883,14 @@ def move_along_local_z(val, ref = None):
 # Rotations:
 
 def rotate_vector(vec = Vector(), ref = None):
-    objs = get_objects(ref)
+    objs = make_obj_list(ref)
     for obj in objs:
         obj.rotation_euler[0] += vec[0]
         obj.rotation_euler[1] += vec[1]
         obj.rotation_euler[2] += vec[2]
 
 def rotate_around_axis(deg, axis = Vector(), ref = None, point = None):
-    objs = get_objects(ref)
+    objs = make_obj_list(ref)
     pointref = None
     if point is None:
         if get_scene().tool_settings.transform_pivot_point == 'MEDIAN_POINT':
@@ -934,7 +934,7 @@ def rotate_in_z(deg, ref = None,point = None):
     rotate_around_global_z(deg, ref, point)
 
 def rotate_around_local_axis(deg, axis = Vector(), ref = None, point = None):
-    objs = get_objects(ref)
+    objs = make_obj_list(ref)
     pointref = None
     if point is None:
         if get_scene().tool_settings.transform_pivot_point == 'MEDIAN_POINT':
@@ -965,7 +965,7 @@ def rotate_around_local_z(deg, ref = None, point = None):
 # Scaling:
 
 def scale_vector(vec, ref = None):
-    objs = get_objects(ref)
+    objs = make_obj_list(ref)
     for obj in objs:
         obj = get_object(ref)
         obj.scale[0] *= vec[0]
@@ -976,7 +976,7 @@ def scale_uniform(val, ref = None):
     scale_vector(Vector((val, val, val)), ref)
 
 def scale_along_axis(val, axis, ref = None, point = None):
-    objs = get_objects(ref)
+    objs = make_obj_list(ref)
     pointref = None
     if point is None:
         if get_scene().tool_settings.transform_pivot_point == 'MEDIAN_POINT':
@@ -1031,7 +1031,7 @@ def scale_in_z(val, ref = None, point = None):
     scale_along_axis(val, Vector((0.0, 0.0, 1.0)), ref, point)
 
 def scale_along_global_axis(val, axis, ref = None, point = None):
-    objs = get_objects(ref)
+    objs = make_obj_list(ref)
     pointref = None
     if point is None:
         if get_scene().tool_settings.transform_pivot_point == 'MEDIAN_POINT':
@@ -1067,7 +1067,7 @@ def scale_along_global_z(val, ref = None, point = None):
 
 #Need to be revised, not working as expected
 def scale_perpendicular_to_x(val, ref = None, point = None):
-    objs = get_objects(ref)
+    objs = make_obj_list(ref)
     pointref = None
     if point is None:
         if get_scene().tool_settings.transform_pivot_point == 'MEDIAN_POINT':
@@ -1086,7 +1086,7 @@ def scale_perpendicular_to_x(val, ref = None, point = None):
         translate_along_axis(fac, axis, obj)
 
 def scale_perpendicular_to_y(val, ref = None, point = None):
-    objs = get_objects(ref)
+    objs = make_obj_list(ref)
     pointref = None
     if point is None:
         if get_scene().tool_settings.transform_pivot_point == 'MEDIAN_POINT':
@@ -1105,7 +1105,7 @@ def scale_perpendicular_to_y(val, ref = None, point = None):
         translate_along_axis(fac, axis, obj)
 
 def scale_perpendicular_to_z(val, ref = None, point = None):
-    objs = get_objects(ref)
+    objs = make_obj_list(ref)
     pointref = None
     if point is None:
         if get_scene().tool_settings.transform_pivot_point == 'MEDIAN_POINT':
@@ -1991,6 +1991,10 @@ def is_string(ref):
 #region DATA CONSTRUCTORS
 def make_vector(data):
     return Vector((data[0],data[1],data[2]))
+def make_obj_list(ref):
+    if ref is None:
+        return [get_object(ref)]
+    return get_objects(ref)
 #endregion
 #region MISC
 def clear_unwanted_data():

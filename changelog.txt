@@ -15,6 +15,7 @@
 - Changes to get_object(), get_selected_objects(), so()
 - + selected_objects
 - Shortened location(), rotation() and scale() by making use of pre-existing functions.
+- + make_obj_list
 
 [ 3D_Bubble ]
 - set_active_collection fix

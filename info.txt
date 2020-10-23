@@ -439,7 +439,8 @@ DATA CHECKS
 - is_string                         
 
 DATA CONSTRUCTORS
-- make_vector                       
+- make_vector  
+- make_obj_list                     
 
 MISC
 - clear_unwanted_data               
