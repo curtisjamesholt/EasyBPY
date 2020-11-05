@@ -1,6 +1,6 @@
 #region INFO
 '''
-    == EasyBPY 0.0.7 ==
+    == EasyBPY 0.0.8 ==
     Managed by Curtis Holt
     https://curtisholt.online/links
     ---
@@ -1592,15 +1592,8 @@ def delete_material(ref):
     bpy.data.materials.remove(matref)
 
 def get_material(ref=None):
-    if ref is not None:
-        if is_string(ref):
-            if ref in bpy.data.materials:
-                return bpy.data.materials[ref]
-        else:
-            return ref
-    else:
-        objref = active_object()
-        return objref.material_slots[0].material
+    objref = get_object(ref)
+    return objref.material_slots[0].material
 
 def add_material_to_object(ref, mat):
     objref = None
@@ -1671,18 +1664,34 @@ def get_material_nodes(ref):
     mat = get_material(ref)
     return mat.node_tree.nodes
 
+def get_node(nodes,ref):
+    if is_string(ref):
+        for n in nodes:
+            if n.name == ref:
+                return n
+    else:
+        return ref
+
+def get_nodes(mat):
+    return mat.node_tree.nodes
+
 def get_node_tree(matref):
     matref.use_nodes = True
-    return matref.node_tree.nodes
+    return matref.node_tree
 
 def create_node(nodes, nodetype):
     return nodes.new(type=nodetype)
 
+def delete_node(nodes, ref):
+    noderef = get_node(nodes, ref)
+    if noderef is not None:
+        nodes.remove(noderef)
+
 def get_node_links(matref):
     return matref.node_tree.links
 
-def create_node_link(matref, point1, point2):
-    links = matref.node_tree.links
+def create_node_link(point1, point2):
+    links = point1.id_data.links
     return links.new(point1,point2)
 
 # World Nodes
@@ -1693,15 +1702,17 @@ def get_world_nodes(index=None):
         return bpy.data.worlds[0].node_tree.nodes
 
 #endregion
-#region TEXTURES 
+#region TEXTURES AND IMAGES
 def create_texture(name="Texture", type='CLOUDS'):
     if type is not None:
         return bpy.data.textures.new(name, type.upper())
     
-def get_texture(name):
-    if name is not None:
-        if name in bpy.data.textures:
-            return bpy.data.textures[name]
+def get_texture(ref):
+    if is_string(ref):
+        if ref in bpy.data.textures:
+            return bpy.data.textures[ref]
+    else:
+        return ref
 
 def get_all_textures():
     return bpy.data.textures
@@ -1710,20 +1721,57 @@ def get_list_of_textures():
     return get_all_textures()
 
 def rename_texture(ref, name):
-    tex_ref = None
-    if is_string(ref):
-        tex_ref = get_texture(ref)
-    else:
-        tex_ref = ref
+    texref = get_texture(ref)
     if name is not None:
-        tex_ref.name = name
+        texref.name = name
 
 def delete_texture(ref):
     if is_string(ref):
         bpy.data.textures.remove(get_texture(ref))
     else:
         bpy.data.textures.remove(ref)
-        
+
+def create_image(name="Image", width=None, height=None):
+    iwidth = None
+    iheight = None
+    iname = name
+
+    if width is None:
+        iwidth = 1024
+    else:
+        iwidth = width
+
+    if height is None:
+        iheight = 1024
+    else:
+        iheight = height
+
+    return bpy.data.images.new(name=iname, width=iwidth, height=iheight)
+
+def get_image(ref):
+    if is_string(ref):
+        if ref in bpy.data.images:
+            return bpy.data.images[ref]
+    else:
+        return ref
+
+def get_all_images():
+    return bpy.data.images
+
+def get_list_of_images():
+    return get_all_images()
+
+def rename_image(ref, name):
+    imgref = get_image(ref)
+    if name is not None:
+        imgref.name = name
+
+def delete_image(ref):
+    if is_string(ref):
+        bpy.data.images.remove(get_image(ref))
+    else:
+        bpy.data.images.remove(ref)
+
 #endregion
 #region MODIFIERS 
 def add_modifier(ref, name, id):

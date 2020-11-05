@@ -1,4 +1,4 @@
-== EasyBPY 0.0.7 ==
+== EasyBPY 0.0.8 ==
 Managed by Curtis Holt.
 https://curtisholt.online/links
 
@@ -342,22 +342,29 @@ MATERIALS
 - get_material_names_from_object    
 
 NODES
-( more coming in the future )
 - set_material_use_nodes
 - set_material_to_use_nodes
 - get_material_nodes
+- get_node
+- get_nodes
 - get_node_tree
 - create_node
 - get_node_links
 - create_node_link
 - get_world_nodes
 
-TEXTURES
+TEXTURES AND IMAGES
 - create_texture
 - get_texture
 - get_all_textures
 - rename_texture
 - delete_texture
+- create_image
+- get_image
+- get_all_images
+- get_list_of_images
+- rename_image
+- delete_image
 
 MODIFIERS
 - add_modifier                      

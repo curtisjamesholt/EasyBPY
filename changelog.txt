@@ -1,3 +1,20 @@
+=== 0.0.8 ===
+[ Curtis Holt ]
+- get_material fixed.
+- + get_nodes, accepts material reference.
+- + get_node, for finding node by name.
+- create_node_link no longer needs a material reference.
+- + delete_node, for deleting a node from a node tree.
+- Renamed 'Textures' category to 'Textures and Images'
+- get_texture changed to pass texture reference back if already provided.
+- rename_texture changed to use get_texture.
+- + create_image
+- + get_image
+- + get_all_images
+- + get_list_of_images con-func.
+- + rename_image
+- + delete_image
+
 === 0.0.7 - ===
 
 [ Curtis Holt ]
