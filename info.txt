@@ -102,7 +102,8 @@ OBJECTS - SELECTION
 - select_all_armatures              
 - select_all_lattices               
 - select_all_empties                
-- select_all_greace_pencils         
+- select_all_greace_pencils
+- select_all_lights         
 - select_all_cameras                
 - select_all_speakers               
 - select_all_light_probes    
@@ -298,7 +299,8 @@ SHADING
 - set_smooth_angle
 
 MESHES
-- create_mesh                       
+- create_mesh
+- get_all_meshes
 - get_vertices                       
 - get_edges                          
 - get_faces                          
@@ -326,7 +328,7 @@ COLLECTIONS
 - move_objects_to_collection        
 - get_object_collection             
 - get_object_collections            
-- collection_exists                 
+- collection_exists
 
 MATERIALS
 - create_material                   
@@ -351,6 +353,7 @@ NODES
 - create_node
 - get_node_links
 - create_node_link
+- create_link
 - get_world_nodes
 
 TEXTURES AND IMAGES
@@ -452,4 +455,10 @@ DATA CONSTRUCTORS
 MISC
 - clear_unwanted_data               
 - clear_unsaved_data  
-- delete_unused_data              
+- delete_unused_data    
+
+COMMON WORKFLOW FUNCTIONS
+- organize_outliner
+- suffix_convert_dataset
+- convert_suffixes_underscore
+- convert_suffixes

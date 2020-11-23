@@ -1,4 +1,5 @@
 === 0.0.8 ===
+
 [ Curtis Holt ]
 - get_material fixed.
 - + get_nodes, accepts material reference.
@@ -14,6 +15,22 @@
 - + get_list_of_images con-func.
 - + rename_image
 - + delete_image
+- + create_link con-func.
+- + select_all_lights
+- Created section: 'COMMON WORKFLOW FUNCTIONS'.
+- + organize_outliner
+- + suffix_convert_dataset
+- + convert_suffixes_underscore
+- + convert_suffixes con-func
+- delete_objects: if no argument is provided, delete selected objects.
+- delete_object: if no argument is provided, delete active object.
+- + get_all_meshes
+
+[ JYoshi ]
+- Improved create_collection
+- Simplified collection_exists
+- Simplified material_exists
+- Simplified set_material_use_nodes
 
 === 0.0.7 - ===
 

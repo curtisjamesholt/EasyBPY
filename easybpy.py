@@ -258,10 +258,11 @@ def delete_selected_objects():
     bpy.ops.object.delete()
 
 def delete_object(ref = None):
-    ref = get_object(ref)
-    bpy.data.objects.remove(ref, do_unlink=True)
+    objref = get_object(ref)
+    bpy.data.objects.remove(objref, do_unlink=True)
 
-def delete_objects(objlist):
+def delete_objects(objlist = None):
+    objlist = get_objects()
     for obj in objlist:
         ref = get_object(obj)
         bpy.data.objects.remove(ref, do_unlink=True)
@@ -436,6 +437,9 @@ def select_all_grease_pencils():
 
 def select_all_cameras():
     bpy.ops.object.select_by_type(type='CAMERA')
+
+def select_all_lights():
+    bpy.ops.object.select_by_type(type='LIGHT')
 
 def select_all_speakers():
     bpy.ops.object.select_by_type(type='SPEAKER')
@@ -1323,6 +1327,9 @@ def set_smooth_angle(ref, degrees = 60):
 def create_mesh(name):
     return bpy.data.meshes.new(name)
 
+def get_all_meshes():
+    return bpy.data.meshes
+
 def get_vertices(ref):
     if is_string(ref):
         return get_object(ref).data.vertices
@@ -1364,13 +1371,12 @@ def delete_vertex_group(ref, group_name):
 #endregion
 #region COLLECTIONS
 def create_collection(name):
-    if collection_exists(name) is False:
+    if not collection_exists(name):
         bpy.data.collections.new(name)
         colref = bpy.data.collections[name]
         bpy.context.scene.collection.children.link(colref)
         return colref
-    else:
-        return False
+    return False
 
 def delete_collection(name, delete_objects = False):
     # Make sure collection exists
@@ -1471,7 +1477,7 @@ def set_active_collection(ref):
     hir = bpy.context.view_layer.layer_collection
     search_layer_collection_in_hierarchy_and_set_active(colref, hir)
 
-# CONVINIENCE RECURSIVE FUNCTION, NOT FOR USER
+# Dev Function
 def search_layer_collection_in_hierarchy_and_set_active(colref, hir) :
     if isinstance(hir, bpy.types.LayerCollection):
         if hir.collection == colref:
@@ -1556,15 +1562,9 @@ def get_object_collections(ref):
 
 def collection_exists(col):
     if is_string(col):
-        if col in bpy.data.collections:
-            return True
-        else:
-            return False
-    else:
-        if col.name in bpy.data.collections:
-            return True
-        else:
-            return False
+        return col in bpy.data.collections
+    return col.name in bpy.data.collections
+
 #endregion
 #region MATERIALS
 def create_material(name):
@@ -1572,16 +1572,9 @@ def create_material(name):
 
 def material_exists(ref):
     if is_string(ref):
-        if ref in bpy.data.materials:
-            return True
-        else:
-            return False
-    # redundant but for safety
-    else:
-        if ref.name in bpy.data.materials:
-            return True
-        else:
-            return False
+        return ref in bpy.data.materials
+    # safety
+    return ref.name in bpy.data.materials
 
 def delete_material(ref):
     matref = None
@@ -1652,10 +1645,7 @@ def get_material_names_from_object(ref):
 #endregion
 #region NODES
 def set_material_use_nodes(matref, value):
-    if value is True:
-        matref.use_nodes = True
-    else:
-        matref.use_nodes = False
+    matref.use_nodes = value
 
 def set_material_to_use_nodes(matref=None, value=None):
     set_material_use_nodes(matref,value)
@@ -1694,6 +1684,9 @@ def create_node_link(point1, point2):
     links = point1.id_data.links
     return links.new(point1,point2)
 
+def create_link(point1 = None, point2 = None):
+    return create_node_link(point1, point2)
+
 # World Nodes
 def get_world_nodes(index=None):
     if index is not None:
@@ -1731,22 +1724,8 @@ def delete_texture(ref):
     else:
         bpy.data.textures.remove(ref)
 
-def create_image(name="Image", width=None, height=None):
-    iwidth = None
-    iheight = None
-    iname = name
-
-    if width is None:
-        iwidth = 1024
-    else:
-        iwidth = width
-
-    if height is None:
-        iheight = 1024
-    else:
-        iheight = height
-
-    return bpy.data.images.new(name=iname, width=iwidth, height=iheight)
+def create_image(name = 'Image', width = 1024, height = 1024):
+    return bpy.data.images.new(name = name, width = width, height = height)
 
 def get_image(ref):
     if is_string(ref):
@@ -2079,4 +2058,141 @@ def delete_unused_data():
     for block in bpy.data.images:
         if block.users == 0:
             bpy.data.images.remove(block)
+#endregion
+#region COMMON WORKFLOW FUNCTIONS
+def organize_outliner():
+    d = deselect_all_objects
+    c = create_collection
+    m = move_objects_to_collection
+
+    # Cameras
+    d()
+    select_all_cameras()
+    if len(so())>0:
+        camcol = c("Cameras")
+        m(so(),camcol)
+
+    # Lights
+    d()
+    select_all_lights()
+    if len(so())>0:
+        lightcol = c("Lights")
+        m(so(),lightcol)
+
+    # Empties
+    d()
+    select_all_empties()
+    if len(so())>0:
+        emptycol = c("Empties")
+        m(so(),emptycol)
+
+    # Mesh Objects
+    d()
+    select_all_meshes()
+    if len(so())>0:
+        objcol = c("Objects")
+        m(so(),objcol)
+
+    # Curves
+    d()
+    select_all_curves()
+    if len(so())>0:
+        curvecol = c("Curves")
+        m(so(),curvecol)
+        
+    # Surfaces
+    d()
+    select_all_surfaces()
+    if len(so())>0:
+        surfacecol = c("Surfaces")
+        m(so(),surfacecol)
+        
+    # Metas
+    d()
+    select_all_metas()
+    if len(so())>0:
+        metacol = c("Metas")
+        m(so(),metacol)
+
+    # Text
+    d()
+    select_all_text()
+    if len(so())>0:
+        textcol = c("Text")
+        m(so(),textcol)
+
+    # Volumes
+    d()
+    select_all_volumes()
+    if len(so())>0:
+        volcol = c("Volumes")
+        m(so(),volcol)
+
+    # Armatures
+    d()
+    select_all_armatures()
+    if len(so())>0:
+        armcol = c("Armatures")
+        m(so(),armcol)
+
+    # Lattices
+    d()
+    select_all_lattices()
+    if len(so())>0:
+        latcol = c("Lattices")
+        m(so(),latcol)
+
+    # Grease Pencil
+    d()
+    select_all_grease_pencils()
+    if len(so())>0:
+        gpcol = c("Grease Pencils")
+        m(so(),gpcol)
+
+    # Light Probes
+    d()
+    select_all_light_probes()
+    if len(so())>0:
+        lpcol = c("Light Probes")
+        m(so(),lpcol)
+    
+    # End
+    d()
+
+def suffix_convert_dataset(data):
+    for d in data:
+        nn = d.name
+        if '_' in d.name:
+            r = d.name.split('_')
+            if '.' in r[1]:
+                r2 = r[1].split('.')
+                if r2[0].isdigit():
+                    val = int(r2[0]) + int(r2[1])
+                    nn = r[0] + '_' + str(val)
+                    i = 1
+                    while nn in data:
+                        nn = r[0] + '_' + str(val + i)
+                        i += 1
+        else:
+            if '.' in d.name:
+                r = d.name.split('.')
+                if r[1].isdigit():
+                    val = int(r[1])
+                    nn = r[0] + '_' + str(val)
+                    i = 1
+                    while nn in data:
+                        nn = r[0] + '_' + str(val + i)
+                        i += 1
+        d.name = nn
+
+def convert_suffixes_underscore():
+    suffix_convert_dataset(bpy.data.meshes)
+    suffix_convert_dataset(bpy.data.objects)
+    suffix_convert_dataset(bpy.data.textures)
+    suffix_convert_dataset(bpy.data.images)
+    suffix_convert_dataset(bpy.data.materials)
+
+def convert_suffixes():
+    convert_suffixes_underscore()
+
 #endregion
