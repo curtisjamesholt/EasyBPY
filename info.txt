@@ -1,4 +1,4 @@
-== EasyBPY 0.0.8 ==
+== EasyBPY 0.0.9 ==
 Managed by Curtis Holt.
 https://curtisholt.online/links
 
@@ -102,13 +102,17 @@ OBJECTS - SELECTION
 - select_all_armatures              
 - select_all_lattices               
 - select_all_empties                
-- select_all_greace_pencils
+- select_all_grease_pencils
 - select_all_lights         
 - select_all_cameras                
 - select_all_speakers               
 - select_all_light_probes    
 - invert_selection
-- select_objects_with_modifiers   
+- select_objects_with_modifiers  
+- get_objects_including
+- select_objects_including
+- get_objects_by_vertex
+- select_objects_by_vertex
 
 OBJECTS - PRIMITIVES
 - create_plane
@@ -297,6 +301,13 @@ SHADING
 - shade_object_flat                 
 - shade_flat
 - set_smooth_angle
+
+LIGHTING
+- get_light
+- light_power
+- light_intensity
+- light_power_add
+- light_intensity_add
 
 MESHES
 - create_mesh

@@ -1,6 +1,6 @@
 #region INFO
 '''
-    == EasyBPY 0.0.8 ==
+    == EasyBPY 0.0.9 ==
     Managed by Curtis Holt
     https://curtisholt.online/links
     ---
@@ -462,6 +462,41 @@ def select_objects_with_modifiers():
     for obj in bpy.data.objects:
         if len(obj.modifiers) > 0:
             select_object(obj)
+
+# Custom Selection
+def get_objects_including(include):
+    objlist = []
+    for o in bpy.data.objects:
+        if include in o.name:
+            objlist.append(o)
+    return objlist
+
+def select_objects_including(include):
+    for o in bpy.data.objects:
+        if include in o.name:
+            o.select_set(True)
+
+def get_objects_by_vertex(count = 0, mode="EQUAL"):
+    cmode = mode.upper()
+    objlist = []
+    for o in bpy.data.objects:
+        if isinstance(o.data, bpy.types.Mesh):
+            # o.data / len(o.data.vertices)
+            if cmode == "EQUAL" or cmode == "SAME":
+                if len(o.data.vertices) == count:
+                    objlist.append(o)
+            if cmode == "GREATER" or cmode == "MORE":
+                if len(o.data.vertices) > count:
+                    objlist.append(o)
+            if cmode == "LESS" or cmode == "FEWER":
+                if len(o.data.vertices) < count:
+                    objlist.append(o)
+    return objlist
+
+def select_objects_by_vertex(count = 0, mode="EQUAL"):
+    objs = get_objects_by_vertex(count, mode)
+    for o in objs:
+        o.select_set(True)
 
 #endregion
 #region OBJECTS - PRIMITIVES
@@ -1132,7 +1167,7 @@ def scale_perpendicular_to_z(val, ref = None, point = None):
 # Example: path is the object and property is 'location'
 def add_keyframe(path, property, frame = None):
     if frame is None:
-        frame = current_frame
+        frame = current_frame()
     path.keyframe_insert(data_path=property,frame=frame)
     keyframes = []
     for i in range(len(path.animation_data.action.fcurves)):
@@ -1148,18 +1183,21 @@ def add_keyframe(path, property, frame = None):
         
     return keyframes if len(keyframes) > 1 else keyframes[0] 
     
-def remove_keyframe(keyframe):
-    fcurves = keyframe.id_data.fcurves
-    for fcurve in fcurves:    
-        for keyframe1 in fcurve.keyframe_points:
-            if keyframe1 == keyframe:
-                fcurve.keyframe_points.remove(keyframe)
-        if len(fcurve.keyframe_points) == 0:
-            fcurves.remove(fcurve)
+def remove_keyframe(keyframes):
+    if type(keyframes) is not list:
+        keyframes = [keyframes]
+    for keyframe in keyframes:
+        fcurves = keyframe.id_data.fcurves
+        for fcurve in fcurves:    
+            for keyframe1 in fcurve.keyframe_points:
+                if keyframe1 == keyframe:
+                    fcurve.keyframe_points.remove(keyframe)
+            if len(fcurve.keyframe_points) == 0:
+                fcurves.remove(fcurve)
 
-    # Updating Interface:
-    for area in bpy.context.screen.areas:
-        area.tag_redraw()
+        # Updating Interface:
+        for area in bpy.context.screen.areas:
+            area.tag_redraw()
 #endregion
 #region DRIVERS
 
@@ -1322,6 +1360,35 @@ def set_smooth_angle(ref, degrees = 60):
         objref.data.use_auto_smooth = True
     objref.data.auto_smooth_angle = radians(degrees)
 #endregion
+#region LIGHTING
+def get_light(ref):
+    obj = get_object(ref)
+    return obj.data
+
+def light_power(val = 0, ref = None):
+    objlist = []
+    if ref is None:
+        objlist = so()
+    else:
+        objlist = [ref]
+    for o in objlist:
+        o.data.energy = val
+
+def light_intensity(val = 0, ref = None):
+    light_power(val,ref)
+
+def light_power_add(val = 0, ref = None):
+    objlist = []
+    if ref is None:
+        objlist = so()
+    else:
+        objlist = [ref]
+    for o in objlist:
+        o.data.energy += val
+
+def light_intensity_add(val = 0, ref = None):
+    light_power_add(val,ref)
+#endregion
 #region MESHES
 # Creates a mesh - (string) name
 def create_mesh(name):
@@ -1378,30 +1445,26 @@ def create_collection(name):
         return colref
     return False
 
-def delete_collection(name, delete_objects = False):
-    # Make sure collection exists
-    if collection_exists(name):
-        # String or reference check
-        if is_string(name):
-            col = get_collection(name)
-        else:
-            col = name
-        # See if deleting the children
-        if delete_objects:
-            deselect_all_objects()
-            if len(col.objects) > 0:
-                for co in col.objects:
-                    co.select_set(True)
-                delete_selected_objects()
-        else:
-            deselect_all_objects()
-            if len(col.objects) > 0:
-                for co in col.objects:
-                    bpy.context.scene.collection.objects.link(co)
-        # Now remove collection
-        bpy.data.collections.remove(col)
+def delete_collection(col, delete_objects = False):
+    colref = None
+    if is_string(col):
+            colref = get_collection(col)
     else:
-        return False
+        colref = col
+
+    if delete_objects:
+        deselect_all_objects()
+        if len(colref.objects) > 0:
+            for co in colref.objects:
+                co.select_set(True)
+            delete_selected_objects()
+    else:
+        deselect_all_objects()
+        if len(colref.objects) > 0:
+            for co in colref.objects:
+                bpy.context.scene.collection.objects.link(co)
+
+    bpy.data.collections.remove(colref)
 
 def delete_objects_in_collection(col):
     # setting up colref

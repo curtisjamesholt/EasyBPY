@@ -1,3 +1,23 @@
+=== 0.0.9 ===
+
+[ Curtis Holt ]
+- Web page has been created to help introduce people to the 
+  module (curtisholt.online/easybpy)
+- Created new category 'LIGHTING'.
+- + get_light
+- + light_power
+- + light_intensity con-func
+- + light_power_add
+- + light_intensity_add con-func
+- + get_objects_including
+- + select_objects_including
+- delete_collection changes.
+- + get_objects_by_vertex
+- + select_objects_by_vertex
+
+[ JYoshi ]
+- Fixed keyframe functions.
+
 === 0.0.8 ===
 
 [ Curtis Holt ]
@@ -6,7 +26,7 @@
 - + get_node, for finding node by name.
 - create_node_link no longer needs a material reference.
 - + delete_node, for deleting a node from a node tree.
-- Renamed 'Textures' category to 'Textures and Images'
+- Renamed 'TEXTURES' category to 'TEXTURES AND IMAGES'
 - get_texture changed to pass texture reference back if already provided.
 - rename_texture changed to use get_texture.
 - + create_image
