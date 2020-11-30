@@ -14,6 +14,7 @@
 - delete_collection changes.
 - + get_objects_by_vertex
 - + select_objects_by_vertex
+- organize_outliner pre-existing collection exception.
 
 [ JYoshi ]
 - Fixed keyframe functions.

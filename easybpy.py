@@ -1560,8 +1560,10 @@ def link_object_to_collection(ref, col):
         objref = get_object(ref)
         bpy.data.collections[col].objects.link(objref)
     else:
-        objref = get_object(ref)
-        col.objects.link(objref)
+        # Check for bad return argument
+        if isinstance(col, bool)!=True:
+            objref = get_object(ref)
+            col.objects.link(objref)
 
 def link_objects_to_collection(ref, col):
     objs = get_objects(ref)
@@ -1851,7 +1853,7 @@ def remove_modifier(ref, name):
         if area.type == 'PROPERTIES':
             area.tag_redraw()
 
-def apply_all_modifiers(ref):
+def apply_all_modifiers(ref = None):
     objref = get_object(ref)
     select_object(objref)
     for mod in objref.modifiers:
@@ -2127,97 +2129,177 @@ def organize_outliner():
     d = deselect_all_objects
     c = create_collection
     m = move_objects_to_collection
+    ce = collection_exists
+    gc = get_collection
 
     # Cameras
     d()
     select_all_cameras()
+    colname = "Cameras"
     if len(so())>0:
-        camcol = c("Cameras")
-        m(so(),camcol)
+        col = None
+        if ce(colname):
+            col = gc(colname)
+            pass
+        else:
+            col = c(colname)
+        m(so(),col)
 
     # Lights
     d()
     select_all_lights()
+    colname = "Lights"
     if len(so())>0:
-        lightcol = c("Lights")
-        m(so(),lightcol)
+        col = None
+        if ce(colname):
+            col = gc(colname)
+            pass
+        else:
+            col = c(colname)
+        m(so(),col)
 
     # Empties
     d()
     select_all_empties()
+    colname = "Empties"
     if len(so())>0:
-        emptycol = c("Empties")
-        m(so(),emptycol)
+        col = None
+        if ce(colname):
+            col = gc(colname)
+            pass
+        else:
+            col = c(colname)
+        m(so(),col)
 
     # Mesh Objects
     d()
     select_all_meshes()
+    colname = "Objects"
     if len(so())>0:
-        objcol = c("Objects")
-        m(so(),objcol)
+        col = None
+        if ce(colname):
+            col = gc(colname)
+            pass
+        else:
+            col = c(colname)
+        m(so(),col)
 
     # Curves
     d()
     select_all_curves()
+    colname = "Curves"
     if len(so())>0:
-        curvecol = c("Curves")
-        m(so(),curvecol)
+        col = None
+        if ce(colname):
+            col = gc(colname)
+            pass
+        else:
+            col = c(colname)
+        m(so(),col)
         
     # Surfaces
     d()
     select_all_surfaces()
+    colname = "Surfaces"
     if len(so())>0:
-        surfacecol = c("Surfaces")
-        m(so(),surfacecol)
+        col = None
+        if ce(colname):
+            col = gc(colname)
+            pass
+        else:
+            col = c(colname)
+        m(so(),col)
         
     # Metas
     d()
     select_all_metas()
+    colname = "Metas"
     if len(so())>0:
-        metacol = c("Metas")
-        m(so(),metacol)
+        col = None
+        if ce(colname):
+            col = gc(colname)
+            pass
+        else:
+            col = c(colname)
+        m(so(),col)
 
     # Text
     d()
     select_all_text()
+    colname = "Text"
     if len(so())>0:
-        textcol = c("Text")
-        m(so(),textcol)
+        col = None
+        if ce(colname):
+            col = gc(colname)
+            pass
+        else:
+            col = c(colname)
+        m(so(),col)
 
     # Volumes
     d()
     select_all_volumes()
+    colname = "Volumes"
     if len(so())>0:
-        volcol = c("Volumes")
-        m(so(),volcol)
+        col = None
+        if ce(colname):
+            col = gc(colname)
+            pass
+        else:
+            col = c(colname)
+        m(so(),col)
 
     # Armatures
     d()
     select_all_armatures()
+    colname = "Armatures"
     if len(so())>0:
-        armcol = c("Armatures")
-        m(so(),armcol)
+        col = None
+        if ce(colname):
+            col = gc(colname)
+            pass
+        else:
+            col = c(colname)
+        m(so(),col)
 
     # Lattices
     d()
     select_all_lattices()
+    colname = "Lattices"
     if len(so())>0:
-        latcol = c("Lattices")
-        m(so(),latcol)
+        col = None
+        if ce(colname):
+            col = gc(colname)
+            pass
+        else:
+            col = c(colname)
+        m(so(),col)
 
     # Grease Pencil
     d()
     select_all_grease_pencils()
+    colname = "Grease Pencils"
     if len(so())>0:
-        gpcol = c("Grease Pencils")
-        m(so(),gpcol)
+        col = None
+        if ce(colname):
+            col = gc(colname)
+            pass
+        else:
+            col = c(colname)
+        m(so(),col)
 
     # Light Probes
     d()
     select_all_light_probes()
+    colname = "Light Probes"
     if len(so())>0:
-        lpcol = c("Light Probes")
-        m(so(),lpcol)
+        col = None
+        if ce(colname):
+            col = gc(colname)
+            pass
+        else:
+            col = c(colname)
+        m(so(),col)
     
     # End
     d()
