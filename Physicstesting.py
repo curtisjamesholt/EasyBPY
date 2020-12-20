@@ -1,5 +1,6 @@
 #Setting the type of fluid (domain,flow,effector, or none)
-
+#booleans can only be a int or a bool, not a string
+# 1 = on, 0 = off
 def set_fluid_type_none():
     bpy.context.object.modifiers["Fluid"].fluid_type = 'NONE'
 
@@ -198,8 +199,184 @@ def fluid_domain_border_colisions(side,toggle):
     if side == 'bottom' or side == 'BOTTOM':
         bpy.context.object.modifiers["Fluid"].domain_settings.use_collision_border_bottom = bool
 
-        
-    
-    
-#Gas Domain
+#caches      
+def fluid_domain_cache_folder(value):
+    bpy.context.object.modifiers["Fluid"].domain_settings.cache_directory = value
 
+def fluid_simulation_start(value):
+    start = int(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.cache_frame_start = start
+
+def fluid_simulation_end(value):
+    end = int(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.cache_frame_end = end
+
+def fluid_simulation_offset(value):
+    end = int(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.cache_frame_offset = end
+    
+def fluid_cache_type(value):
+    bpy.context.object.modifiers["Fluid"].domain_settings.cache_type = value
+    #use REPLAY, MODULAR, and ALL
+
+def fluid_cache_continue_toggle(value):
+    bool = int(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.cache_resumable = bool
+    
+def fluid_cache_format(value):
+    if value.lower() == 'openvdb':
+        bpy.context.object.modifiers["Fluid"].domain_settings.cache_data_format = 'OPENVDB'
+    if value.lower() == 'uni cache':
+        bpy.context.object.modifiers["Fluid"].domain_settings.cache_data_format = 'UNI'
+          
+def fluid_cache_format(value):
+    if value.lower() == 'zip':
+        bpy.context.object.modifiers["Fluid"].domain_settings.openvdb_cache_compress_type = 'ZIP'
+    if value.lower() == 'blosc':
+        bpy.context.object.modifiers["Fluid"].domain_settings.openvdb_cache_compress_type = 'BLOSC'
+    if value.lower() == 'none':
+        bpy.context.object.modifiers["Fluid"].domain_settings.openvdb_cache_compress_type = 'NONE'
+      
+def fluid_cache_precision_vol(value):
+    print(value)
+    if value.lower() == 'half':
+        value = "16"
+    if value.lower() == 'full':
+        value = "32"
+    bpy.context.object.modifiers["Fluid"].domain_settings.openvdb_data_depth = value
+
+#Collections 
+
+def fluid_flow_collection(value):
+    bpy.context.object.modifiers["Fluid"].domain_settings.fluid_group = bpy.data.collections[value]
+
+def fluid_flow_effectorn(value):
+    bpy.context.object.modifiers["Fluid"].domain_settings.effector_group = bpy.data.collections[value]
+
+#Guides
+
+def fluid_domain_guides_toggle(value):
+    bool = int(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.use_guide = bool
+
+def fluid_domain_guide_weight(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.guide_alpha = val
+
+def fluid_domain_guides_size(value):
+    val = int(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.guide_beta = val
+
+def fluid_domain_guides_velocity(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.guide_vel_factor = val
+
+def fluid_domain_guides_source(value):
+    bpy.context.object.modifiers["Fluid"].domain_settings.guide_source = value.upper()
+
+#Need to check over this command
+# def fluid_domain_guides_source(value):
+#     bpy.context.object.modifiers["Fluid"].domain_settings.guide_parent = bpy.data.objects[value]
+
+#field weights
+def fluid_field_weights_collection(value):
+    bpy.context.object.modifiers["Fluid"].domain_settings.effector_weights.collection = bpy.data.collections[value]
+
+def fluid_field_weights_gravity(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.effector_weights.gravity = val
+
+def fluid_field_weights_all(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.effector_weights.all = val
+
+#The force awakens, to me being an idiot
+def fluid_field_weights_force(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.effector_weights.force = val
+
+#I wanted to go on this ride
+def fluid_field_weights_vortex(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.effector_weights.vortex = val
+
+def fluid_field_weights_magnetic(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.effector_weights.magnetic = val
+    
+def fluid_field_weights_harmonic(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.effector_weights.harmonic = val
+    
+def fluid_field_weights_charge(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.effector_weights.charge = val
+    
+def fluid_field_weights_lennardjones(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.effector_weights.lennardjones = val
+    
+def fluid_field_weights_wind(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.effector_weights.wind = val
+
+def fluid_field_weights_curve_guide(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.effector_weights.curve_guide = val
+    
+def fluid_field_weights_texture(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.effector_weights.texture = val
+    
+def fluid_field_weights_smoke_flow(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.effector_weights.smokeflow = val
+
+def fluid_field_weights_turbulence(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.effector_weights.turbulence = val
+
+def fluid_field_weights_drag(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.effector_weights.drag = val
+    
+#check
+def fluid_field_weights_boid(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.effector_weights.boid = val
+#Gas Domain.
+
+
+
+
+
+
+
+
+
+#adpative domain
+def fluid_domain_adapt_toggle(value):
+    bool = int(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.use_adaptive_domain = bool
+    
+def fluid_domain_adapt_res(value):
+    intval = int(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.additional_res = intval
+
+def fluid_domain_adapt_margin(value):
+    intval = int(value)
+    if intval > 24:
+        print("Too high")
+    else:
+        bpy.context.object.modifiers["Fluid"].domain_settings.adapt_margin = intval
+
+def fluid_domain_adapt_threshold(value):
+    floatval = float(value)
+    if floatval > 1:
+        print("Too high")
+    else:
+        bpy.context.object.modifiers["Fluid"].domain_settings.adapt_threshold = floatval
+        
+        
+
+    
