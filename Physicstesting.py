@@ -367,7 +367,7 @@ def fluid_view_slice_axis(value):
     bpy.context.object.modifiers["Fluid"].domain_settings.slice_axis = value.upper
 
 def fluid_view_slice_position(value):
-    boolean = int(value)
+    boolean = float(value)
     bpy.context.object.modifiers["Fluid"].domain_settings.slice_depth = boolean 
 
 
@@ -379,7 +379,7 @@ def fluid_view_vector_dis_toggle(value):
     boolean = int(value)
     bpy.context.object.modifiers["Fluid"].domain_settings.use_slice = boolean
 
-#I have many regrets, I want die
+#I have many regrets, I don't want to do this, please help me with this
 #Someone do grid display later
 
 def fluid_view_vector_display_type(value):
@@ -394,12 +394,37 @@ def fluid_view_vector_field(value):
     bpy.context.object.modifiers["Fluid"].domain_settings.vector_field = value.upper()
 
 def fluid_view_vector_scale(value):
-    val = int(value)
+    val = float(value)
     bpy.context.object.modifiers["Fluid"].domain_settings.vector_scale = val
 
 #Gas Domain.
+#Not catorogrized
+def fluid_gas_buoyancy_density(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.alpha = val
 
+def fluid_gas_buoyancy_heat(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.beta = val
 
+def fluid_gas_buoyancy_vorticity(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.vorticity = 2
+
+#Dissolve
+
+def fluid_gas_dissolve_toggle(value):
+    val = int(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.use_dissolve_smoke = val
+
+def fluid_gas_dissolve_time(value):
+    val = int(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.dissolve_speed = val
+    
+def fluid_gas_dissolve_slow_toggle(value):
+    val = int(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.use_dissolve_smoke_log = val 
+    
 
 #adpative domain
 def fluid_domain_adapt_toggle(value):
@@ -423,7 +448,4 @@ def fluid_domain_adapt_threshold(value):
         print("Too high")
     else:
         bpy.context.object.modifiers["Fluid"].domain_settings.adapt_threshold = floatval
-        
-        
-
-    
+     
