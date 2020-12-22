@@ -1,6 +1,9 @@
 #Setting the type of fluid (domain,flow,effector, or none)
 #booleans can only be a int or a bool, not a string
 # 1 = on, 0 = off
+#Fluid > domain > Viewport > Grid > On hold 
+
+
 def set_fluid_type_none():
     bpy.context.object.modifiers["Fluid"].fluid_type = 'NONE'
 
@@ -339,18 +342,62 @@ def fluid_field_weights_turbulence(value):
 def fluid_field_weights_drag(value):
     val = float(value)
     bpy.context.object.modifiers["Fluid"].domain_settings.effector_weights.drag = val
-    
-#check
+
 def fluid_field_weights_boid(value):
     val = float(value)
     bpy.context.object.modifiers["Fluid"].domain_settings.effector_weights.boid = val
+#Viewport display
+
+def fluid_view_thickness(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.display_thickness = val
+
+def fluid_view_interpolation(value):
+    bpy.context.object.modifiers["Fluid"].domain_settings.display_interpolation = value.upper()
+
+def fluid_view_slices_voxel(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.slice_per_voxel = val
+
+def fluid_view_slice_toggle(value):
+    boolean = int(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.use_slice = boolean
+    
+def fluid_view_slice_axis(value):
+    bpy.context.object.modifiers["Fluid"].domain_settings.slice_axis = value.upper
+
+def fluid_view_slice_position(value):
+    boolean = int(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.slice_depth = boolean 
+
+
+def fluid_view_grid_toggle(value):
+    boolean = int(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.use_color_ramp = boolean
+    
+def fluid_view_vector_dis_toggle(value):
+    boolean = int(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.use_slice = boolean
+
+#I have many regrets, I want die
+#Someone do grid display later
+
+def fluid_view_vector_display_type(value):
+    bpy.context.object.modifiers["Fluid"].domain_settings.vector_display_type = value.upper()
+    
+def fluid_view_vector_magnitude(value):
+    val = int(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.vector_scale_with_magnitude = val
+
+#Force,fluid_velocity,guide_velocity
+def fluid_view_vector_field(value):
+    bpy.context.object.modifiers["Fluid"].domain_settings.vector_field = value.upper()
+
+def fluid_view_vector_scale(value):
+    val = int(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.vector_scale = val
+
 #Gas Domain.
-
-
-
-
-
-
 
 
 
