@@ -1,5 +1,5 @@
 #Setting the type of fluid (domain,flow,effector, or none)
-#booleans can only be a int or a bool, not a string
+#booleans can only be a int or a bool, not a string, bools are a pain
 # 1 = on, 0 = off
 #Fluid > domain > Viewport > Grid > On hold 
 
