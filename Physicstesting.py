@@ -1,5 +1,5 @@
 #Setting the type of fluid (domain,flow,effector, or none)
-#booleans can only be a int or a bool, not a string, bools are a pain
+#booleans can only be a int or a bool, not a string
 # 1 = on, 0 = off
 #Fluid > domain > Viewport > Grid > On hold 
 
@@ -144,11 +144,6 @@ def flow_initial_velocity_toggle(value):
 def flow_initial_velocity_value(value):
     velocity = float(value)
     bpy.context.object.modifiers["Fluid"].flow_settings.velocity_factor = velocity
-
-
-
-
-
 
 #Domains
 def fluid_domain_set_gas():
@@ -371,16 +366,47 @@ def fluid_view_slice_position(value):
     bpy.context.object.modifiers["Fluid"].domain_settings.slice_depth = boolean 
 
 
+#I have many regrets, I don't want to do this, please help me with this
+#Someone do grid display later
+# C.active_object.modifiers[0].domain_settings.color_ramp.elements[0].position=.5
+
+
 def fluid_view_grid_toggle(value):
     boolean = int(value)
     bpy.context.object.modifiers["Fluid"].domain_settings.use_color_ramp = boolean
     
+def fluid_view_grid_scale(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.color_ramp_field_scale = val
+
+def fluid_view_grid_color_position(pos,stop):
+    val = float(pos)
+    position = int(stop)
+    C.active_object.modifiers["Fluid"].domain_settings.color_ramp.elements[position].position= val
+
+def fluid_view_grid_color_hue_interpolation(value):
+    bpy.context.active_object.modifiers["Fluid"].domain_settings.color_ramp.hue_interpolation = value.upper()
+    
+def fluid_view_grid_color(stop,r,g,b,al):
+    stopint = int(stop)
+    red = float(r)
+    green = float(b)
+    blue = float(g)
+    alpha = float(al)
+    bpy.context.active_object.modifiers["Fluid"].domain_settings.color_ramp.elements[stopint].color = (red,green,blue,alpha)
+
+
+
+
+
+
+
+
+
+
 def fluid_view_vector_dis_toggle(value):
     boolean = int(value)
     bpy.context.object.modifiers["Fluid"].domain_settings.use_slice = boolean
-
-#I have many regrets, I don't want to do this, please help me with this
-#Someone do grid display later
 
 def fluid_view_vector_display_type(value):
     bpy.context.object.modifiers["Fluid"].domain_settings.vector_display_type = value.upper()
@@ -448,4 +474,8 @@ def fluid_domain_adapt_threshold(value):
         print("Too high")
     else:
         bpy.context.object.modifiers["Fluid"].domain_settings.adapt_threshold = floatval
-     
+        
+        
+
+C.active_object.modifiers[0].domain_settings.color_ramp.elements[0].position=.5
+
