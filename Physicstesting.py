@@ -367,7 +367,7 @@ def fluid_view_slice_position(value):
 
 
 #I have many regrets, I don't want to do this, please help me with this
-#Someone do grid display later
+#I wish I didn't attempt this
 # C.active_object.modifiers[0].domain_settings.color_ramp.elements[0].position=.5
 
 
@@ -387,7 +387,8 @@ def fluid_view_grid_color_position(pos,stop):
 def fluid_view_grid_color_hue_interpolation(value):
     bpy.context.active_object.modifiers["Fluid"].domain_settings.color_ramp.hue_interpolation = value.upper()
     
-def fluid_view_grid_color(stop,r,g,b,al):
+def fluid_view_grid_color(stop,encoding,r,g,b,al):
+    bpy.context.active_object.modifiers["Fluid"].domain_settings.color_ramp.color_mode = encoding.upper()
     stopint = int(stop)
     red = float(r)
     green = float(b)
@@ -395,14 +396,14 @@ def fluid_view_grid_color(stop,r,g,b,al):
     alpha = float(al)
     bpy.context.active_object.modifiers["Fluid"].domain_settings.color_ramp.elements[stopint].color = (red,green,blue,alpha)
 
+def fluid_view_grid_stops_new(value):
+    val = float(value)
+    bpy.context.active_object.modifiers["Fluid"].domain_settings.color_ramp.elements.new(val)
 
-
-
-
-
-
-
-
+#Send help
+def fluid_view_grid_stops_remove(value):
+    val = int(value)
+    bpy.context.active_object.modifiers["Fluid"].domain_settings.color_ramp.elements.remove( bpy.context.active_object.modifiers["Fluid"].domain_settings.color_ramp.elements[val] )
 
 def fluid_view_vector_dis_toggle(value):
     boolean = int(value)
@@ -451,6 +452,34 @@ def fluid_gas_dissolve_slow_toggle(value):
     val = int(value)
     bpy.context.object.modifiers["Fluid"].domain_settings.use_dissolve_smoke_log = val 
     
+#Noise
+def fluid_gas_noise_toggle(value):
+    val = int(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.use_noise = val
+
+def fluid_gas_noise_toggle(value):
+    val = int(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.noise_scale = 2
+
+def fluid_gas_noise_upres_factor(value):
+    val = int(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.noise_scale = val
+    
+def fluid_gas_noise_method(value):
+    bpy.context.object.modifiers["Fluid"].domain_settings.noise_type = value.upper()
+
+def fluid_gas_noise_strength(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.noise_strength = val
+
+def fluid_gas_noise_scale(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.noise_pos_scale = val
+
+def fluid_gas_noise_time(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.noise_time_anim = val
+
 
 #adpative domain
 def fluid_domain_adapt_toggle(value):
