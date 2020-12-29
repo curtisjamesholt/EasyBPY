@@ -480,6 +480,84 @@ def fluid_gas_noise_time(value):
     val = float(value)
     bpy.context.object.modifiers["Fluid"].domain_settings.noise_time_anim = val
 
+#Fire
+def fluid_gas_fire_reaction_speed(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.burning_rate = val
+
+def fluid_gas_fire_smoke(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.flame_smoke = val
+
+def fluid_gas_fire_vorticity(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.flame_vorticity = val
+
+def fluid_gas_fire_temp_max(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.flame_max_temp = 1
+
+def fluid_gas_fire_temp_min(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.flame_ignition = val
+
+def fluid_gas_fire_color_rgb(red,green,blue):
+    r = float(red)
+    g = float(green)
+    b = float(blue)
+    bpy.context.object.modifiers["Fluid"].domain_settings.flame_smoke_color = (r, g, b)
+
+
+#fluid
+
+def fluid_fluid_toggle(value):
+    h = bool(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.use_flip_particles = h
+
+def fluid_fluid_flip_ratio(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.flip_ratio = val
+
+def fluid_fluid_particle_max(value):
+    val = int(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.sys_particle_maximum = val
+
+def fluid_fluid_particle_radius(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.particle_radius = val
+
+def fluid_fluid_particle_sampling(value):
+    val = int(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.particle_number = val
+
+def fluid_fluid_particle_random(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.particle_randomness = val
+
+def fluid_fluid_cell_max(value):
+    val = int(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.particle_max = val
+
+def fluid_fluid_cell_min(value):
+    val = int(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.particle_min = val
+
+def fluid_fluid_narrow_bandwidth(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.particle_band_width = val
+
+#broken
+# def fluid_fluid_frac_obs(value):
+#     h = bool(value)
+#     bpy.context.object.modifiers["Fluid"].domain_settings.use_fractions = h
+
+def fluid_fluid_frac_distance(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.fractions_distance = val
+
+
+
+
 
 #adpative domain
 def fluid_domain_adapt_toggle(value):
@@ -503,8 +581,3 @@ def fluid_domain_adapt_threshold(value):
         print("Too high")
     else:
         bpy.context.object.modifiers["Fluid"].domain_settings.adapt_threshold = floatval
-        
-        
-
-C.active_object.modifiers[0].domain_settings.color_ramp.elements[0].position=.5
-
