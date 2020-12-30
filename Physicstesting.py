@@ -546,17 +546,35 @@ def fluid_fluid_narrow_bandwidth(value):
     val = float(value)
     bpy.context.object.modifiers["Fluid"].domain_settings.particle_band_width = val
 
-#broken
-# def fluid_fluid_frac_obs(value):
-#     h = bool(value)
-#     bpy.context.object.modifiers["Fluid"].domain_settings.use_fractions = h
+def fluid_fluid_frac_obs_toggle(value):
+    if value.upper() == 'FALSE':
+        h =bool(False)
+    elif value.upper() == 'TRUE':
+        h =bool(True)
+    bpy.context.object.modifiers["Fluid"].domain_settings.use_fractions = h
 
-def fluid_fluid_frac_distance(value):
+def fluid_fluid_obs_distance(value):
     val = float(value)
     bpy.context.object.modifiers["Fluid"].domain_settings.fractions_distance = val
 
+def fluid_fluid_obs_threshold(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.fractions_threshold = val
 
+def fluid_fluid_diffusion_toggle(value):
+    if value.upper() == 'FALSE':
+        h =bool(False)
+    elif value.upper() == 'TRUE':
+        h =bool(True)
+    bpy.context.object.modifiers["Fluid"].domain_settings.use_diffusion = h
 
+def fluid_fluid_diffusion_base(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.viscosity_base = val
+
+def fluid_fluid_diffusion_exponent(value):
+    val = int(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.viscosity_exponent = val
 
 
 #adpative domain
