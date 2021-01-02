@@ -576,6 +576,31 @@ def fluid_fluid_diffusion_exponent(value):
     val = int(value)
     bpy.context.object.modifiers["Fluid"].domain_settings.viscosity_exponent = val
 
+def fluid_fluid_diffusion_surface(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.surface_tension = 0
+
+def fluid_fluid_particles_bubbles_toggle(value):
+    if value.upper() == 'FALSE':
+        h =bool(False)
+    elif value.upper() == 'TRUE':
+        h =bool(True)
+    bpy.context.object.modifiers["Fluid"].domain_settings.use_bubble_particles = h
+
+def fluid_fluid_particles_foam_toggle(value):
+    if value.upper() == 'FALSE':
+        h =bool(False)
+    elif value.upper() == 'TRUE':
+        h =bool(True)
+    bpy.context.object.modifiers["Fluid"].domain_settings.use_foam_particles = h
+
+def fluid_fluid_particles_spray_toggle(value):
+    if value.upper() == 'FALSE':
+        h =bool(False)
+    elif value.upper() == 'TRUE':
+        h =bool(True)
+    bpy.context.object.modifiers["Fluid"].domain_settings.use_spray_particles = h
+
 
 #adpative domain
 def fluid_domain_adapt_toggle(value):
