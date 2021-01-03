@@ -601,6 +601,34 @@ def fluid_fluid_particles_spray_toggle(value):
         h =bool(True)
     bpy.context.object.modifiers["Fluid"].domain_settings.use_spray_particles = h
 
+def fluid_fluid_particles_combined_export(value):
+    value = value.replace(" ", "_")
+    value = value.upper()
+    print(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.sndparticle_combined_export = value
+
+#
+#
+#   Upres is scarry
+#
+#
+
+def fluid_fluid_particles_wave_crest_potential_maximum(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.sndparticle_potential_max_wavecrest = val
+
+def fluid_fluid_particles_wave_crest_potential_minimum(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.sndparticle_potential_min_wavecrest = val
+
+def fluid_fluid_particles_traped_air_potential_minimum(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.sndparticle_potential_max_trappedair = val
+
+def fluid_fluid_particles_traped_air_potential_minimum(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.sndparticle_potential_min_trappedair = val
+
 
 #adpative domain
 def fluid_domain_adapt_toggle(value):
@@ -624,3 +652,7 @@ def fluid_domain_adapt_threshold(value):
         print("Too high")
     else:
         bpy.context.object.modifiers["Fluid"].domain_settings.adapt_threshold = floatval
+        
+        
+        
+        
