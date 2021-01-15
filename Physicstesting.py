@@ -629,14 +629,48 @@ def fluid_fluid_particles_traped_air_potential_minimum(value):
     val = float(value)
     bpy.context.object.modifiers["Fluid"].domain_settings.sndparticle_potential_min_trappedair = val
 
-def fluid_fluid_particles_Kinetic_energy_potential_max(value):
+def fluid_fluid_particles_kinetic_potential_minimum(value):
     val = float(value)
     bpy.context.object.modifiers["Fluid"].domain_settings.sndparticle_potential_max_energy = val
 
-def fluid_fluid_particles_Kinetic_energy_potential_min(value):
+def fluid_fluid_particles_kinetic_potential_minimum(value):
     val = float(value)
     bpy.context.object.modifiers["Fluid"].domain_settings.sndparticle_potential_min_energy = val
 
+def fluid_fluid_particles_potential_radius(value):
+    val = int(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.sndparticle_potential_min_energy = val
+    
+def fluid_fluid_particles_particle_update_radius(value):
+    val = int(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.sndparticle_potential_min_energy = val
+    
+def fluid_fluid_particles_wave_crest_particle_sampling(value):
+    val = int(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.sndparticle_sampling_trappedair = val
+    
+def fluid_fluid_particles_traped_air_particle_sampling(value):
+    val = int(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.sndparticle_sampling_wavecrest = val
+
+def fluid_fluid_particles_particle_life_maximum(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.sndparticle_life_max = val
+
+def fluid_fluid_particles_particle_life_minimum(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.sndparticle_life_min = val
+
+def fluid_fluid_particles_bubble_buoyancy(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.sndparticle_bubble_buoyancy = 1
+
+def fluid_fluid_particles_bubble_drag(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.sndparticle_bubble_drag = 1
+
+def fluid_fluid_particles_particles_in_boundary(value):
+    bpy.context.object.modifiers["Fluid"].domain_settings.sndparticle_boundary = value.upper()
 
 
 #adpative domain
