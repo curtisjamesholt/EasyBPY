@@ -1,6 +1,6 @@
 #region INFO
 '''
-    == EasyBPY 0.0.9 ==
+    == EasyBPY 0.1.0 ==
     Managed by Curtis Holt
     https://curtisholt.online/links
     ---
@@ -464,17 +464,25 @@ def select_objects_with_modifiers():
             select_object(obj)
 
 # Custom Selection
-def get_objects_including(include):
+def get_objects_including(include, case_sensitive = True):
     objlist = []
     for o in bpy.data.objects:
-        if include in o.name:
-            objlist.append(o)
+        if case_sensitive is True:
+            if include in o.name:
+                objlist.append(o)
+        else:
+            if (include.lower() in o.name) or (include.upper() in o.name) or (include in o.name):
+                objlist.append(o)
     return objlist
 
-def select_objects_including(include):
+def select_objects_including(include, case_sensitive = True):
     for o in bpy.data.objects:
-        if include in o.name:
-            o.select_set(True)
+        if case_sensitive is True:
+            if include in o.name:
+                o.select_set(True)
+        else:
+            if (include.lower() in o.name) or (include.upper() in o.name) or (include in o.name):
+                o.select_set(True)
 
 def get_objects_by_vertex(count = 0, mode="EQUAL"):
     cmode = mode.upper()
@@ -643,6 +651,130 @@ def create_text_object():
 def create_text():
     return create_text_object()
 
+#endregion
+#region OBJECTS - CONSTRAINTS
+def add_constraint(type, ref = None, name = ""):
+    objref = get_object(ref)
+    new_con = objref.constraints.new(type)
+    if name : 
+        new_con.name = name
+    for area in bpy.context.screen.areas:
+        if area.type == 'PROPERTIES':
+            area.tag_redraw()
+    return new_con
+
+def get_constraint(name, ref = None):
+    objref = get_object(ref)
+
+    # we assume name is string
+    if name in objref.constraints:
+        return objref.constraints[name]
+    else:
+        # Maybe return the 1st constraint on selected object?
+        return None
+
+def get_constraints_by_type(type,ref = None):
+    objref = get_object(ref)
+    constraints = [con for con in objref.constraints if con.type == type]
+    return constraints
+
+def remove_constraint(name = None, ref = None):
+    objref = get_object(ref)
+
+    if name is not None:
+        if is_string(name):
+            if name in objref.constraints:
+                mod = get_constraint(name,objref)
+                objref.constraints.remove(mod)
+        else:
+            objref.constraints.remove(name)
+    else:
+        remove_constraint(objref.constraints[0])
+    
+    for area in bpy.context.screen.areas:
+        if area.type == 'PROPERTIES':
+            area.tag_redraw()
+
+def add_camera_solver_constraint(ref = None, name = ""):
+    return add_constraint('CAMERA_SOLVER', ref, name)
+
+def add_follow_track_constraint(ref = None, name = ""):
+    return add_constraint('FOLLOW_TRACK', ref, name)
+
+def add_object_solver_constraint(ref = None, name = ""):
+    return add_constraint('OBJECT_SOLVER', ref, name)
+
+def add_copy_location_constraint(ref = None, name = ""):
+    return add_constraint('COPY_LOCATION', ref, name)
+
+def add_copy_rotation_constraint(ref = None, name = ""):
+    return add_constraint('COPY_ROTATION', ref, name)
+
+def add_copy_scale_constraint(ref = None, name = ""):
+    return add_constraint('COPY_SCALE', ref, name)
+
+def add_copy_transforms_constraint(ref = None, name = ""):
+    return add_constraint('COPY_TRANSFORMS', ref, name)
+
+def add_limit_distance_constraint(ref = None, name = ""):
+    return add_constraint('LIMIT_DISTANCE', ref, name)
+
+def add_limit_location_constraint(ref = None, name = ""):
+    return add_constraint('LIMIT_LOCATION', ref, name)
+
+def add_limit_rotation_constraint(ref = None, name = ""):
+    return add_constraint('LIMIT_ROTATION', ref, name)
+
+def add_limit_scale_constraint(ref = None, name = ""):
+    return add_constraint('LIMIT_SCALE', ref, name)
+
+def add_maintain_volume_constraint(ref = None, name = ""):
+    return add_constraint('MAINTAIN_VOLUME', ref, name)
+
+def add_transform_constraint(ref = None, name = ""):
+    return add_constraint('TRANSFORM', ref, name)
+
+def add_transformation_constraint(ref = None, name = ""):
+    return add_constraint('TRANSFORM', ref, name)
+
+def add_transform_cache_constraint(ref = None, name = ""):
+    return add_constraint('TRANSFORM_CACHE', ref, name)
+
+def add_clamp_to_constraint(ref = None, name = ""):
+    return add_constraint('CLAMP_TO', ref, name)
+
+def add_damped_track_constraint(ref = None, name = ""):
+    return add_constraint('DAMPED_TRACK', ref, name)
+
+def add_locked_track_constraint(ref = None, name = ""):
+    return add_constraint('LOCKED_TRACK', ref, name)
+
+def add_stretch_to_constraint(ref = None, name = ""):
+    return add_constraint('STRETCH_TO', ref, name)
+
+def add_track_to_constraint(ref = None, name = ""):
+    return add_constraint('TRACK_TO', ref, name)
+
+def add_action_constraint(ref = None, name = ""):
+    return add_constraint('ACTION', ref, name)
+
+def add_armature_constraint(ref = None, name = ""):
+    return add_constraint('ARMATURE', ref, name)
+
+def add_child_of_constraint(ref = None, name = ""):
+    return add_constraint('CHILD_OF', ref, name)
+
+def add_floor_constraint(ref = None, name = ""):
+    return add_constraint('FLOOR', ref, name)
+
+def add_follow_path_constraint(ref = None, name = ""):
+    return add_constraint('FOLLOW_PATH', ref, name)
+
+def add_pivot_constraint(ref = None, name = ""):
+    return add_constraint('PIVOT', ref, name)
+
+def add_shrinkwrap_constraint(ref = None, name = ""):
+    return add_constraint('SHRINKWRAP', ref, name)
 #endregion
 #region MODES
 def set_mode(ref=None, newmode=None):
@@ -1388,6 +1520,18 @@ def light_power_add(val = 0, ref = None):
 
 def light_intensity_add(val = 0, ref = None):
     light_power_add(val,ref)
+
+def light_power_multiply(val = 0, ref = None):
+    objlist = []
+    if ref is None:
+        objlist = so()
+    else:
+        objlist = [ref]
+    for o in objlist:
+        o.data.energy *= val
+
+def light_intensity_multiply(val = 0, ref = None):
+    light_power_multiply(val,ref)
 #endregion
 #region MESHES
 # Creates a mesh - (string) name
@@ -1649,9 +1793,10 @@ def delete_material(ref):
         matref = ref
     bpy.data.materials.remove(matref)
 
-def get_material(ref=None):
-    objref = get_object(ref)
-    return objref.material_slots[0].material
+def get_material(matname):
+    for m in bpy.data.materials:
+        if m.name == matname:
+            return m
 
 def add_material_to_object(ref, mat):
     objref = None
@@ -1691,6 +1836,10 @@ def get_materials(ref = None):
         get_materials_from_object(ref)
     else:
         return bpy.data.materials
+
+def get_material_from_object(ref):
+    objref = get_object(ref)
+    return objref.material_slots[0].material
 
 def get_materials_from_object(ref):
     objref = get_object(ref)
@@ -2132,6 +2281,10 @@ def organize_outliner():
     ce = collection_exists
     gc = get_collection
 
+    if bpy.context.active_object != None:
+        if bpy.context.active_object.mode != 'OBJECT':
+            bpy.ops.object.mode_set(mode='OBJECT')
+
     # Cameras
     d()
     select_all_cameras()
@@ -2309,8 +2462,8 @@ def suffix_convert_dataset(data):
         nn = d.name
         if '_' in d.name:
             r = d.name.split('_')
-            if '.' in r[1]:
-                r2 = r[1].split('.')
+            if '.' in r[-1]:
+                r2 = r[-1].split('.')
                 if r2[0].isdigit():
                     val = int(r2[0]) + int(r2[1])
                     nn = r[0] + '_' + str(val)
@@ -2318,11 +2471,20 @@ def suffix_convert_dataset(data):
                     while nn in data:
                         nn = r[0] + '_' + str(val + i)
                         i += 1
+                else:
+                    if r2[1].isdigit():
+                        val = int(r2[1])
+                        i = 0
+                        nn = ""
+                        while i < len(r)-1:
+                            nn = nn + r[i] + "_"
+                            i+=1
+                        nn = nn + r2[0] + "_" + str(val)
         else:
             if '.' in d.name:
                 r = d.name.split('.')
-                if r[1].isdigit():
-                    val = int(r[1])
+                if r[-1].isdigit():
+                    val = int(r[-1])
                     nn = r[0] + '_' + str(val)
                     i = 1
                     while nn in data:
@@ -2340,4 +2502,13 @@ def convert_suffixes_underscore():
 def convert_suffixes():
     convert_suffixes_underscore()
 
+def add_prefix_to_name(ref, prefix, delim="_"):
+    objlist = make_obj_list(ref)
+    for o in objlist:
+        o.name = prefix + delim + o.name
+
+def add_suffix_to_name(ref, suffix, delim="_"):
+    objlist = make_obj_list(ref)
+    for o in objlist:
+        o.name = o.name + delim + suffix
 #endregion

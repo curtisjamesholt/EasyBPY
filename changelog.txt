@@ -1,3 +1,51 @@
+=== 0.1.0 ===
+
+[ Curtis Holt ]
+- + add_prefix_to_name
+- + add_suffix_to_name
+- + light_power_multiply
+- + light_intensity_multiply con-func
+- Changed get_material to expect string argument.
+- + get_material_from_object
+- suffix_convert_dataset now considers multiple underscores.
+- get_objects_including now has case_sensitive option.
+- select_objects_including now has case_sensitive option.
+
+[ Pvn31 ]
+- C Note: Created new category 'OBJECTS - CONSTRAINTS'
+- + add_constraint
+- + get_constraint
+- + get_constraints_by_type
+- + remove_constraint
+- C Note: Passing no argument to remove_constraint removed first in list.
+- + add_camera_solver_constraint
+- + add_follow_track_constraint
+- + add_object_solver_constraint
+- + add_copy_location_constraint
+- + add_copy_rotation_constraint
+- + add_copy_scale_constraint
+- + add_copy_transforms_constraint
+- + add_limit_distance_constraint
+- + add_limit_location_constraint
+- + add_limit_rotation_constraint
+- + add_limit_scale_constraint
+- + add_maintain_volume_constraint
+- + add_transform_constraint
+- + C Note: add_transformation_constraint con-func.
+- + add_transform_cache_constraint
+- + add_clamp_to_constraint
+- + add_damped_track_constraint
+- + add_locked_track_constraint
+- + add_stretch_to_constraint
+- + add_track_to_constraint
+- + add_action_constraint
+- + add_armature_constraint
+- + add_child_of_constraint
+- + add_floor_constraint
+- + add_follow_path_constraint
+- + add_pivot_constraint
+- + add_shrinkwrap_constraint
+
 === 0.0.9 ===
 
 [ Curtis Holt ]
