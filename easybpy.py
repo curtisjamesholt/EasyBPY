@@ -1828,6 +1828,18 @@ def remove_material_from_object(ref, matname):
 def remove_material(ref, matname):
     return remove_material_from_object(ref, matname)
 
+def remove_unused_material_slots(ref = None):
+    objrefs = get_objects(ref)
+    for o in objrefs:
+        data = o.data
+        tmp = data.materials.items()
+        data.materials.clear()
+        for item in tmp:
+            data.materials.append(item[1])
+
+def remove_unused_slots(ref = None):
+    remove_unused_material_slots(ref)
+
 def get_all_materials():
     return bpy.data.materials
 

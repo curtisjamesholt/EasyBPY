@@ -5,6 +5,8 @@
 - add_mofifier - now returns a list of created modifiers if more than one is created
 - + remove_modifiers
 - + remove_all_modifiers con-func
+- + remove_unused_material_slots
+- + remove_unused_slots con-func
 
 === 0.1.0 ===
 

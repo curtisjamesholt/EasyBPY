@@ -384,6 +384,8 @@ MATERIALS
 - add_material_to_object            
 - remove_material_from_object       
 - remove_material
+- remove_unused_material_slots
+- remove_unused_slots
 - get_all_materials
 - get_materials
 - get_material_from_object
@@ -420,6 +422,8 @@ MODIFIERS
 - add_modifier                      
 - get_modifier                      
 - remove_modifier
+- remove_modifiers
+- remove_all_modifiers
 - apply_all_modifiers
 - apply_modifiers
 - add_data_transfer
