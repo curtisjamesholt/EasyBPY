@@ -1,4 +1,4 @@
-== EasyBPY 0.1.0 ==
+== EasyBPY 0.1.1 ==
 Managed by Curtis Holt.
 https://curtisholt.online/links
 

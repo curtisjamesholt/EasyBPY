@@ -1,6 +1,6 @@
 #region INFO
 '''
-    == EasyBPY 0.1.0 ==
+    == EasyBPY 0.1.1 ==
     Managed by Curtis Holt
     https://curtisholt.online/links
     ---
@@ -1967,13 +1967,21 @@ def delete_image(ref):
 
 #endregion
 #region MODIFIERS 
-def add_modifier(ref, name, id):
-    objref = get_object(ref)
-    new_mod = objref.modifiers.new(name, id)
+def add_modifier(ref = None, name = "Modifier", id="SUBSURF"):
+    objrefs = get_objects(ref)
+    new_mods = []
+    for o in objrefs:
+        new_mod = o.modifiers.new(name, id)
+        new_mods.append(new_mod)
+
     for area in bpy.context.screen.areas:
         if area.type == 'PROPERTIES':
             area.tag_redraw()
-    return new_mod
+    
+    if len(new_mods)>1:
+        return new_mods
+    else:
+        return new_mods[0]
 
 def get_modifier(ref, name):
     objref = get_object(ref)
@@ -1984,23 +1992,30 @@ def get_modifier(ref, name):
     else:
         return False
 
-def remove_modifier(ref, name):
-    objref = None
-    if is_string(ref):
-        objref = get_object(ref)
+def remove_modifier(ref = None, name = None):
+    objref = get_object(ref)
+    if name is not None:
+        if is_string(name):
+            if name in objref.modifiers:
+                mod = get_modifier(objref,name)
+                objref.modifiers.remove(mod)
+        else:
+            objref.modifiers.remove(name)
     else:
-        objref = ref
-
-    if is_string(name):
-        if name in objref.modifiers:
-            mod = get_modifier(objref,name)
-            objref.modifiers.remove(mod)
-    else:
-        objref.modifiers.remove(name)
+        objref.modifiers.remove(objref.modifiers[0])
     
     for area in bpy.context.screen.areas:
         if area.type == 'PROPERTIES':
             area.tag_redraw()
+
+def remove_modifiers(ref = None):
+    objref = get_objects(ref)
+    for o in objref:
+        for m in o.modifiers:
+            o.modifiers.remove(m)
+
+def remove_all_modifiers(ref = None):
+    remove_modifiers(ref)
 
 def apply_all_modifiers(ref = None):
     objref = get_object(ref)
