@@ -11,4 +11,6 @@ You can either grab the file from here on GitHub, or alternatively on [Gumroad](
 
 Documentation (work-in-progress) is available in the [Wiki section](https://github.com/curtisjamesholt/EasyBPY/wiki).
 
+Alternatively, the [official web page](https://curtisholt.online/easybpy) will provide a nice breakdown of what's possible.
+
 For more information on the thought process behind EasyBPY, please [read this blog post](https://curtisholt.online/blog/easybpy).
