@@ -34,12 +34,12 @@ def fluid_effector_thickness_value(value):
     bpy.context.object.modifiers["Fluid"].effector_settings.surface_distance = intvalue
 
 #Use effector, 1 = on 0 = off
-def fluid_effector_use(fbool):
+def fluid_effector_use_toggle(fbool):
     bool = int(fbool)
     bpy.context.object.modifiers["Fluid"].effector_settings.use_effector = bool
     
 #Is Planar, 1 = on 0 = off
-def fluid_effector_isplanar(fbool):
+def fluid_effector_is_planar_toggle(fbool):
     bool = int(fbool)
     bpy.context.object.modifiers["Fluid"].effector_settings.use_plane_init = bool
 
@@ -75,11 +75,11 @@ def flow_type_set_fluid():
     bpy.context.object.modifiers["Fluid"].flow_settings.flow_type = 'LIQUID'
     
 #flow behavior
-def flow_set_behavoir(value):
+def flow_set_behavior(value):
     bpy.context.object.modifiers["Fluid"].flow_settings.flow_behavior = value
 
 #Use flow
-def flow_use_flow(value):
+def flow_use_flow_toggle(value):
     bool = int(value)
     bpy.context.object.modifiers["Fluid"].flow_settings.use_inflow = bool
 
@@ -436,7 +436,7 @@ def fluid_gas_buoyancy_heat(value):
 
 def fluid_gas_buoyancy_vorticity(value):
     val = float(value)
-    bpy.context.object.modifiers["Fluid"].domain_settings.vorticity = 2
+    bpy.context.object.modifiers["Fluid"].domain_settings.vorticity = val
 
 #Dissolve
 
@@ -459,7 +459,7 @@ def fluid_gas_noise_toggle(value):
 
 def fluid_gas_noise_toggle(value):
     val = int(value)
-    bpy.context.object.modifiers["Fluid"].domain_settings.noise_scale = 2
+    bpy.context.object.modifiers["Fluid"].domain_settings.noise_scale = val
 
 def fluid_gas_noise_upres_factor(value):
     val = int(value)
@@ -495,7 +495,7 @@ def fluid_gas_fire_vorticity(value):
 
 def fluid_gas_fire_temp_max(value):
     val = float(value)
-    bpy.context.object.modifiers["Fluid"].domain_settings.flame_max_temp = 1
+    bpy.context.object.modifiers["Fluid"].domain_settings.flame_max_temp = val
 
 def fluid_gas_fire_temp_min(value):
     val = float(value)
@@ -578,7 +578,7 @@ def fluid_fluid_diffusion_exponent(value):
 
 def fluid_fluid_diffusion_surface(value):
     val = float(value)
-    bpy.context.object.modifiers["Fluid"].domain_settings.surface_tension = 0
+    bpy.context.object.modifiers["Fluid"].domain_settings.surface_tension = val
 
 def fluid_fluid_particles_bubbles_toggle(value):
     if value.upper() == 'FALSE':
@@ -663,14 +663,61 @@ def fluid_fluid_particles_particle_life_minimum(value):
 
 def fluid_fluid_particles_bubble_buoyancy(value):
     val = float(value)
-    bpy.context.object.modifiers["Fluid"].domain_settings.sndparticle_bubble_buoyancy = 1
+    bpy.context.object.modifiers["Fluid"].domain_settings.sndparticle_bubble_buoyancy = val
 
 def fluid_fluid_particles_bubble_drag(value):
     val = float(value)
-    bpy.context.object.modifiers["Fluid"].domain_settings.sndparticle_bubble_drag = 1
+    bpy.context.object.modifiers["Fluid"].domain_settings.sndparticle_bubble_drag = val
 
 def fluid_fluid_particles_particles_in_boundary(value):
     bpy.context.object.modifiers["Fluid"].domain_settings.sndparticle_boundary = value.upper()
+
+def fluid_fluid_mesh_toggle(value):
+    if value.upper() == 'FALSE':
+        h =bool(False)
+    elif value.upper() == 'TRUE':
+        h =bool(True)
+    bpy.context.object.modifiers["Fluid"].domain_settings.use_mesh = h
+
+def fluid_fluid_mesh_upres(value):
+    val = int(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.mesh_scale = val
+
+def fluid_fluid_mesh_particle_radius(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.mesh_particle_radius = val
+
+def fluid_fluid_mesh_smooth_pos(value):
+    val = int(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.mesh_smoothen_pos = val
+
+def fluid_fluid_mesh_smooth_pos(value):
+    val = int(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.mesh_smoothen_pos = val
+
+def fluid_fluid_mesh_use_speed_vectors(value):
+    if value.upper() == 'FALSE':
+        h =bool(False)
+    elif value.upper() == 'TRUE':
+        h =bool(True)    
+    bpy.context.object.modifiers["Fluid"].domain_settings.use_speed_vectors = h
+
+def fluid_fluid_mesh_generator(value):
+    if value.upper() == 'FINAL':
+        bpy.context.object.modifiers["Fluid"].domain_settings.mesh_generator = 'IMPROVED'
+    elif value.upper() == 'PREVIEW':
+        bpy.context.object.modifiers["Fluid"].domain_settings.mesh_generator = 'UNION'
+
+def fluid_fluid_mesh_concavity_upper(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.mesh_concave_upper = val
+
+def fluid_fluid_mesh_concavity_lower(value):
+    val = float(value)
+    bpy.context.object.modifiers["Fluid"].domain_settings.mesh_concave_lower = val
+
+
+
 
 
 #adpative domain
