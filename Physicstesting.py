@@ -35,13 +35,19 @@ def fluid_effector_thickness_value(value):
 
 #Use effector, 1 = on 0 = off
 def fluid_effector_use_toggle(fbool):
-    bool = int(fbool)
-    bpy.context.object.modifiers["Fluid"].effector_settings.use_effector = bool
+    if value.upper() == 'FALSE':
+        h =bool(False)
+    elif value.upper() == 'TRUE':
+        h =bool(True)
+    bpy.context.object.modifiers["Fluid"].effector_settings.use_effector = h
     
 #Is Planar, 1 = on 0 = off
 def fluid_effector_is_planar_toggle(fbool):
-    bool = int(fbool)
-    bpy.context.object.modifiers["Fluid"].effector_settings.use_plane_init = bool
+    if value.upper() == 'FALSE':
+        h =bool(False)
+    elif value.upper() == 'TRUE':
+        h =bool(True)
+    bpy.context.object.modifiers["Fluid"].effector_settings.use_plane_init = h
 
 #enabling velocity
 def fluid_effector_velocity(value):
@@ -80,8 +86,11 @@ def flow_set_behavior(value):
 
 #Use flow
 def flow_use_flow_toggle(value):
-    bool = int(value)
-    bpy.context.object.modifiers["Fluid"].flow_settings.use_inflow = bool
+    if value.upper() == 'FALSE':
+        h =bool(False)
+    elif value.upper() == 'TRUE':
+        h =bool(True)
+    bpy.context.object.modifiers["Fluid"].flow_settings.use_inflow = h
 
 #flow source, liquids
 def flow_source(value):
@@ -123,8 +132,11 @@ def flow_particle_system_select(value):
     bpy.context.object.modifiers["Fluid"].flow_settings.particle_system = bpy.data.objects["Cube"].particle_systems[value]
 
 def flow_particle_set_size_toggle(value):
-    bool = int(value)
-    bpy.context.object.modifiers["Fluid"].flow_settings.use_particle_size = bool
+    if value.upper() == 'FALSE':
+        h =bool(False)
+    elif value.upper() == 'TRUE':
+        h =bool(True)
+    bpy.context.object.modifiers["Fluid"].flow_settings.use_particle_size = h
 
 
 #set size thing in particles
@@ -137,8 +149,11 @@ def flow_set_particle_size(value):
 #intial Velocity
 #toggle
 def flow_initial_velocity_toggle(value):
-    bool = int(value)
-    bpy.context.object.modifiers["Fluid"].flow_settings.use_initial_velocity = bool
+    if value.upper() == 'FALSE':
+        h =bool(False)
+    elif value.upper() == 'TRUE':
+        h =bool(True)
+    bpy.context.object.modifiers["Fluid"].flow_settings.use_initial_velocity = h
 
 #How much
 def flow_initial_velocity_value(value):
@@ -218,8 +233,11 @@ def fluid_cache_type(value):
     #use REPLAY, MODULAR, and ALL
 
 def fluid_cache_continue_toggle(value):
-    bool = int(value)
-    bpy.context.object.modifiers["Fluid"].domain_settings.cache_resumable = bool
+    if value.upper() == 'FALSE':
+        h =bool(False)
+    elif value.upper() == 'TRUE':
+        h =bool(True)
+    bpy.context.object.modifiers["Fluid"].domain_settings.cache_resumable = h
     
 def fluid_cache_format(value):
     if value.lower() == 'openvdb':
@@ -254,8 +272,11 @@ def fluid_flow_effectorn(value):
 #Guides
 
 def fluid_domain_guides_toggle(value):
-    bool = int(value)
-    bpy.context.object.modifiers["Fluid"].domain_settings.use_guide = bool
+    if value.upper() == 'FALSE':
+        h =bool(False)
+    elif value.upper() == 'TRUE':
+        h =bool(True)
+    bpy.context.object.modifiers["Fluid"].domain_settings.use_guide = h
 
 def fluid_domain_guide_weight(value):
     val = float(value)
@@ -355,8 +376,11 @@ def fluid_view_slices_voxel(value):
     bpy.context.object.modifiers["Fluid"].domain_settings.slice_per_voxel = val
 
 def fluid_view_slice_toggle(value):
-    boolean = int(value)
-    bpy.context.object.modifiers["Fluid"].domain_settings.use_slice = boolean
+    if value.upper() == 'FALSE':
+        h =bool(False)
+    elif value.upper() == 'TRUE':
+        h =bool(True)
+    bpy.context.object.modifiers["Fluid"].domain_settings.use_slice =h
     
 def fluid_view_slice_axis(value):
     bpy.context.object.modifiers["Fluid"].domain_settings.slice_axis = value.upper
@@ -372,8 +396,11 @@ def fluid_view_slice_position(value):
 
 
 def fluid_view_grid_toggle(value):
-    boolean = int(value)
-    bpy.context.object.modifiers["Fluid"].domain_settings.use_color_ramp = boolean
+    if value.upper() == 'FALSE':
+        h =bool(False)
+    elif value.upper() == 'TRUE':
+        h =bool(True)
+    bpy.context.object.modifiers["Fluid"].domain_settings.use_color_ramp = h
     
 def fluid_view_grid_scale(value):
     val = float(value)
@@ -406,8 +433,11 @@ def fluid_view_grid_stops_remove(value):
     bpy.context.active_object.modifiers["Fluid"].domain_settings.color_ramp.elements.remove( bpy.context.active_object.modifiers["Fluid"].domain_settings.color_ramp.elements[val] )
 
 def fluid_view_vector_dis_toggle(value):
-    boolean = int(value)
-    bpy.context.object.modifiers["Fluid"].domain_settings.use_slice = boolean
+    if value.upper() == 'FALSE':
+        h =bool(False)
+    elif value.upper() == 'TRUE':
+        h =bool(True)
+    bpy.context.object.modifiers["Fluid"].domain_settings.use_slice = h
 
 def fluid_view_vector_display_type(value):
     bpy.context.object.modifiers["Fluid"].domain_settings.vector_display_type = value.upper()
@@ -441,25 +471,37 @@ def fluid_gas_buoyancy_vorticity(value):
 #Dissolve
 
 def fluid_gas_dissolve_toggle(value):
-    val = int(value)
-    bpy.context.object.modifiers["Fluid"].domain_settings.use_dissolve_smoke = val
+    if value.upper() == 'FALSE':
+        h =bool(False)
+    elif value.upper() == 'TRUE':
+        h =bool(True)
+    bpy.context.object.modifiers["Fluid"].domain_settings.use_dissolve_smoke = h
 
 def fluid_gas_dissolve_time(value):
     val = int(value)
     bpy.context.object.modifiers["Fluid"].domain_settings.dissolve_speed = val
     
 def fluid_gas_dissolve_slow_toggle(value):
-    val = int(value)
-    bpy.context.object.modifiers["Fluid"].domain_settings.use_dissolve_smoke_log = val 
+    if value.upper() == 'FALSE':
+        h =bool(False)
+    elif value.upper() == 'TRUE':
+        h =bool(True)
+    bpy.context.object.modifiers["Fluid"].domain_settings.use_dissolve_smoke_log = h
     
 #Noise
 def fluid_gas_noise_toggle(value):
-    val = int(value)
-    bpy.context.object.modifiers["Fluid"].domain_settings.use_noise = val
+    if value.upper() == 'FALSE':
+        h =bool(False)
+    elif value.upper() == 'TRUE':
+        h =bool(True)
+    bpy.context.object.modifiers["Fluid"].domain_settings.use_noise = h
 
 def fluid_gas_noise_toggle(value):
-    val = int(value)
-    bpy.context.object.modifiers["Fluid"].domain_settings.noise_scale = val
+    if value.upper() == 'FALSE':
+        h =bool(False)
+    elif value.upper() == 'TRUE':
+        h =bool(True)
+    bpy.context.object.modifiers["Fluid"].domain_settings.noise_scale = h
 
 def fluid_gas_noise_upres_factor(value):
     val = int(value)
@@ -511,7 +553,10 @@ def fluid_gas_fire_color_rgb(red,green,blue):
 #fluid
 
 def fluid_fluid_toggle(value):
-    h = bool(value)
+    if value.upper() == 'FALSE':
+        h =bool(False)
+    elif value.upper() == 'TRUE':
+        h =bool(True)
     bpy.context.object.modifiers["Fluid"].domain_settings.use_flip_particles = h
 
 def fluid_fluid_flip_ratio(value):
@@ -722,8 +767,11 @@ def fluid_fluid_mesh_concavity_lower(value):
 
 #adpative domain
 def fluid_domain_adapt_toggle(value):
-    bool = int(value)
-    bpy.context.object.modifiers["Fluid"].domain_settings.use_adaptive_domain = bool
+    if value.upper() == 'FALSE':
+        h =bool(False)
+    elif value.upper() == 'TRUE':
+        h =bool(True)
+    bpy.context.object.modifiers["Fluid"].domain_settings.use_adaptive_domain = h
     
 def fluid_domain_adapt_res(value):
     intval = int(value)
