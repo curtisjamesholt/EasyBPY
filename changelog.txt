@@ -1,3 +1,34 @@
+=== 0.1.2 ===
+
+[ Curtis Holt ]
+- get_material now returns a reference to first material on active object if no arguments are provided.
+- + remove_materials
+- + remove_all_materials
+- + set_fluid_type
+    (Removed Functions)
+    x set_fluid_type_none
+    x set_fluid_type_domain
+    x set_fluid_type_flow
+    x set_fluid_type_effector
+- + fluid_set_flow_type - Simplified function for setting the type of flow.
+    Allowed arguments are: SMOKE, FIRE, BOTH, FIRE_SMOKE, SMOKE_FIRE, LIQUID
+    (Removed Functions)
+    x flow_type_set_smoke
+    x flow_type_set_fire
+    x flow_type_set_fire_smoke
+    x flow_type_set_fluid
+- + fluid_set_domain_type - Simplified function for setting the type of domain.
+    Allowed arguments are: GAS, LIQUID
+    (Removed Functions)
+    x fluid_domain_set_gas
+    x fluid_domain_set_liquid
+- Renamed duplicate function name 'fluid_cache_format' to 'fluid_cache_compress_type'.
+- Renamed fluid_cache_precision_vol to fluid_cache_precision
+
+- + select_only to deselect all objects before selecting a given argument.
+- + get_index_of_output
+- + get_index_of_input
+
 === 0.1.1 ===
 
 [ Curtis Holt ]

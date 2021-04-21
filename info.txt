@@ -1,4 +1,4 @@
-== EasyBPY 0.1.1 ==
+== EasyBPY ==
 Managed by Curtis Holt.
 https://curtisholt.online/links
 
@@ -17,7 +17,7 @@ Documentation will become available over time as the project evolves.
 In the meantime, a list of all available functions is provided below.
 
 Extra Contributors:
-Charan (Just 3D Things), JYoshi, 3D_Bubble
+Charan (Just 3D Things), JYoshi, 3D_Bubble, Yohello
 ---
 
 RENDER SETTINGS
@@ -66,7 +66,8 @@ OBJECTS
 - select_object                     
 - select_all_objects                
 - deselect_object                   
-- deselect_all_objects              
+- deselect_all_objects     
+- select_only         
 - delete_selected_objects           
 - delete_object                     
 - delete_objects                    
@@ -384,6 +385,8 @@ MATERIALS
 - add_material_to_object            
 - remove_material_from_object       
 - remove_material
+- remove_materials
+- remove_all_materials
 - remove_unused_material_slots
 - remove_unused_slots
 - get_all_materials
@@ -403,6 +406,8 @@ NODES
 - get_node_links
 - create_node_link
 - create_link
+- get_index_of_output
+- get_index_of_input
 - get_world_nodes
 
 TEXTURES AND IMAGES
@@ -492,21 +497,15 @@ PHYSICS
 - add_rigid_body_constraint_physics
 
 PHYSICS - FLUIDS
-- set_fluid_type_none
-- set_fluid_type_domain
-- set_fluid_type_flow
-- set_fluid_type_effector
+- set_fluid_type
 - fluid_effector_type
 - fluid_effector_subsample_value
 - fluid_effector_thickness_value
 - fluid_effector_use_toggle
-- fluid_effector_is_planar_toggle
+- fluid_effector_is_planar
 - fluid_effector_velocity
 - fluid_effector_guide_mode
-- flow_type_set_smoke
-- flow_type_set_fire
-- flow_type_set_fire_smoke
-- flow_type_set_fluid
+- fluid_set_flow_type
 - flow_set_behavior
 - flow_use_flow_toggle
 - flow_source
@@ -520,8 +519,7 @@ PHYSICS - FLUIDS
 - flow_set_particle_size
 - flow_initial_velocity_toggle
 - flow_initial_velocity_value
-- fluid_domain_set_gas
-- fluid_domain_set_liquid
+- fluid_set_domain_type
 - fluid_domain_set_resolution
 - fluid_domain_time_scale
 - fluid_domain_set_cfl
@@ -535,8 +533,8 @@ PHYSICS - FLUIDS
 - fluid_cache_type
 - fluid_cache_continue_toggle
 - fluid_cache_format
-- fluid_cache_format
-- fluid_cache_precision_vol
+- fluid_cache_compress_type
+- fluid_cache_precision
 - fluid_flow_collection
 - fluid_flow_effectorn
 - fluid_domain_guides_toggle

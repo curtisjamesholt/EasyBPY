@@ -1,6 +1,6 @@
 #region INFO
 '''
-    == EasyBPY 0.1.1 ==
+    == EasyBPY 0.1.2 ==
     Managed by Curtis Holt
     https://curtisholt.online/links
     ---
@@ -155,7 +155,9 @@ def set_render_fps(val, base = 1.0):
     get_scene().render.fps_base = base
 #endregion
 #region OBJECTS
-def create_object(name, col = None):
+def create_object(name = None, col = None):
+    if name is None:
+        name = "New Object"
     m = bpy.data.meshes.new(name)
     o = bpy.data.objects.new(name, m)
     col_ref = None
@@ -245,6 +247,11 @@ def select_all_objects(col = None):
             col_ref = col
         for c in col_ref.objects:
             c.select_set(True)
+
+def select_only(ref = None):
+    objref = get_object(ref)
+    deselect_all_objects()
+    select_object(objref)
 
 def deselect_object(ref):
     objref = get_object(ref)
@@ -1793,10 +1800,15 @@ def delete_material(ref):
         matref = ref
     bpy.data.materials.remove(matref)
 
-def get_material(matname):
-    for m in bpy.data.materials:
-        if m.name == matname:
-            return m
+def get_material(matname = None):
+    if matname is None:
+        active = ao()
+        if len(active.material_slots) > 0:
+            return active.material_slots[0].material
+    else:
+        for m in bpy.data.materials:
+            if m.name == matname:
+                return m
 
 def add_material_to_object(ref, mat):
     objref = None
@@ -1827,6 +1839,19 @@ def remove_material_from_object(ref, matname):
 
 def remove_material(ref, matname):
     return remove_material_from_object(ref, matname)
+
+def remove_materials(ref = None):
+    objrefs = get_objects(ref)
+    for o in objrefs:
+        if len(o.material_slots) > 0:
+            names = []
+            for m in o.material_slots:
+                names.append(m.name)
+            for n in names:
+                remove_material_from_object(o,n)
+                
+def remove_all_materials(ref = None):
+    remove_materials(ref)
 
 def remove_unused_material_slots(ref = None):
     objrefs = get_objects(ref)
@@ -1912,6 +1937,24 @@ def create_node_link(point1, point2):
 
 def create_link(point1 = None, point2 = None):
     return create_node_link(point1, point2)
+
+def get_index_of_output(node, name):
+    index = None
+    i = 0
+    while i < len(node.outputs):
+        if node.outputs[i].name == name:
+            index = i
+        i += 1
+    return index
+
+def get_index_of_input(node, name):
+    index = None
+    i = 0
+    while i < len(node.inputs):
+        if node.inputs[i].name == name:
+            index = i
+        i += 1
+    return index
 
 # World Nodes
 def get_world_nodes(index=None):
@@ -2236,17 +2279,20 @@ def add_rigid_body_constraint_physics(ref=None):
     bpy.ops.rigidbody.constraint_add()
 #endregion
 #region PHYSICS - FLUIDS
-def set_fluid_type_none():
-    bpy.context.object.modifiers["Fluid"].fluid_type = 'NONE'
 
-def set_fluid_type_domain():
-    bpy.context.object.modifiers["Fluid"].fluid_type = 'DOMAIN'
-
-def set_fluid_type_flow():
-    bpy.context.object.modifiers["Fluid"].fluid_type = 'FLOW'
-
-def set_fluid_type_effector():
-    bpy.context.object.modifiers["Fluid"].fluid_type = 'EFFECTOR'
+def set_fluid_type(fluidtype = None):
+    ftype = bpy.context.object.modifiers["Fluid"].fluid_type
+    if fluidtype is not None:
+        if fluidtype == "NONE":
+            ftype = "NONE"
+        if fluidtype == "DOMAIN":
+            ftype = "DOMAIN"
+        if fluidtype == "FLOW":
+            ftype = "FLOW"
+        if fluidtype == "EFFECTOR":
+            ftype = "EFFECTOR"
+    else:
+        ftype = "NONE"
 
 # Effector Parameters 
 def fluid_effector_type(type):
@@ -2269,7 +2315,7 @@ def fluid_effector_use_toggle(fbool):
     bpy.context.object.modifiers["Fluid"].effector_settings.use_effector = h
 
 # Is Planar, 1 = on 0 = off
-def fluid_effector_is_planar_toggle(fbool):
+def fluid_effector_is_planar(fbool):
     if value.upper() == 'FALSE':
         h =bool(False)
     elif value.upper() == 'TRUE':
@@ -2291,17 +2337,19 @@ def fluid_effector_guide_mode(value):
         bpy.context.object.modifiers["Fluid"].effector_settings.guide_mode = 'AVERAGED'
 
 # Type Flow Parameters
-def flow_type_set_smoke():
-    bpy.context.object.modifiers["Fluid"].flow_settings.flow_type = 'SMOKE'
-
-def flow_type_set_fire():
-    bpy.context.object.modifiers["Fluid"].flow_settings.flow_type = 'FIRE'
-
-def flow_type_set_fire_smoke():
-    bpy.context.object.modifiers["Fluid"].flow_settings.flow_type = 'BOTH'
-
-def flow_type_set_fluid():
-    bpy.context.object.modifiers["Fluid"].flow_settings.flow_type = 'LIQUID'
+def fluid_set_flow_type(flowtype = None):
+    ftype = bpy.context.object.modifiers["Fluid"].flow_settings.flow_type
+    if flowtype is not None:
+        if flowtype == "SMOKE":
+            ftype = "SMOKE"
+        if flowtype == "FIRE":
+            ftype = "FIRE"
+        if flowtype == "LIQUID" or flowtype == "FLUID":
+            ftype = "LIQUID"
+        if flowtype == "SMOKE_FIRE" or flowtype == "FIRE_SMOKE" or flowtype == "BOTH":
+            ftype = "BOTH"
+    else:
+        ftype = "LIQUID"
 
 def flow_set_behavior(value):
     bpy.context.object.modifiers["Fluid"].flow_settings.flow_behavior = value
@@ -2368,11 +2416,15 @@ def flow_initial_velocity_value(value):
     bpy.context.object.modifiers["Fluid"].flow_settings.velocity_factor = velocity
 
 # Domains
-def fluid_domain_set_gas():
-    bpy.context.object.modifiers["Fluid"].domain_settings.domain_type = 'GAS'
-
-def fluid_domain_set_liquid():
-    bpy.context.object.modifiers["Fluid"].domain_settings.domain_type = 'LIQUID'
+def fluid_set_domain_type(domaintype = None):
+    dtype = bpy.context.object.modifiers["Fluid"].domain_settings.domain_type
+    if domaintype is not None:
+        if domaintype == "GAS":
+            dtype = "GAS"
+        if domaintype == "LIQUID":
+            dtype = "LIQUID"
+    else:
+        dtype = "LIQUID"
 
 # Global Fluid Settings
 def fluid_domain_set_resolution(value):
@@ -2444,7 +2496,7 @@ def fluid_cache_format(value):
     if value.lower() == 'uni cache':
         bpy.context.object.modifiers["Fluid"].domain_settings.cache_data_format = 'UNI'
 
-def fluid_cache_format(value):
+def fluid_cache_compress_type(value):
     if value.lower() == 'zip':
         bpy.context.object.modifiers["Fluid"].domain_settings.openvdb_cache_compress_type = 'ZIP'
     if value.lower() == 'blosc':
@@ -2452,7 +2504,7 @@ def fluid_cache_format(value):
     if value.lower() == 'none':
         bpy.context.object.modifiers["Fluid"].domain_settings.openvdb_cache_compress_type = 'NONE'
 
-def fluid_cache_precision_vol(value):
+def fluid_cache_precision(value):
     print(value)
     if value.lower() == 'half':
         value = "16"
@@ -3024,6 +3076,8 @@ def delete_unused_data():
     for block in bpy.data.images:
         if block.users == 0:
             bpy.data.images.remove(block)
+def debug_test():
+    print("EasyBPY debug output")
 #endregion
 #region COMMON WORKFLOW FUNCTIONS
 def organize_outliner():
