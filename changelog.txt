@@ -1,3 +1,13 @@
+=== 0.1.3 ===
+
+[ Curtis Holt ]
+- select_only now ensures the object is set to active.
+- + get_node_group
+- + get_all_node_groups
+- + replace_duplicate_nodes
+- + fix_node_duplicates
+- + fix_duplicate_nodes (con-func)
+
 === 0.1.2 ===
 
 [ Curtis Holt ]

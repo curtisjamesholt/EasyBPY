@@ -402,6 +402,8 @@ NODES
 - get_node
 - get_nodes
 - get_node_tree
+- get_node_group
+- get_all_node_groups
 - create_node
 - get_node_links
 - create_node_link
@@ -669,3 +671,6 @@ COMMON WORKFLOW FUNCTIONS
 - convert_suffixes
 - add_prefix_to_name
 - add_suffix_to_name
+- replace_duplicate_nodes
+- fix_node_duplicates
+- fix_duplicate_nodes

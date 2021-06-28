@@ -1,6 +1,6 @@
 #region INFO
 '''
-    == EasyBPY 0.1.2 ==
+    == EasyBPY 0.1.3 ==
     Managed by Curtis Holt
     https://curtisholt.online/links
     ---
@@ -251,7 +251,7 @@ def select_all_objects(col = None):
 def select_only(ref = None):
     objref = get_object(ref)
     deselect_all_objects()
-    select_object(objref)
+    select_object(objref, True)
 
 def deselect_object(ref):
     objref = get_object(ref)
@@ -1920,6 +1920,13 @@ def get_node_tree(matref):
     matref.use_nodes = True
     return matref.node_tree
 
+def get_node_group(name):
+    if name in bpy.data.node_groups:
+        return bpy.data.node_groups[name]
+
+def get_all_node_groups():
+    return bpy.data.node_groups
+
 def create_node(nodes, nodetype):
     return nodes.new(type=nodetype)
 
@@ -3317,4 +3324,29 @@ def add_suffix_to_name(ref, suffix, delim="_"):
     objlist = make_obj_list(ref)
     for o in objlist:
         o.name = o.name + delim + suffix
+
+def replace_duplicate_nodes(nodes):
+    for node in nodes:
+        # If node is group
+        if node.type == 'GROUP':
+            # If name has suffix
+            if '.' in node.name:
+                # Remove suffix
+                sname = node.node_tree.name.split('.')
+                # If name w/o suffix is node group
+                if sname[0] in bpy.data.node_groups:
+                    # Set node group to node name w/o suffix
+                    node.node_tree = bpy.data.node_groups[sname[0]]
+
+def fix_node_duplicates():
+    for m in bpy.data.materials:
+        matnodes = get_nodes(m)
+        replace_duplicate_nodes(matnodes)
+    for ng in bpy.data.node_groups:
+        ngnodes = ng.nodes
+        replace_duplicate_nodes(ngnodes)
+
+def fix_duplicate_nodes():
+    fix_node_duplicates()
+
 #endregion
