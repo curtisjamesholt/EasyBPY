@@ -1914,10 +1914,12 @@ def get_node(nodes,ref):
         return ref
 
 def get_nodes(mat):
-    return mat.node_tree.nodes
+    node_tree = mat.node_tree
+    if node_tree:
+      return node_tree.nodes 
 
-def get_node_tree(matref):
-    matref.use_nodes = True
+def get_node_tree(matref, make_tree = True):
+    matref.use_nodes = make_tree
     return matref.node_tree
 
 def get_node_group(name):
@@ -3341,7 +3343,8 @@ def replace_duplicate_nodes(nodes):
 def fix_node_duplicates():
     for m in bpy.data.materials:
         matnodes = get_nodes(m)
-        replace_duplicate_nodes(matnodes)
+        if matnodes:
+            replace_duplicate_nodes(matnodes)
     for ng in bpy.data.node_groups:
         ngnodes = ng.nodes
         replace_duplicate_nodes(ngnodes)

@@ -7,6 +7,11 @@
 - + replace_duplicate_nodes
 - + fix_node_duplicates
 - + fix_duplicate_nodes (con-func)
+- get_node_tree now has make_tree argument to allow for creation of node tree.
+
+[ JYoshi ]
+- Included new handling in get_nodes.
+- Included new handling in fix_node_duplicates.
 
 === 0.1.2 ===
 
