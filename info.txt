@@ -646,6 +646,23 @@ PHYSICS - FLUIDS
 - fluid_domain_adapt_margin
 - fluid_domain_adapt_threshold
 
+PHYSICS - COLLISION
+- collision_use
+- use_collision
+- collision_field_absorption
+- collision_particle_permeability
+- collision_particle_stickiness
+- collision_particle_kill
+- collision_particle_friction
+- collision_particle_friction_random
+- collision_particle_damping
+- collision_particle_damping_random
+- collision_soft_cloth_damping
+- collision_soft_cloth_friction
+- collision_soft_cloth_thick_out
+- collision_soft_cloth_thick_in
+- collision_soft_cloth_single_side
+- collision_soft_cloth_override_normals
 
 TEXT OBJECTS
 - create_text_file

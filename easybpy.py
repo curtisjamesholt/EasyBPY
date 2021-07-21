@@ -3021,6 +3021,66 @@ def fluid_domain_adapt_threshold(value):
     else:
         bpy.context.object.modifiers["Fluid"].domain_settings.adapt_threshold = floatval
 #endregion
+#region PHYSICS - COLLISION
+def collision_use(value = True):
+    bpy.context.object.collision.use = value
+
+def use_collision(value = True):
+    collision_use(value)
+
+def collision_field_absorption(value):
+    val = float(value)
+    bpy.context.object.collision.absorption = val
+
+def collision_particle_permeability(value):
+    val = float(value)
+    bpy.context.object.collision.permeability = val
+
+def collision_particle_stickiness(value):
+    val = float(value)
+    bpy.context.object.collision.stickiness = val
+
+def collision_particle_kill(value = True):
+    bpy.context.object.collision.use_particle_kill = value
+
+def collision_particle_friction(value):
+    val = float(value)
+    bpy.context.object.collision.friction_factor = val
+
+def collision_particle_friction_random(value):
+    val = float(value)
+    bpy.context.object.collision.friction_random = val
+
+def collision_particle_damping(value):
+    val = float(value)
+    bpy.context.object.collision.damping_factor = val
+
+def collision_particle_damping_random(value):
+    val = float(value)
+    bpy.context.object.collision.damping_random = val
+
+def collision_soft_cloth_damping(value):
+    val = float(value)
+    bpy.context.object.collision.damping = val
+
+def collision_soft_cloth_friction(value):
+    val = float(value)
+    bpy.context.object.collision.cloth_friction = val
+
+def collision_soft_cloth_thick_out(value):
+    val = float(value)
+    bpy.context.object.collision.thickness_outer = val
+
+def collision_soft_cloth_thick_in(value):
+    val = float(value)
+    bpy.context.object.collision.thickness_inner = val
+
+def collision_soft_cloth_single_side(value = True):
+    bpy.context.object.collision.use_culling = value
+    
+def collision_soft_cloth_override_normals(value = True):
+    bpy.context.object.collision.use_normal = value
+#endregion
 #region TEXT OBJECTS
 def create_text_file(textname):
     return bpy.data.texts.new(textname)

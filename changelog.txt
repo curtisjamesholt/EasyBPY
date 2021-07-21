@@ -8,10 +8,30 @@
 - + fix_node_duplicates
 - + fix_duplicate_nodes (con-func)
 - get_node_tree now has make_tree argument to allow for creation of node tree.
+- Added category: PHYSICS - COLLISION
+- + use_collision con-func
 
 [ JYoshi ]
 - Included new handling in get_nodes.
 - Included new handling in fix_node_duplicates.
+
+[ Yohello ]
+(C Note: Some changes made to naming from contributions to make more consistent with module.)
+- + collision_use
+- + collision_field_absorption
+- + collision_particle_permeability
+- + collision_particle_stickiness
+- + collision_particle_kill
+- + collision_particle_friction
+- + collision_particle_friction_random
+- + collision_particle_damping
+- + collision_particle_damping_random
+- + collision_soft_cloth_damping
+- + collision_soft_cloth_friction
+- + collision_soft_cloth_thick_out
+- + collision_soft_cloth_thick_in
+- + collision_soft_cloth_single_side
+- + collision_soft_cloth_override_normals
 
 === 0.1.2 ===
 
