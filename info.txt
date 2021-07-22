@@ -388,6 +388,9 @@ MESHES
 VERTEX GROUPS
 ( coming soon )
 
+PARTICLE SYSTEMS
+- get_particle_systems
+
 COLLECTIONS
 - create_collection                 
 - delete_collection                 
@@ -718,6 +721,10 @@ MISC
 - delete_unused_data    
 
 COMMON WORKFLOW FUNCTIONS
+- get_objects_containing
+- select_objects_containing
+- get_materials_containing
+- get_particle_systems_containing
 - organize_outliner
 - suffix_convert_dataset
 - convert_suffixes_underscore

@@ -1705,6 +1705,11 @@ def delete_vertex_group(ref, group_name):
     pass
 '''
 #endregion
+#region PARTICLE SYSTEMS
+def get_particle_systems(ref):
+    objref = get_object(ref)
+    return objref.particle_systems
+#endregion
 #region COLLECTIONS
 def create_collection(name):
     if not collection_exists(name):
@@ -3274,6 +3279,37 @@ def debug_test():
     print("EasyBPY debug output")
 #endregion
 #region COMMON WORKFLOW FUNCTIONS
+def get_objects_containing(ref):
+    result = []
+    for o in bpy.data.objects:
+        if ref in o.name:
+            result.append(o)
+    return result
+
+def select_objects_containing(ref):
+    select_objects(get_objects_containing(ref))
+
+def get_materials_containing(name, ref = None):
+    results = []
+    if ref is not None:
+        mats = get_materials_from_object(ref)
+        for m in mats:
+            if name in m.name:
+                results.append(m)
+    else:
+        for m in bpy.data.materials:
+            if name in m.name:
+                results.append(m)
+    return results
+
+def get_particle_systems_containing(name, ref):
+    result = []
+    ps = get_particle_systems(ref)
+    for p in ps:
+        if name in p.name:
+            result.append(p)
+    return result
+
 def organize_outliner():
     d = deselect_all_objects
     c = create_collection
@@ -3536,5 +3572,4 @@ def fix_node_duplicates():
 
 def fix_duplicate_nodes():
     fix_node_duplicates()
-
 #endregion

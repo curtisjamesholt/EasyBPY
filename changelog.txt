@@ -46,6 +46,12 @@
 - + use_fake_user
 - + select_objects created as plural version of select_object
 - Fixed get_objects not constructing list of object references when given list of string names.
+- + get_objects_containing
+- + select_objects_containing
+- + get_materials_containing
+- Added category: PARTICLE SYSTEMS
+- + get_particle_systems
+- + get_particle_systems_containing
 
 [ JYoshi ]
 - Included new handling in get_nodes.
