@@ -154,6 +154,106 @@ def set_render_fps(val, base = 1.0):
     get_scene().render.fps = val
     get_scene().render.fps_base = base
 #endregion
+#region APPENDING / LINKING
+def append(file, category, object):
+    if '\\' in file:
+        #fpath = file.replace('\\', '/')
+        print("Please use forward slashes in path string.")
+    else:
+        filepath = file + "\\" + category + "\\" + object
+        directory = file + "\\" + category + "\\"
+        filename = object
+        bpy.ops.wm.append(filepath = filepath, directory = directory, filename = filename)
+
+def append_brush(file, name):
+    append(file, "Brush", name)
+
+def append_collection(file, name):
+    append(file, "Collection", name)
+    
+def append_freestyle_line_style(file, name):
+    append(file, "FreestyleLineStyle", name)
+
+def append_image(file, name):
+    append(file, "Image", name)
+    
+def append_material(file, name):
+    append(file, "Material", name)
+    
+def append_mesh(file, name):
+    append(file, "Mesh", name)
+
+def append_node_tree(file, name):
+    append(file, "NodeTree", name)
+
+def append_object(file, name):
+    append(file, "Object", name)
+
+def append_scene(file, name):
+    append(file, "Scene", name)
+
+def append_text(file, name):
+    append(file, "Text", name)
+
+def append_texture(file, name):
+    append(file, "Texture", name)
+
+def append_workspace(file, name):
+    append(file, "Workspace", name)
+
+def append_world(file, name):
+    append(file, "World", name)
+
+def link(file, category, object):
+    if '\\' in file:
+        #fpath = file.replace('\\', '/')
+        print("Please use forward slashes in path string.")
+    else:
+        filepath = file + "\\" + category + "\\" + object
+        directory = file + "\\" + category + "\\"
+        filename = object
+        bpy.ops.wm.link(filepath = filepath, directory = directory, filename = filename)
+
+def link_brush(file, name):
+    link(file, "Brush", name)
+
+def link_collection(file, name):
+    link(file, "Collection", name)
+    
+def link_freestyle_line_style(file, name):
+    link(file, "FreestyleLineStyle", name)
+
+def link_image(file, name):
+    link(file, "Image", name)
+    
+def link_material(file, name):
+    link(file, "Material", name)
+    
+def link_mesh(file, name):
+    link(file, "Mesh", name)
+
+def link_node_tree(file, name):
+    link(file, "NodeTree", name)
+
+def link_object(file, name):
+    link(file, "Object", name)
+
+def link_scene(file, name):
+    link(file, "Scene", name)
+
+def link_text(file, name):
+    link(file, "Text", name)
+
+def link_texture(file, name):
+    link(file, "Texture", name)
+
+def link_workspace(file, name):
+    link(file, "Workspace", name)
+
+def link_world(file, name):
+    link(file, "World", name)
+
+#endregion
 #region OBJECTS
 def create_object(name = None, col = None):
     if name is None:
@@ -923,6 +1023,13 @@ def scale(ref = None, scale = None):
         objref.scale = Vector((scale[0],scale[1],scale[2]))
     else:
         return objref.scale
+
+def dimensions(ref = None, dim = None):
+    objref = get_object(ref)
+    if dim is not None:
+        objref.dimensions = Vector((dim[0],dim[1],dim[2]))
+    else:
+        return objref.dimensions
 
 # Applying Transformations:
 

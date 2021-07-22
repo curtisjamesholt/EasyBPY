@@ -51,6 +51,36 @@ RENDER SETTINGS
 - set_frame_step
 - set_render_fps
 
+APPENDING / LINKING
+- append
+- append_brush
+- append_collection
+- append_freestyle_line_style
+- append_image
+- append_material
+- append_mesh
+- append_node_tree
+- append_object
+- append_scene
+- append_text
+- append_texture
+- append_workspace
+- append_world
+- link
+- link_brush
+- link_collection
+- link_freestyle_line_style
+- link_image
+- link_material
+- link_mesh
+- link_node_tree
+- link_object
+- link_scene
+- link_text
+- link_texture
+- link_workspace
+- link_world
+
 OBJECTS
 - create_object                     
 - copy_object                       
@@ -228,6 +258,7 @@ TRANSFORMATIONS
 - location                          
 - rotation                          
 - scale
+- dimensions
 - apply_location
 - apply_rotation
 - apply_scale

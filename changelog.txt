@@ -10,6 +10,36 @@
 - get_node_tree now has make_tree argument to allow for creation of node tree.
 - Added category: PHYSICS - COLLISION
 - + use_collision con-func
+- + dimensions (multipurpose argument getter and setter)
+- Added category: APPENDING / LINKING
+- + append
+- + append_brush
+- + append_collection
+- + append_freestyle_line_style
+- + append_image
+- + append_material
+- + append_mesh
+- + append_node_tree
+- + append_object
+- + append_scene
+- + append_text
+- + append_texture
+- + append_workspace
+- + append_world
+- + link
+- + link_brush
+- + link_collection
+- + link_freestyle_line_style
+- + link_image
+- + link_material
+- + link_mesh
+- + link_node_tree
+- + link_object
+- + link_scene
+- + link_text
+- + link_texture
+- + link_workspace
+- + link_world
 
 [ JYoshi ]
 - Included new handling in get_nodes.
