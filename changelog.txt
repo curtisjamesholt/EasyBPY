@@ -40,6 +40,12 @@
 - + link_texture
 - + link_workspace
 - + link_world
+- Changed 'append' and 'link' functions to now also support lists of strings to bring multiple things in at once.
+- Added category: FAKE USERS
+- + set_fake_user
+- + use_fake_user
+- + select_objects created as plural version of select_object
+- Fixed get_objects not constructing list of object references when given list of string names.
 
 [ JYoshi ]
 - Included new handling in get_nodes.

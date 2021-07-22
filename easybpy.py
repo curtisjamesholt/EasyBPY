@@ -157,13 +157,16 @@ def set_render_fps(val, base = 1.0):
 #region APPENDING / LINKING
 def append(file, category, object):
     if '\\' in file:
-        #fpath = file.replace('\\', '/')
+        #fpath = file.replace('\\', '/') => Not viable for numeric folders.
         print("Please use forward slashes in path string.")
     else:
-        filepath = file + "\\" + category + "\\" + object
-        directory = file + "\\" + category + "\\"
-        filename = object
-        bpy.ops.wm.append(filepath = filepath, directory = directory, filename = filename)
+        if isinstance(object, list) is False:
+            object = [object]
+        for o in object:
+            filepath = file + "\\" + category + "\\" + o
+            directory = file + "\\" + category + "\\"
+            filename = o
+            bpy.ops.wm.append(filepath = filepath, directory = directory, filename = filename)
 
 def append_brush(file, name):
     append(file, "Brush", name)
@@ -206,13 +209,16 @@ def append_world(file, name):
 
 def link(file, category, object):
     if '\\' in file:
-        #fpath = file.replace('\\', '/')
+        #fpath = file.replace('\\', '/') => Not viable for numeric folders.
         print("Please use forward slashes in path string.")
     else:
-        filepath = file + "\\" + category + "\\" + object
-        directory = file + "\\" + category + "\\"
-        filename = object
-        bpy.ops.wm.link(filepath = filepath, directory = directory, filename = filename)
+        if isinstance(object, list) is False:
+            object = [object]
+        for o in object:
+            filepath = file + "\\" + category + "\\" + o
+            directory = file + "\\" + category + "\\"
+            filename = o
+            bpy.ops.wm.link(filepath = filepath, directory = directory, filename = filename)
 
 def link_brush(file, name):
     link(file, "Brush", name)
@@ -331,6 +337,11 @@ def select_object(ref, make_active=True):
     if make_active:
         bpy.context.view_layer.objects.active = objref
 
+def select_objects(ref):
+    objref = get_objects(ref)
+    for o in objref:
+        o.select_set(True)
+
 def selected_objects():
     return get_selected_objects()
 
@@ -414,8 +425,8 @@ def get_objects(ref = None):
                     objref = ref
                 elif isinstance(ref[0], str):
                     for ob_name in ref:
-                        if object_exists(ref):
-                            objref.append(bpy.data.objects[ref])
+                        if object_exists(ob_name):
+                            objref.append(bpy.data.objects[ob_name])
         elif is_string(ref):
             if object_exists(ref):
                 objref.append(bpy.data.objects[ref])
@@ -3201,6 +3212,13 @@ def delete_text_file(textname):
     
 def get_lines_in_text_object(textname):
     return bpy.data.texts[textname].lines
+#endregion
+#region FAKE USERS
+def set_fake_user(ref, use = True):
+    ref.use_fake_user = use
+
+def use_fake_user(ref, use = True):
+    ref.use_fake_user = use
 #endregion
 #region DATA CHECKS
 def is_string(ref):

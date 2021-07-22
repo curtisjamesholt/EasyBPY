@@ -93,7 +93,8 @@ OBJECTS
 - get_selected_objects    
 - get_all_objects 
 - get_list_of_objects         
-- select_object                     
+- select_object
+- select_objects                
 - select_all_objects                
 - deselect_object                   
 - deselect_all_objects     
@@ -699,6 +700,10 @@ TEXT OBJECTS
 - create_text_file
 - delete_text_file
 - get_lines_in_text_object
+
+FAKE USERS
+- set_fake_user
+- use_fake_user
 
 DATA CHECKS
 - is_string                         
