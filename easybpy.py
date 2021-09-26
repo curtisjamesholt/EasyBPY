@@ -1,6 +1,6 @@
 #region INFO
 '''
-    == EasyBPY 0.1.3 ==
+    == EasyBPY 0.1.4 ==
     Managed by Curtis Holt
     https://curtisholt.online/links
     ---
@@ -784,11 +784,9 @@ def add_constraint(type, ref = None, name = ""):
 def get_constraint(name, ref = None):
     objref = get_object(ref)
 
-    # we assume name is string
     if name in objref.constraints:
         return objref.constraints[name]
     else:
-        # Maybe return the 1st constraint on selected object?
         return None
 
 def get_constraints_by_type(type,ref = None):
@@ -1659,7 +1657,6 @@ def light_intensity_multiply(val = 0, ref = None):
     light_power_multiply(val,ref)
 #endregion
 #region MESHES
-# Creates a mesh - (string) name
 def create_mesh(name):
     return bpy.data.meshes.new(name)
 
@@ -1694,6 +1691,59 @@ def get_mesh_from_object(ref):
     else:
         objref = ref
     return objref.data
+
+def get_selected_vertices(ref = None):
+    ref = get_object(ref)
+    tmp_mode = ref.mode
+    select_object(ref)
+    bpy.ops.object.mode_set(mode='OBJECT')
+    selected_vertices = [v for v in ref.data.vertices if v.select]
+    bpy.ops.object.mode_set(mode=tmp_mode)
+    return selected_vertices
+
+def get_selected_verts(ref = None):
+    return get_selected_vertices(ref)
+
+def get_selected_edges(ref = None):
+    ref = get_object(ref)
+    tmp_mode = ref.mode
+    select_object(ref)
+    bpy.ops.object.mode_set(mode='OBJECT')
+    selected_edges = [e for e in ref.data.edges if e.select]
+    bpy.ops.object.mode_set(mode=tmp_mode)
+    return selected_edges
+
+def get_selected_faces(ref = None):
+    ref = get_object(ref)
+    tmp_mode = ref.mode
+    select_object(ref)
+    bpy.ops.object.mode_set(mode='OBJECT')
+    selected_faces = [f for f in ref.data.polygons if f.select]
+    bpy.ops.object.mode_set(mode=tmp_mode)
+    return selected_faces
+#endregion
+#region CURVES
+def get_curve_points(ref = None):
+    obj = get_object(ref)
+    points = []
+    for spline in obj.data.splines:
+        for point in (*spline.points, *spline.bezier_points):
+            points.append(point)
+    return points
+
+def get_selected_curve_points(ref = None):
+    obj = get_object(ref)
+    points = []
+    for spline in obj.data.splines:
+        if spline.type == "NURBS":
+            for point in spline.points:
+                if point.select:
+                    points.append(point)
+        if spline.type == "BEZIER":
+            for point in spline.points:
+                if point.select_control_point:
+                    points.append(point)
+    return points
 #endregion
 #region VERTEX GROUPS
 ''' FUTURE UPDATE
@@ -1704,6 +1754,50 @@ def create_vertex_group(ref, group_name):
 def delete_vertex_group(ref, group_name):
     pass
 '''
+#endregion
+#region SHAPE KEYS
+def add_shape_key(name = None, ref = None):
+    objref = get_object(ref)
+    if name:
+        sk = objref.shape_key_add(name = name)
+    else:
+        sk = objref.shape_key_add()
+    return sk
+
+def get_shape_key(name_or_index = 0, ref = None):
+    objref = get_object(ref)
+    sk = None
+    if(objref.data.shape_keys):
+        sk = objref.data.shape_keys.key_blocks[name_or_index]
+    return sk
+
+def get_all_shape_keys(ref = None):
+    objref = get_object(ref)
+    return list(objref.data.shape_keys.key_blocks)
+
+def remove_shape_key(shape_key, ref = None):
+    objref = get_object(ref)
+    if isinstance(shape_key, bpy.types.ShapeKey):
+        objref.shape_key_remove(shape_key)
+    elif isinstance(shape_key, str) or isinstance(shape_key, int):
+        sk_ref = get_shape_key(shape_key,objref)
+        objref.shape_key_remove(sk_ref)
+    else:
+        print('Invalid Input')
+
+def remove_all_shape_keys(ref = None):
+    objref = get_object(ref)
+    objref.shape_key_clear()
+
+def get_active_shape_key(ref = None):
+    objref = get_object(ref)
+    return objref.active_shape_key
+
+def get_shape_keys(ref = None):
+    return get_all_shape_keys(ref)
+
+def remove_shape_keys(ref = None):
+    return remove_all_shape_keys(ref)
 #endregion
 #region PARTICLE SYSTEMS
 def get_particle_systems(ref):

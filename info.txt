@@ -383,10 +383,27 @@ MESHES
 - get_vertices                       
 - get_edges                          
 - get_faces                          
-- get_mesh_from_object              
+- get_mesh_from_object
+- get_selected_vertices
+- get_selected_verts
+- get_selected_edges
+- get_selected_faces
+
+CURVES
+- get_curve_points
+- get_selected_curve_points
 
 VERTEX GROUPS
-( coming soon )
+
+SHAPE KEYS
+- add_shape_key
+- get_shape_key
+- get_all_shape_keys
+- remove_shape_key
+- remove_all_shape_keys
+- get_active_shape_key
+- get_shape_key
+- remove_shape_keys
 
 PARTICLE SYSTEMS
 - get_particle_systems
