@@ -9,7 +9,7 @@ For a visual introduction, please watch the [announcement video](https://www.you
 
 You can either grab the file from here on GitHub, or alternatively on [Gumroad](https://gumroad.com/l/easybpy).
 
-Documentation (work-in-progress) is available in the [Wiki section](https://github.com/curtisjamesholt/EasyBPY/wiki).
+Documentation (work-in-progress) is available on the [Website Wiki](https://curtisholt.online/wiki/easybpy).
 
 Alternatively, the [official web page](https://curtisholt.online/easybpy) will provide a nice breakdown of what's possible.
 
