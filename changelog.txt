@@ -5,6 +5,14 @@
 - Added section CURVES
 
 [ JYoshi ]
+- + get_curve_points
+- + get_selected_curve_points
+- + get_selected_vertices
+- + get_selected_verts
+- + get_selected_edges
+- + get_selected_faces
+
+[ NullPointerException ]
 - + add_shape_key
 - + get_shape_key
 - + get_all_shape_key
@@ -13,12 +21,6 @@
 - + get_active_shape_key
 - + get_shape_keys
 - + remove_shape_keys
-- + get_curve_points
-- + get_selected_curve_points
-- + get_selected_vertices
-- + get_selected_verts
-- + get_selected_edges
-- + get_selected_faces
 
 === 0.1.3 ===
 
