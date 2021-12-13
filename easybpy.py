@@ -3121,10 +3121,6 @@ def fluid_fluid_particles_traped_air_potential_minimum(value):
     val = float(value)
     bpy.context.object.modifiers["Fluid"].domain_settings.sndparticle_potential_max_trappedair = val
 
-def fluid_fluid_particles_traped_air_potential_minimum(value):
-    val = float(value)
-    bpy.context.object.modifiers["Fluid"].domain_settings.sndparticle_potential_min_trappedair = val
-
 def fluid_fluid_particles_kinetic_potential_minimum(value):
     val = float(value)
     bpy.context.object.modifiers["Fluid"].domain_settings.sndparticle_potential_max_energy = val
