@@ -2872,7 +2872,7 @@ def fluid_view_grid_scale(value):
 def fluid_view_grid_color_position(pos,stop):
     val = float(pos)
     position = int(stop)
-    C.active_object.modifiers["Fluid"].domain_settings.color_ramp.elements[position].position= val
+    bpy.context.active_object.modifiers["Fluid"].domain_settings.color_ramp.elements[position].position= val
 
 def fluid_view_grid_color_hue_interpolation(value):
     bpy.context.active_object.modifiers["Fluid"].domain_settings.color_ramp.hue_interpolation = value.upper()
