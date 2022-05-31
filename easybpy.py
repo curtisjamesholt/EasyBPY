@@ -901,7 +901,7 @@ def add_shrinkwrap_constraint(ref = None, name = ""):
     return add_constraint('SHRINKWRAP', ref, name)
 #endregion
 #region MODES
-def set_mode(newmode=None,ref=None):
+def set_mode(ref=None, newmode=None,):
     if newmode is not None:
         objref = get_object(ref)
         bpy.context.view_layer.objects.active = objref
@@ -911,43 +911,43 @@ def get_mode():
     return bpy.context.mode
 
 def set_object_mode(ref=None):
-    set_mode('OBJECT', ref)
+    set_mode(ref, 'OBJECT')
 
 def object_mode(ref=None):
     set_object_mode(ref)
 
 def set_edit_mode(ref=None):
-    set_mode('EDIT', ref)
+    set_mode(ref, 'EDIT')
 
 def edit_mode(ref=None):
     set_edit_mode(ref)
 
 def set_sculpt_mode(ref=None):
-    set_mode('SCULPT', ref)
+    set_mode(ref, 'SCULPT')
 
 def sculpt_mode(ref=None):
     set_sculpt_mode(ref)
 
 def set_vertex_paint_mode(ref=None):
-    set_mode('VERTEX_PAINT', ref)
+    set_mode(ref, 'VERTEX_PAINT')
 
 def vertex_paint_mode(ref=None):
     set_vertex_paint_mode(ref)
 
 def set_weight_paint_mode(ref=None):
-    set_mode('WEIGHT_PAINT', ref)
+    set_mode(ref, 'WEIGHT_PAINT')
 
 def weight_paint_mode(ref=None):
     set_weight_paint_mode(ref)
 
 def set_texture_paint_mode(ref=None):
-    set_mode('TEXTURE_PAINT', ref)
+    set_mode(ref, 'TEXTURE_PAINT')
 
 def texture_paint_mode(ref=None):
     set_texture_paint_mode(ref)
 
 def set_pose_mode(ref=None):
-    set_mode('POSE',ref)
+    set_mode(ref, 'POSE')
 
 def pose_mode(ref=None):
     set_pose_mode(ref) 
