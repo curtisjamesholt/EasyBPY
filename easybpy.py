@@ -312,6 +312,9 @@ def set_active_object(ref):
     objref = get_object(ref)
     bpy.context.view_layer.objects.active = objref 
 
+def clear_active_object():
+    bpy.context.view_layer.objects.active = None
+
 def active_object():
     return get_active_object()
 
