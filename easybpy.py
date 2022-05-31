@@ -30,6 +30,7 @@
 '''
 #endregion
 #region IMPORTS
+import re
 import bpy
 import bpy.types
 from mathutils import Vector, Matrix, Euler
@@ -306,6 +307,10 @@ def copy_object(tocopy, col = None):
 
 def get_active_object():
     return bpy.context.active_object
+
+def set_active_object(ref):
+    objref = get_object(ref)
+    bpy.context.view_layer.objects.active = objref 
 
 def active_object():
     return get_active_object()
