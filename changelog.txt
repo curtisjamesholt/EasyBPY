@@ -4,7 +4,7 @@
 - Added section SHAPE KEYS
 - Added section CURVES
 
-[ JYoshi ]
+[ Joshua Bloemer ]
 - + get_curve_points
 - + get_selected_curve_points
 - + get_selected_vertices
@@ -77,7 +77,7 @@
 - + get_particle_systems
 - + get_particle_systems_containing
 
-[ JYoshi ]
+[ Joshua Bloemer ]
 - Included new handling in get_nodes.
 - Included new handling in fix_node_duplicates.
 
@@ -361,7 +361,7 @@
 - + select_objects_by_vertex
 - organize_outliner pre-existing collection exception.
 
-[ JYoshi ]
+[ Joshua Bloemer ]
 - Fixed keyframe functions.
 
 === 0.0.8 ===
@@ -392,7 +392,7 @@
 - delete_object: if no argument is provided, delete active object.
 - + get_all_meshes
 
-[ JYoshi ]
+[ Joshua Bloemer ]
 - Improved create_collection
 - Simplified collection_exists
 - Simplified material_exists
@@ -404,7 +404,7 @@
 - Rearranged arguments for object transformation functions to allow only
   a single value to be provided for ease of use.
 
-[ JYoshi ]
+[ Joshua Bloemer ]
 - Changes to how delete_object and delete_objects work.
 - + get_parent
 - + get_children
@@ -517,7 +517,7 @@
 - + convert_to_grease_pencil
 - + convert_to_curve
 
-[ JYoshi ]
+[ Joshua Bloemer ]
 - C Note: Created new category 'ANIMATION / KEYFRAMES' for following functions.
 - + add_keyframe
 - + remove_keyframe
@@ -542,7 +542,7 @@
 - + create_torus
 - + create_grid
 
-[ JYoshi ]
+[ Joshua Bloemer ]
 - C Note: New category 'MODES' created for mode functions.
 - + set_mode
 - + get_mode
@@ -591,7 +591,7 @@
 - + set_origin_to_centermass_volume
 - + origin_to_centermass_volume
 
-[ JYoshi ]
+[ Joshua Bloemer ]
 - create_modifier force redraw of interface.
 - remove_modifier force redraw of interface.
 - Added default values for 'modname' argument in every specific modifier function.
@@ -722,5 +722,5 @@
     C Note: String check was missing, added.
 - + set_active_collection - REQUIRES FIXING
 
-[ JYoshi ]
+[ Joshua Bloemer ]
 - Converting != to 'is not' where appropriate.

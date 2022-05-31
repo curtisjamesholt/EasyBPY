@@ -17,7 +17,7 @@ Documentation will become available over time as the project evolves.
 In the meantime, a list of all available functions is provided below.
 
 Extra Contributors:
-Charan (Just 3D Things), JYoshi, 3D_Bubble, Yohello
+Charan (Just 3D Things), Joshua Bloemer, 3D_Bubble, Yohello
 ---
 
 RENDER SETTINGS
