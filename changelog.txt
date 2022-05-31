@@ -1,3 +1,14 @@
+=== 0.1.5 ===
+
+[ Joshua Bloemer ]
+- fixed set_mode function
+- fixed create_circle_curve function
+- fixed fluid_view_grid_color_position
+- + set_active_object
+- + clear_active_object
+- + set_pose_mode
+- + pose_mode
+
 === 0.1.4 ===
 
 [ Curtis Holt ]
