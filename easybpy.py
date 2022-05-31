@@ -682,7 +682,7 @@ def create_bezier():
     return create_bezier_curve()
 
 def create_circle_curve():
-    bpy.ops.curve.primitive_circle_add()
+    bpy.ops.curve.primitive_bezier_circle_add()
     return active_object()
 
 def create_nurbs_curve():
