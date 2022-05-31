@@ -308,7 +308,7 @@ def copy_object(tocopy, col = None):
 def get_active_object():
     return bpy.context.active_object
 
-def set_active_object(ref):
+def set_active_object(ref=None):
     objref = get_object(ref)
     bpy.context.view_layer.objects.active = objref 
 
@@ -901,7 +901,7 @@ def add_shrinkwrap_constraint(ref = None, name = ""):
     return add_constraint('SHRINKWRAP', ref, name)
 #endregion
 #region MODES
-def set_mode(ref=None, newmode=None):
+def set_mode(newmode=None,ref=None):
     if newmode is not None:
         objref = get_object(ref)
         bpy.context.view_layer.objects.active = objref
@@ -945,6 +945,13 @@ def set_texture_paint_mode(ref=None):
 
 def texture_paint_mode(ref=None):
     set_texture_paint_mode(ref)
+
+def set_pose_mode(ref=None):
+    set_mode('POSE',ref)
+
+def pose_mode(ref=None):
+    set_pose_mode(ref) 
+
 #endregion
 #region SCENES
 def get_scene():
