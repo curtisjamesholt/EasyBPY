@@ -1923,6 +1923,51 @@ def set_active_collection(ref):
     hir = bpy.context.view_layer.layer_collection
     search_layer_collection_in_hierarchy_and_set_active(colref, hir)
 
+def hide_collection_viewport(ref=None):
+    col = get_collection(ref)
+    col.hide_viewport = True
+
+# most people will probably expect the viewport collection to be hidden with this function name
+def hide_collection(ref=None):
+    hide_collection_viewport(ref)
+
+def hide_collection_render(ref=None):
+    col = get_collection(ref)
+    col.hide_render = True
+
+def hide_collection_select(ref=None):
+    col = get_collection(ref)
+    col.hide_select = True
+
+def show_collection_viewport(ref=None):
+    col = get_collection(ref)
+    col.hide_viewport = False
+
+# most people will probably expect the viewport collection to be unhidden with this function name
+def show_collection(ref=None):
+    show_collection_viewport(ref)
+
+def show_collection_render(ref=None):
+    col = get_collection(ref)
+    col.hide_render = False
+
+def show_collection_select(ref=None):
+    col = get_collection(ref)
+    col.hide_select = False
+
+def unhide_collection_viewport(ref=None):
+    show_collection_viewport(ref)
+
+# most people will probably expect the viewport collection to be hidden with this function name
+def unhide_collection(ref=None):
+    unhide_collection_viewport(ref)
+
+def unhide_collection_render(ref=None):
+    show_collection_render(ref)
+
+def unhide_collection_select(ref=None):
+    show_collection_select(ref)
+
 # Dev Function
 def search_layer_collection_in_hierarchy_and_set_active(colref, hir) :
     if isinstance(hir, bpy.types.LayerCollection):

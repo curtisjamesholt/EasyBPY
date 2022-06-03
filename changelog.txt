@@ -1,3 +1,17 @@
+[ Joshua Bloemer ]
+- + hide_collection_viewport
+- + hide_collection
+- + hide_collection_render
+- + hide_collection_select
+- + show_collection_viewport
+- + show_collection
+- + show_collection_render
+- + show_collection_select
+- + unhide_collection_viewport
+- + unhide_collection
+- + unhide_collection_render
+- + unhide_collection_select
+
 === 0.1.5 ===
 
 [ Joshua Bloemer ]
