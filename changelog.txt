@@ -11,6 +11,10 @@
 - + unhide_collection
 - + unhide_collection_render
 - + unhide_collection_select
+=== 0.1.6 ===
+
+[Curtis Holt]
+- Changed select_objects_including and get_objects_including to use bpy.context.view_layer.objects instead of bpy.data.objects, to prevent an error being thrown when objects in non-active scenes are trying to be selected.
 
 === 0.1.5 ===
 

@@ -1,6 +1,6 @@
 #region INFO
 '''
-    == EasyBPY 0.1.4 ==
+    == EasyBPY 0.1.6 ==
     Managed by Curtis Holt
     https://curtisholt.online/links
     ---
@@ -592,7 +592,7 @@ def select_objects_with_modifiers():
 # Custom Selection
 def get_objects_including(include, case_sensitive = True):
     objlist = []
-    for o in bpy.data.objects:
+    for o in bpy.context.view_layer.objects:
         if case_sensitive is True:
             if include in o.name:
                 objlist.append(o)
@@ -602,7 +602,7 @@ def get_objects_including(include, case_sensitive = True):
     return objlist
 
 def select_objects_including(include, case_sensitive = True):
-    for o in bpy.data.objects:
+    for o in bpy.context.view_layer.objects:
         if case_sensitive is True:
             if include in o.name:
                 o.select_set(True)
