@@ -1,6 +1,6 @@
 #region INFO
 '''
-    == EasyBPY 0.1.6 ==
+    == EasyBPY 0.1.7 ==
     Managed by Curtis Holt
     https://curtisholt.online/links
     ---
