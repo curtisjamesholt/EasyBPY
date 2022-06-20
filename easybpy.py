@@ -30,13 +30,11 @@
 '''
 #endregion
 #region IMPORTS
-import re
 import bpy
 import bpy.types
 from mathutils import Vector, Matrix, Euler
 import math
 import random
-from math import radians
 #endregion
 #region RENDER SETTINGS
 def set_render_engine_to_cycles():
@@ -1628,7 +1626,7 @@ def set_smooth_angle(ref, degrees = 60):
         objref = ref
     if objref.data.use_auto_smooth == False:
         objref.data.use_auto_smooth = True
-    objref.data.auto_smooth_angle = radians(degrees)
+    objref.data.auto_smooth_angle = math.radians(degrees)
 #endregion
 #region LIGHTING
 def get_light(ref):
