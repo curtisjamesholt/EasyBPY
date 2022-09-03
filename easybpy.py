@@ -1,6 +1,6 @@
 #region INFO
 '''
-    == EasyBPY 0.1.7 ==
+    == EasyBPY 0.1.8 ==
     Managed by Curtis Holt
     https://curtisholt.online/links
     ---
@@ -1466,6 +1466,11 @@ def remove_keyframe(keyframes):
         # Updating Interface:
         for area in bpy.context.screen.areas:
             area.tag_redraw()
+
+def delete_animation_data(ref = None):
+    objs = get_objects(ref)
+    for obj in objs:
+        obj.animation_data_clear()
 #endregion
 #region DRIVERS
 
@@ -1826,7 +1831,7 @@ def create_collection(name):
         return colref
     return False
 
-def delete_collection(col, delete_objects = False):
+def delete_collection(col, delete_objects = False, link_objects = False):
     colref = None
     if is_string(col):
             colref = get_collection(col)
@@ -1837,13 +1842,15 @@ def delete_collection(col, delete_objects = False):
         deselect_all_objects()
         if len(colref.objects) > 0:
             for co in colref.objects:
-                co.select_set(True)
+                if co.name in bpy.context.view_layer.objects:
+                    co.select_set(True)
             delete_selected_objects()
     else:
         deselect_all_objects()
         if len(colref.objects) > 0:
-            for co in colref.objects:
-                bpy.context.scene.collection.objects.link(co)
+            if link_objects:
+                for co in colref.objects:
+                    bpy.context.scene.collection.objects.link(co)
 
     bpy.data.collections.remove(colref)
 
@@ -1873,7 +1880,7 @@ def delete_hierarchy(col):
             delete_hierarchy(co)
     deselect_all_objects()
     delete_objects_in_collection(colref)
-    delete_collection(colref)
+    delete_collection(colref, False)
 
 def duplicate_collection(col):
     colref = None
@@ -1920,6 +1927,9 @@ def set_active_collection(ref):
         colref = ref
     hir = bpy.context.view_layer.layer_collection
     search_layer_collection_in_hierarchy_and_set_active(colref, hir)
+
+def select_collection(ref):
+    set_active_collection(ref)
 
 def hide_collection_viewport(ref=None):
     col = get_collection(ref)
@@ -3720,4 +3730,44 @@ def fix_node_duplicates():
 
 def fix_duplicate_nodes():
     fix_node_duplicates()
+
+def random_visibility_keyframes(objects = None, phase_min = 0, phase_max = 75, sustain_min = 5, sustain_max = 100, chance = 6):
+    # Getting important information:
+    end = frame_end()
+    # Clearing animation data in preparation for new keyframes:
+    for obj in objects:
+        show_in_viewport(obj)
+        obj.select_set(True)
+        bpy.ops.anim.keyframe_clear_v3d()
+    # Begin main keyframe generating loop:
+    for obj in objects:
+        hide_in_viewport(obj)
+        hide_in_render(obj)
+        obj.keyframe_insert(data_path = "hide_viewport", frame = 0)
+        obj.keyframe_insert(data_path = "hide_render", frame = 0)
+        chance_num = random.randint(1,10)
+        if chance_num > chance:
+            count = 0
+            while count < end:
+                # Begin a phase:
+                count += random.randint(phase_min, phase_max)
+                if count >= end:
+                    break
+                else:
+                    # Set visibility on:
+                    show_in_viewport(obj)
+                    show_in_render(obj)
+                    obj.keyframe_insert(data_path = "hide_viewport", frame = count)
+                    obj.keyframe_insert(data_path = "hide_render", frame = count)
+                
+                # Sustain a phase:
+                count += random.randint(sustain_min, sustain_max)
+                if count >= end:
+                    break
+                else:
+                    # Set visibility off:
+                    hide_in_viewport(obj)
+                    hide_in_render(obj)
+                    obj.keyframe_insert(data_path = "hide_viewport", frame = count)
+                    obj.keyframe_insert(data_path = "hide_render", frame = count)
 #endregion

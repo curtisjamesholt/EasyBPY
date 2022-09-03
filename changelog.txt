@@ -1,3 +1,10 @@
+=== 0.1.8 ===
+
+[ Curtis Holt ]
+- + select_collection
+- + delete_animation_data
+- + random_visibility_keyframes
+
 === 0.1.7 ===
 
 [ Joshua Bloemer ]

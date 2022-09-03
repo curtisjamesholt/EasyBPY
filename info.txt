@@ -409,24 +409,24 @@ PARTICLE SYSTEMS
 - get_particle_systems
 
 COLLECTIONS
-- create_collection                 
-- delete_collection                 
-- delete_objects_in_colletion       
-- delete_hierarchy                  
-- duplicate_collection              
-- get_objects_from_collection       
-- get_collection                    
-- get_col               
-- get_all_collections            
-- get_list_of_collections           
-- link_object_to_collection         
-- link_objects_to_collection        
-- unlink_object_from_collection     
-- unlink_objects_from_collection    
-- move_object_to_collection         
-- move_objects_to_collection        
-- get_object_collection             
-- get_object_collections            
+- create_collection
+- delete_collection
+- delete_objects_in_colletion
+- delete_hierarchy
+- duplicate_collection
+- get_objects_from_collection
+- get_collection
+- get_col
+- get_all_collections
+- get_list_of_collections
+- link_object_to_collection
+- link_objects_to_collection
+- unlink_object_from_collection
+- unlink_objects_from_collection
+- move_object_to_collection
+- move_objects_to_collection
+- get_object_collection
+- get_object_collections
 - collection_exists
 
 MATERIALS
