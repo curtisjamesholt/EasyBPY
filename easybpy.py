@@ -39,15 +39,13 @@ import random
 #region RENDER SETTINGS
 def set_render_engine_to_cycles():
     get_scene().render.engine = 'CYCLES'
-
-def set_render_engine_cycles():
-    set_render_engine_to_cycles()
+#function alias:
+set_render_engine_cycles = set_render_engine_to_cycles
 
 def set_render_engine_to_eevee():
     get_scene().render.engine = 'BLENDER_EEVEE'
-
-def set_render_engine_eevee():
-    set_render_engine_to_eevee()
+#function alias:
+set_render_engine_eevee = set_render_engine_to_eevee
 
 def render_image(use_view = False):
     bpy.ops.render.render(use_viewport=use_view)
@@ -305,6 +303,8 @@ def copy_object(tocopy, col = None):
 
 def get_active_object():
     return bpy.context.active_object
+#function alias:
+ao = active_object = selected_object = get_selected_object = get_active_object
 
 def set_active_object(ref=None):
     objref = get_object(ref)
@@ -313,29 +313,16 @@ def set_active_object(ref=None):
 def clear_active_object():
     bpy.context.view_layer.objects.active = None
 
-def active_object():
-    return get_active_object()
-
-def get_selected_object():
-    return get_active_object()
-
-def selected_object():
-    return get_selected_object()
-
-def ao():
-    return get_active_object()
-
-def so():
-    return get_selected_objects()
 
 def get_selected_objects():
     return bpy.context.selected_objects
+#function alias:
+so = selected_objects = get_selected_objects
 
 def get_all_objects():
     return bpy.data.objects
-
-def get_list_of_objects():
-    get_all_objects()
+#function alias:
+get_list_of_objects = get_all_objects
 
 def select_object(ref, make_active=True):
     objref = get_object(ref)
@@ -348,8 +335,6 @@ def select_objects(ref):
     for o in objref:
         o.select_set(True)
 
-def selected_objects():
-    return get_selected_objects()
 
 def select_all_objects(col = None):
     if col == None:
@@ -652,9 +637,8 @@ def create_cylinder():
 def create_uv_sphere():
     bpy.ops.mesh.primitive_uv_sphere_add()
     return active_object()
-
-def create_sphere():
-    return create_uv_sphere()
+#function alias:
+create_sphere = create_uv_sphere
 
 def create_ico_sphere():
     bpy.ops.mesh.primitive_ico_sphere_add()
@@ -675,17 +659,15 @@ def create_grid():
 def create_suzanne():
     bpy.ops.mesh.primitive_monkey_add()
     return active_object()
-
-def create_monkey():
-    return create_suzanne()
+#function alias:
+create_monkey = create_suzanne
 
 # Curve
 def create_bezier_curve():
     bpy.ops.curve.primitive_bezier_curve_add()
     return active_object()
-
-def create_bezier():
-    return create_bezier_curve()
+#function alias:
+create_bezier = create_bezier_curve
 
 def create_circle_curve():
     bpy.ops.curve.primitive_bezier_circle_add()
@@ -702,24 +684,21 @@ def create_nurbs_circle():
 def create_nurbs_path():
     bpy.ops.curve.primitive_nurbs_path_add()
     return active_object()
-
-def create_path():
-    return create_nurbs_path()
+#function alias:
+create_path = create_nurbs_path
 
 # Surface
 def create_nurbs_curve_surface():
     bpy.ops.surface.primitive_nurbs_surface_curve_add()
     return active_object()
-
-def create_curve_surface():
-    return create_nurbs_curve_surface()
+#function alias:
+create_curve_surface = create_nurbs_curve_surface
 
 def create_nurbs_circle_surface():
     bpy.ops.surface.primitive_nurbs_surface_circle_add()
     return active_object()
-
-def create_circle_surface():
-    return create_nurbs_circle_surface()
+#function alias:
+create_circle_surface = create_nurbs_circle_surface
 
 def create_nurbs_surface():
     bpy.ops.surface.primitive_nurbs_surface_surface_add()
@@ -728,23 +707,20 @@ def create_nurbs_surface():
 def create_nurbs_cylinder_surface():
     bpy.ops.surface.primitive_nurbs_surface_cylinder_add()
     return active_object()
-
-def create_cylinder_surface():
-    return create_nurbs_cylinder_surface()
+#function alias:
+create_cylinder_surface = create_nurbs_cylinder_surface
 
 def create_nurbs_sphere_surface():
     bpy.ops.surface.primitive_nurbs_surface_sphere_add()
     return active_object()
-
-def create_sphere_surface():
-    return create_nurbs_sphere_surface()
+#function alias:
+create_sphere_surface = create_nurbs_sphere_surface
 
 def create_nurbs_torus_surface():
     bpy.ops.surface.primitive_nurbs_surface_torus_add()
     return active_object()
-
-def create_torus_surface():
-    return create_nurbs_torus_surface()
+#function alias:
+create_torus_surface = create_nurbs_torus_surface
 
 # Metaball
 def create_metaball():
@@ -771,9 +747,8 @@ def create_metaball_cube():
 def create_text_object():
     bpy.ops.object.text_add()
     return active_object()
-
-def create_text():
-    return create_text_object()
+#function alias:
+create_text = create_text_object
 
 #endregion
 #region OBJECTS - CONSTRAINTS
@@ -1987,9 +1962,8 @@ def search_layer_collection_in_hierarchy_and_set_active(colref, hir) :
 
 def get_all_collections():
     return bpy.data.collections
-
-def get_list_of_collections():
-    return get_all_collections()
+#function alias:
+get_list_of_collections = get_all_collections
 
 def link_object_to_collection(ref, col):
     if is_string(col):
@@ -2272,9 +2246,8 @@ def get_texture(ref):
 
 def get_all_textures():
     return bpy.data.textures
-
-def get_list_of_textures():
-    return get_all_textures()
+#function alias:
+get_list_of_textures = get_all_textures
 
 def rename_texture(ref, name):
     texref = get_texture(ref)
@@ -2299,9 +2272,8 @@ def get_image(ref):
 
 def get_all_images():
     return bpy.data.images
-
-def get_list_of_images():
-    return get_all_images()
+#function alias:
+get_list_of_images = get_all_images
 
 def rename_image(ref, name):
     imgref = get_image(ref)
@@ -3692,9 +3664,8 @@ def convert_suffixes_underscore():
     suffix_convert_dataset(bpy.data.textures)
     suffix_convert_dataset(bpy.data.images)
     suffix_convert_dataset(bpy.data.materials)
-
-def convert_suffixes():
-    convert_suffixes_underscore()
+#function alias:
+convert_suffixes = convert_suffixes_underscore
 
 def add_prefix_to_name(ref, prefix, delim="_"):
     objlist = make_obj_list(ref)
@@ -3727,9 +3698,8 @@ def fix_node_duplicates():
     for ng in bpy.data.node_groups:
         ngnodes = ng.nodes
         replace_duplicate_nodes(ngnodes)
-
-def fix_duplicate_nodes():
-    fix_node_duplicates()
+#function alias:
+fix_duplicate_nodes = fix_node_duplicates
 
 def random_visibility_keyframes(objects = None, phase_min = 0, phase_max = 75, sustain_min = 5, sustain_max = 100, chance = 6):
     # Getting important information:
