@@ -386,7 +386,8 @@ def delete_object(ref = None):
     bpy.data.objects.remove(objref, do_unlink=True)
 
 def delete_objects(objlist = None):
-    objlist = get_objects()
+    if not objlist:
+        objlist = get_objects()
     for obj in objlist:
         ref = get_object(obj)
         bpy.data.objects.remove(ref, do_unlink=True)
