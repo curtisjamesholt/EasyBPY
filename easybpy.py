@@ -1,6 +1,6 @@
 #region INFO
 '''
-    == EasyBPY 0.1.8 ==
+    == EasyBPY 0.1.9 ==
     Managed by Curtis Holt
     https://curtisholt.online/links
     ---
@@ -3654,36 +3654,38 @@ def organize_outliner():
 def suffix_convert_dataset(data):
     for d in data:
         nn = d.name
-        if '_' in d.name:
-            r = d.name.split('_')
-            if '.' in r[-1]:
-                r2 = r[-1].split('.')
-                if r2[0].isdigit():
-                    val = int(r2[0]) + int(r2[1])
-                    nn = r[0] + '_' + str(val)
-                    i = 1
-                    while nn in data:
-                        nn = r[0] + '_' + str(val + i)
-                        i += 1
-                else:
-                    if r2[1].isdigit():
-                        val = int(r2[1])
-                        i = 0
-                        nn = ""
-                        while i < len(r)-1:
-                            nn = nn + r[i] + "_"
-                            i+=1
-                        nn = nn + r2[0] + "_" + str(val)
-        else:
-            if '.' in d.name:
-                r = d.name.split('.')
-                if r[-1].isdigit():
-                    val = int(r[-1])
-                    nn = r[0] + '_' + str(val)
-                    i = 1
-                    while nn in data:
-                        nn = r[0] + '_' + str(val + i)
-                        i += 1
+        exclude = ["png", "jpg", "jpeg", "tif", "tiff", "bmp", "sgi", "rgb", "bw", "jp2", "j2c", "tga", "cin", "dpx", "exr", "hdr", "webp"]
+        if not any(x in nn for x in exclude):
+            if '_' in d.name:
+                r = d.name.split('_')
+                if '.' in r[-1]:
+                    r2 = r[-1].split('.')
+                    if r2[0].isdigit():
+                        val = int(r2[0]) + int(r2[1])
+                        nn = r[0] + '_' + str(val)
+                        i = 1
+                        while nn in data:
+                            nn = r[0] + '_' + str(val + i)
+                            i += 1
+                    else:
+                        if r2[1].isdigit():
+                            val = int(r2[1])
+                            i = 0
+                            nn = ""
+                            while i < len(r)-1:
+                                nn = nn + r[i] + "_"
+                                i+=1
+                            nn = nn + r2[0] + "_" + str(val)
+            else:
+                if '.' in d.name:
+                    r = d.name.split('.')
+                    if r[-1].isdigit():
+                        val = int(r[-1])
+                        nn = r[0] + '_' + str(val)
+                        i = 1
+                        while nn in data:
+                            nn = r[0] + '_' + str(val + i)
+                            i += 1
         d.name = nn
 
 def convert_suffixes_underscore():
@@ -3695,6 +3697,14 @@ def convert_suffixes_underscore():
 
 def convert_suffixes():
     convert_suffixes_underscore()
+
+def trim_view_layer_suffixes():
+    for o in bpy.context.view_layer.objects:
+        if '.' in o.name:
+            name_split = o.name.split('.')
+            if name_split[-1] == '001':
+                del name_split[-1]
+            o.name = ''.join(name_split)
 
 def add_prefix_to_name(ref, prefix, delim="_"):
     objlist = make_obj_list(ref)
