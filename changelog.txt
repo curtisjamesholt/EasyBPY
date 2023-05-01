@@ -1,3 +1,9 @@
+=== 0.1.9 ===
+
+[ Curtis Holt ]
+- Added file exceptions to suffix_convert_dataset to prevent issue with exotic file names.
+- Added trim_view_layer_suffixes
+
 === 0.1.8 ===
 
 [ Curtis Holt ]
