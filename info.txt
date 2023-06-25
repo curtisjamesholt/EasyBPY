@@ -1,3 +1,5 @@
+(Note, this will serve as an incomplete function list until a better wiki system becomes a replacement.)
+
 == EasyBPY ==
 Managed by Curtis Holt.
 https://curtisholt.online/links
@@ -748,6 +750,9 @@ COMMON WORKFLOW FUNCTIONS
 - convert_suffixes
 - add_prefix_to_name
 - add_suffix_to_name
+- remove_suffix_from_name
+- remove_suffix
 - replace_duplicate_nodes
 - fix_node_duplicates
 - fix_duplicate_nodes
+- random_visibility_keyframes

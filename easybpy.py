@@ -1,6 +1,6 @@
 #region INFO
 '''
-    == EasyBPY 0.1.9 ==
+    == EasyBPY 0.2.0 ==
     Managed by Curtis Holt
     https://curtisholt.online/links
     ---
@@ -347,6 +347,7 @@ def select_objects(ref):
     objref = get_objects(ref)
     for o in objref:
         o.select_set(True)
+    return objref
 
 def selected_objects():
     return get_selected_objects()
@@ -3445,7 +3446,8 @@ def get_objects_containing(ref):
     return result
 
 def select_objects_containing(ref):
-    select_objects(get_objects_containing(ref))
+    objs = select_objects(get_objects_containing(ref))
+    return objs
 
 def get_materials_containing(name, ref = None):
     results = []
@@ -3715,6 +3717,15 @@ def add_suffix_to_name(ref, suffix, delim="_"):
     objlist = make_obj_list(ref)
     for o in objlist:
         o.name = o.name + delim + suffix
+
+def remove_suffix_from_name(ref, delim="_"):
+    objlist = make_obj_list(ref)
+    for o in objlist:
+        split = o.name.split(delim)
+        o.name = split[0]
+
+def remove_suffix(ref, delim="_"):
+    remove_suffix_from_name(ref,delim)
 
 def replace_duplicate_nodes(nodes):
     for node in nodes:
