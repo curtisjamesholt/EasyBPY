@@ -1098,10 +1098,23 @@ def translate_vector(vec = Vector(), ref = None):
 def translate_along_axis(val, axis, ref = None):
     objs = make_obj_list(ref)
     axis.normalize()
+    print("asd")
     for obj in objs:
-        obj.location[0] += (val * axis[0])
-        obj.location[1] += (val * axis[1])
-        obj.location[2] += (val * axis[2])
+        if obj.scale.x >= 0:
+            obj.location[0] += (val * axis[0])
+        else:
+            obj.location[0] -= (val * -axis[0])
+
+        if obj.scale.y >= 0:
+            obj.location[1] += (val * axis[1])
+        else:
+            obj.location[1] -= (val * axis[1])
+
+        if obj.scale.z >= 0:
+            obj.location[2] += (val * axis[2])
+        else:
+            obj.location[2] -= (val * axis[2])
+
 
 def move_along_axis(val, axis, ref = None):
     translate_along_axis(val, axis, ref)
@@ -1166,9 +1179,21 @@ def translate_along_local_axis(val, axis, ref = None):
     for obj in objs:
         tempaxis = axis.copy()
         tempaxis.rotate(obj.rotation_euler)
-        obj.location[0] += (val * tempaxis[0])
-        obj.location[1] += (val * tempaxis[1])
-        obj.location[2] += (val * tempaxis[2])
+        if obj.scale[0] >= 0:
+            obj.location[0] += (val * tempaxis[0])
+        else:
+            obj.location[0] -= (val * tempaxis[0])
+
+        if obj.scale[1] >= 0:
+            obj.location[1] += (val * tempaxis[1])
+        else:
+            obj.location[1] -= (val * tempaxis[1])
+
+        if obj.scale[2] >= 0:
+            obj.location[2] += (val * tempaxis[2])
+        else:
+            obj.location[2] -= (val * tempaxis[2])
+
 
 def translate_along_local_x(val, ref = None):
     translate_along_local_axis(val, Vector((1.0,0.0,0.0)), ref)
