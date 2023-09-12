@@ -490,13 +490,12 @@ def set_parent(child = None,parent = None):
     child.parent = parent 
     child.matrix_parent_inverse = parent.matrix_world.inverted()
 
-def clear_parent(ref = None, keep_location = True):
+def clear_parent(ref = None, keep_transform = True):
     ref = get_object(ref)
-    loc = ref.matrix_world.to_translation()
-    print(loc)
+    ref_matrix = ref.matrix_world
     ref.parent = None
-    if keep_location:
-        ref.location = loc
+    if keep_transform:
+        ref.matrix_world = ref_matrix
 
 def get_bounding_box(ref = None):
     return get_object(ref).bound_box
