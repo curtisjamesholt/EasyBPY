@@ -490,13 +490,12 @@ def set_parent(child = None,parent = None):
     child.parent = parent 
     child.matrix_parent_inverse = parent.matrix_world.inverted()
 
-def clear_parent(ref = None, keep_location = True):
+def clear_parent(ref = None, keep_transform = True):
     ref = get_object(ref)
-    loc = ref.matrix_world.to_translation()
-    print(loc)
+    ref_matrix = ref.matrix_world
     ref.parent = None
-    if keep_location:
-        ref.location = loc
+    if keep_transform:
+        ref.matrix_world = ref_matrix
 
 def get_bounding_box(ref = None):
     return get_object(ref).bound_box
@@ -1166,9 +1165,20 @@ def translate_along_local_axis(val, axis, ref = None):
     for obj in objs:
         tempaxis = axis.copy()
         tempaxis.rotate(obj.rotation_euler)
-        obj.location[0] += (val * tempaxis[0])
-        obj.location[1] += (val * tempaxis[1])
-        obj.location[2] += (val * tempaxis[2])
+        if obj.scale[0] >= 0:
+            obj.location[0] += (val * tempaxis[0])
+        else:
+            obj.location[0] -= (val * tempaxis[0])
+
+        if obj.scale[1] >= 0:
+            obj.location[1] += (val * tempaxis[1])
+        else:
+            obj.location[1] -= (val * tempaxis[1])
+
+        if obj.scale[2] >= 0:
+            obj.location[2] += (val * tempaxis[2])
+        else:
+            obj.location[2] -= (val * tempaxis[2])
 
 def translate_along_local_x(val, ref = None):
     translate_along_local_axis(val, Vector((1.0,0.0,0.0)), ref)
