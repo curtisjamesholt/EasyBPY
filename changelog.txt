@@ -1,3 +1,11 @@
+=== 0.3.0 ===
+
+[ Curtis Holt ]
+- Large structural changes after a long hiatus to bring EasyBPY up to speed, and make it slightly more convenient to work with in the future.
+- The info.txt file will no longer contain a long list of all functions as this purpose is served by the easybpy.py file itself. Having to track the function names in multiple places makes it more difficult to work with.
+- Inside of the easybpy.py file, a comment (# [ ]) will be placed next to each function name. This will be used to track the status of the function. I would suggest putting the version number of Blender in the brackets representing the last version the function was tested on. For example: # [4.2]. This will make it easier to keep track of outdated 'regions' of the file, and not have us worrying so much about the file 'as a whole' being outdated.
+- Added a note at the beginning of easybpy.py letting people know that the file is structurally designed for readability using region folds, and sharing the hotkey for folding regions using Visual Studio Code.
+
 === 0.2.0 ===
 
 [ Curtis Holt ]
