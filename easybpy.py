@@ -43,119 +43,125 @@ import math
 import random
 #endregion
 #region RENDER SETTINGS
-def set_render_engine_to_cycles(): # [ ]
+def set_render_engine_to_cycles(): # [4.2]
     get_scene().render.engine = 'CYCLES'
 
-def set_render_engine_cycles():  # [ ]
+def set_render_engine_cycles():  # [4.2]
     set_render_engine_to_cycles()
 
-def set_render_engine_to_eevee():  # [ ]
-    get_scene().render.engine = 'BLENDER_EEVEE'
+def set_render_engine_to_eevee():  # [4.2]
+    get_scene().render.engine = 'BLENDER_EEVEE_NEXT'
 
-def set_render_engine_eevee():  # [ ]
+def set_render_engine_eevee():  # [4.2]
     set_render_engine_to_eevee()
 
-def render_image(use_view = False):  # [ ]
+def render_image(use_view = False):  # [4.2]
     bpy.ops.render.render(use_viewport=use_view)
     return bpy.data.images['Render Result']
 
-def render_animation(use_view = False):  # [ ]
+def render_animation(use_view = False):  # [4.2]
     bpy.ops.render.render(animation=True, use_viewport=use_view)
 
-def set_render_resolution(x, y):  # [ ]
+def set_render_resolution(x, y):  # [4.2]
     get_scene().render.resolution_x = x
     get_scene().render.resolution_y = y
 
-def get_render_resolution():  # [ ]
+def get_render_resolution():  # [4.2]
     reslist = []
     reslist.append(get_scene().render.resolution_x)
     reslist.append(get_scene().render.resolution_y)
     return reslist
 
-def render_resolution(x = None, y = None):  # [ ]
+def render_resolution(x = None, y = None):  # [4.2]
     if x is not None and y is not None:
         set_render_resolution(x,y)
     else:
         return get_render_resolution()
 
-def set_render_resolution_percentage(percent):  # [ ]
+def set_render_resolution_percentage(percent):  # [4.2]
     get_scene().render.resolution_percentage = percent
 
-def set_render_percentage(percent = None):  # [ ]
+def set_render_percentage(percent = None):  # [4.2]
     set_render_resolution_percentage(percent)
 
-def set_render_percent(percent = None):  # [ ]
+def set_render_percent(percent = None):  # [4.2]
     set_render_resolution_percentage(percent)
 
-def get_render_resolution_percentage():  # [ ]
+def get_render_resolution_percentage():  # [4.2]
     return get_scene().render.resolution_percentage
 
-def render_resolution_percentage(percent = None):  # [ ]
+def render_resolution_percentage(percent = None):  # [4.2]
     if percent is not None:
         set_render_resolution_percentage(percent)
     else:
         return get_render_resolution_percentage()
 
-def set_render_pixel_aspect_ratio(x, y):  # [ ]
+def render_resolution_percent(percent = None):  # [4.2]
+    if percent is not None:
+        set_render_resolution_percentage(percent)
+    else:
+        return get_render_resolution_percentage()
+
+def set_render_pixel_aspect_ratio(x, y):  # [4.2]
     get_scene().render.pixel_aspect_x = x
     get_scene().render.pixel_aspect_y = y
 
-def get_render_pixel_aspect_ratio():  # [ ]
+def get_render_pixel_aspect_ratio():  # [4.2]
     aspectlist = []
     aspectlist.append(get_scene().render.pixel_aspect_x)
     aspectlist.append(get_scene().render.pixel_aspect_y)
     return aspectlist
 
-def render_aspect_ratio(x = None, y = None):  # [ ]
+def render_aspect_ratio(x = None, y = None):  # [4.2]
     if x is not None and y is not None:
         set_render_pixel_aspect_ratio(x,y)
     else:
         return get_render_pixel_aspect_ratio()
 
-def current_frame(val = None):  # [ ]
+def current_frame(val = None):  # [4.2]
     if val is None:
         return get_scene().frame_current
     else:
         get_scene().frame_current = val
 
-def set_frame(val = None):  # [ ]
+def set_frame(val = None):  # [4.2]
     current_frame(val)
 
-def frame_start(val = None):  # [ ]
+def frame_start(val = None):  # [4.2]
     if val is None:
         return get_scene().frame_start
     else:
         get_scene().frame_start = val
 
-def frame_end(val = None):  # [ ]
+def frame_end(val = None):  # [4.2]
     if val is None:
         return get_scene().frame_end
     else:
         get_scene().frame_end = val
 
-def set_current_frame(val = None):  # [ ]
+def set_current_frame(val = None):  # [4.2]
     current_frame(val)
 
-def set_frame_start(val = None):  # [ ]
+def set_frame_start(val = None):  # [4.2]
     frame_start(val)
 
-def set_frame_end(val = None):  # [ ]
+def set_frame_end(val = None):  # [4.2]
     frame_end(val)
 
-def set_start_frame(val = None):  # [ ]
+def set_start_frame(val = None):  # [4.2]
     frame_start(val)
 
-def set_end_frame(val = None):  # [ ]
+def set_end_frame(val = None):  # [4.2]
     frame_end(val)
 
-def set_frame_interval(start = None, end = None):  # [ ]
+def set_frame_interval(start = None, end = None):  # [4.2]
     frame_start(start)
     frame_end(end)
 
-def set_frame_step(val):  # [ ]
+def set_frame_step(val):  # [4.2]
     get_scene().frame_step = val
 
-def set_render_fps(val, base = 1.0):  # [ ]
+def set_render_fps(val, base = 1.0):  # [4.2]
     get_scene().render.fps = val
     get_scene().render.fps_base = base
 #endregion
