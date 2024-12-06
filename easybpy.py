@@ -166,7 +166,7 @@ def set_render_fps(val, base = 1.0):  # [4.2]
     get_scene().render.fps_base = base
 #endregion
 #region APPENDING / LINKING
-def append(file, category, object): # [ ]
+def append(file, category, object): # [4.2] # Example: append("path/to/file.blend", 'Material', 'PBR Material')
     if '\\' in file:
         #fpath = file.replace('\\', '/') => Not viable for numeric folders.
         print("Please use forward slashes in path string.")
@@ -3704,13 +3704,14 @@ def convert_suffixes_underscore(): # [ ]
 def convert_suffixes(): # [ ]
     convert_suffixes_underscore()
 
-def trim_view_layer_suffixes(): # [ ]
+def trim_view_layer_suffixes(): # [4.3]
     for o in bpy.context.view_layer.objects:
         if '.' in o.name:
             name_split = o.name.split('.')
             if name_split[-1] == '001':
                 del name_split[-1]
-            o.name = ''.join(name_split)
+            newname = ''.join(name_split)
+            o.rename(newname, mode='ALWAYS')
 
 def add_prefix_to_name(ref, prefix, delim="_"): # [ ]
     objlist = make_obj_list(ref)
