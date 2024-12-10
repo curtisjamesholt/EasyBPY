@@ -3704,14 +3704,20 @@ def convert_suffixes_underscore(): # [ ]
 def convert_suffixes(): # [ ]
     convert_suffixes_underscore()
 
-def trim_view_layer_suffixes(): # [4.3]
+def trim_view_layer_suffixes(): # [4.2+4.3]
     for o in bpy.context.view_layer.objects:
-        if '.' in o.name:
-            name_split = o.name.split('.')
-            if name_split[-1] == '001':
-                del name_split[-1]
-            newname = ''.join(name_split)
-            o.rename(newname, mode='ALWAYS')
+        if o is None:
+            continue
+        if o.name.endswith(".001"):
+            newname = o.name[:-4]
+            if newname in bpy.data.objects:
+                #if bpy.app.version >= (4, 3, 0):
+                    #o.rename(newname, mode="ALWAYS")
+                #else:
+                # Rename the existing object to avoid conflict.
+                conflicting_object = bpy.data.objects[newname]
+                conflicting_object.name = newname + "_old"
+                o.name = newname
 
 def add_prefix_to_name(ref, prefix, delim="_"): # [ ]
     objlist = make_obj_list(ref)
